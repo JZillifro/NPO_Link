@@ -1,0 +1,8 @@
+version: '3.3'
+services:
+  frontend:
+    image: gerardomares/npolink:frontend
+    volumes:
+      - ./frontend:/usr/frontend
+    ports:
+      - "80:3000"
