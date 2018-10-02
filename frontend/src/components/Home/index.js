@@ -5,7 +5,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <div className="container">
-         <Jumbotron>
+         <Jumbotron style={{backgroundColor: "#b4eeb4"}}>
             <h1>Welcome to NPOLink!</h1>
             <p>
                Learn more about nonprofits in your area and how you can contribute.
