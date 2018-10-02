@@ -4,7 +4,7 @@ EID: gg26768
 GitLab ID: gigarza
 
 Name: Gerardo Mares
-EID:
+EID: grm738
 GitLab ID: gerardomares
 
 Name: Edgar Marroquin
