@@ -11,7 +11,8 @@ export default class NonprofitPage extends React.Component {
      this.state = {
       nonprofit: {},
       location: {},
-      category: {}
+      category: {},
+      vol_event: {}
      };
    }
 
@@ -19,7 +20,8 @@ export default class NonprofitPage extends React.Component {
       const nonprofit = NonProfitAPI.get(parseInt(this.props.match.params.id, 10));
       const location = LocationAPI.get(parseInt(nonprofit.location, 10));
       const category = CategoryAPI.get(parseInt(nonprofit.category, 10));
-      this.setState({nonprofit, location, category});
+      const vol_event = nonprofit.vol_event;
+      this.setState({nonprofit, location, category, vol_event});
    };
 
   render() {
@@ -63,6 +65,16 @@ export default class NonprofitPage extends React.Component {
                             <CardTitle>{this.state.category.name}</CardTitle>
                             <CardText>{this.state.category.description}</CardText>
                             <Button href={"/category/" + this.state.category.id}> Learn more</Button>
+                          </CardBody>
+                        </Card>
+                  </Col>
+                  <Col xs={12} className="pt-3">
+                        <Card>
+                          <CardHeader>Events</CardHeader>
+                          <CardBody>
+                            <CardTitle>{this.state.vol_event.name}</CardTitle>
+                            <CardText></CardText>
+                            <Button href={this.state.vol_event.url}> Learn more</Button>
                           </CardBody>
                         </Card>
                   </Col>
