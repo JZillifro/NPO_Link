@@ -8,9 +8,9 @@ class About extends Component {
     super(props);
     this.state = {
       contributors: [
-         {name: "Georgina Garza", gitlab_name: "Georgina Garza", role: "Developer", image: avatar, bio: " Georgina Garza is a junior computer science and dance double major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
+         {name: "Georgina Garza", gitlab_name: "Georgina Garza", role: "Developer", image: avatar, bio: "Georgina Garza is a junior computer science and dance double major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
          {name: "Gerardo Mares", gitlab_name: "Gerardo Mares", role: "Developer", image: avatar, bio: "Gerardo Mares is a senior computer science major with a minor in business at UT Austin", commits: 0, issues: 0, unit_tests: 0},
-         {name: "Jacob Zillifro", gitlab_name: "JZillifro", role: "Developer", image: avatar, bio: "my name is Jacob", commits: 0, issues: 0, unit_tests: 0},
+         {name: "Jacob Zillifro", gitlab_name: "JZillifro", role: "Developer", image: avatar, bio: "Jacob is a junior computer science major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
          {name: "Paul Purifoy", gitlab_name: "Paul Purifoy", role: "Developer", image: avatar, bio: "my name is Paul", commits: 0, issues: 0, unit_tests: 0},
          {name: "Edgar Marroquin", gitlab_name: "Edgar Marroquin", role: "Developer", image: avatar, bio: "my name is Edgar", commits: 0, issues: 0, unit_tests: 0}
       ],
