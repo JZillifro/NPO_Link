@@ -1,5 +1,5 @@
 import React from 'react';
-import {Jumbotron, Button, PageHeader} from 'react-bootstrap';
+import {PageHeader} from 'react-bootstrap';
 
 export default class Home extends React.Component {
   render() {
@@ -14,7 +14,7 @@ export default class Home extends React.Component {
             </small>
           </div>
         </PageHeader>
-        <img src="https://openclipart.org/download/276483/1490609861.svg" style={{width:"70%", display:"block", marginLeft:"auto", marginRight:"auto"}}/>
+        <img src="https://openclipart.org/download/276483/1490609861.svg" alt="home" style={{width:"70%", display:"block", marginLeft:"auto", marginRight:"auto"}}/>
       </div>
     )
   }
