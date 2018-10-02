@@ -6,9 +6,13 @@ export default class ModelPage extends React.Component {
   render() {
       if(this.props.match.params.title == "nonprofits"){
         return(<div className="container">
-          <PageHeader>
-            <div>Non-Profit Organizations</div>
-            <div><small>Nonprofit organizations are accountable to the donors, funders, volunteers, program recipients, and the public community.</small></div>
+          <PageHeader style={{backgroundColor: "#b4eeb4"}}>
+            <div style={{marginLeft: "20px"}}>
+              <br/>
+              <h1>Non-Profit Organizations</h1>
+              <div><small>Nonprofit organizations are accountable to the donors, funders, volunteers, program recipients, and the public community.</small></div>
+              <br/>
+            </div>
           </PageHeader>
 
           <Grid>
@@ -42,10 +46,15 @@ export default class ModelPage extends React.Component {
         </div>);
       } else if(this.props.match.params.title == "locations"){
         return(<div className="container">
-          <PageHeader>
-            <div>Locations</div>
-            <div><small>These are various cities which have nonprofit organizations.</small></div>
+          <PageHeader style={{backgroundColor: "#b4eeb4"}}>
+            <div style={{marginLeft: "20px"}}>
+              <br/>
+              <h1>Locations</h1>
+              <div><small>These are various cities which have nonprofit organizations.</small></div>
+              <br/>
+            </div>
           </PageHeader>
+
 
           <Grid>
             <Row>
@@ -78,9 +87,13 @@ export default class ModelPage extends React.Component {
         </div>);
       } else if(this.props.match.params.title == "categories"){
         return(<div className="container">
-          <PageHeader>
-            <div>Categories</div>
-            <div><small>These are various types of nonprofit organizations.</small></div>
+          <PageHeader style={{backgroundColor: "#b4eeb4"}}>
+            <div style={{marginLeft: "20px"}}>
+              <br/>
+              <h1>Categories</h1>
+              <div><small>These are various types of nonprofit organizations.</small></div>
+              <br/>
+            </div>
           </PageHeader>
 
           <Grid>

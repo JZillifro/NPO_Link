@@ -25,8 +25,8 @@ const ModelPanel = ({
   description
 }) => (
   <div className="container">
-    <Thumbnail style={{border: "1px solid #ddd", maxWidth:"100%", maxHeight:"100%"}}>
-      <img src={image} alt="242x200" style={{border: "1px solid #ddd", maxWidth:"100%", maxHeight:"100%"}} />
+    <Thumbnail style={{maxWidth:"100%", maxHeight:"100%"}}>
+      <img src={image} alt="242x200" style={{maxWidth:"100%", maxHeight:"100%"}} />
       <h3>{title}</h3>
       <p>{description}</p>
       <p>
