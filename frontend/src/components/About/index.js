@@ -2,17 +2,20 @@ import React, { Component } from 'react'
 import { Card, CardBody, CardImg, CardText, CardSubtitle, Row, Col , CardDeck, CardHeader, CardFooter} from 'reactstrap'
 
 const avatar = require("./../../avatar.png")
+const gerardo = require("./../../gerardo.jpg")
+const georgina = require("./../../georgina.jpg")
+const edgar = require("./../../edgar.jpg")
 
 class About extends Component {
   constructor(props) {
     super(props);
     this.state = {
       contributors: [
-         {name: "Georgina Garza", gitlab_name: "Georgina Garza", role: "Developer", image: avatar, bio: "Georgina Garza is a junior computer science and dance double major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
-         {name: "Gerardo Mares", gitlab_name: "Gerardo Mares", role: "Developer", image: avatar, bio: "Gerardo Mares is a senior computer science major with a minor in business at UT Austin", commits: 0, issues: 0, unit_tests: 0},
+         {name: "Georgina Garza", gitlab_name: "Georgina Garza", role: "Developer", image: georgina, bio: " Georgina Garza is a junior computer science and dance double major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
+         {name: "Gerardo Mares", gitlab_name: "Gerardo Mares", role: "Developer", image: gerardo, bio: "Gerardo Mares is a senior computer science major with a minor in business at UT Austin", commits: 0, issues: 0, unit_tests: 0},
          {name: "Jacob Zillifro", gitlab_name: "JZillifro", role: "Developer", image: avatar, bio: "Jacob is a junior computer science major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
-         {name: "Paul Purifoy", gitlab_name: "Paul Purifoy", role: "Developer", image: avatar, bio: "my name is Paul", commits: 0, issues: 0, unit_tests: 0},
-         {name: "Edgar Marroquin", gitlab_name: "Edgar Marroquin", role: "Developer", image: avatar, bio: "my name is Edgar", commits: 0, issues: 0, unit_tests: 0}
+         {name: "Paul Purifoy", gitlab_name: "Paul Purifoy", role: "Developer", image: avatar, bio: "Paul is a junior computer science major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
+         {name: "Edgar Marroquin", gitlab_name: "Edgar Marroquin", role: "Developer", image: edgar, bio: "Edgar Marroquin is a senior computer science and biochemistry double major at UT Austin. His major responsibilites include API management and integration.", commits: 0, issues: 0, unit_tests: 0}
       ],
       issues: [],
       commits: 0
@@ -83,7 +86,7 @@ class About extends Component {
            <Row className="row justify-content-center text-center">
             {
               this.state.contributors.map(contributor => (
-                 <Col xs={12} sm={12} md={6} lg={4} className="pb-4">
+                 <Col xs={12} sm={12} md={6} lg={4} className="pb-4 d-flex align-items-stretch">
                     <Card key={contributor.email}>
                         <CardImg top width="100%"
                         src={contributor.image}
