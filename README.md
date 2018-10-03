@@ -8,11 +8,11 @@ EID: grm738
 GitLab ID: gerardomares
 
 Name: Edgar Marroquin
-EID:
+EID: emm3628
 GitLab ID: e_mar
 
 Name: Paul Purifoy
-EID:
+EID: pmp746
 GitLab ID: pmpurifoy
 
 Name: Jacob Zillifro
