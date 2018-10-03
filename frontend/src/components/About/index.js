@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Card, CardBody, CardImg, CardText, CardSubtitle, Row, Col , CardDeck, CardHeader, CardFooter} from 'reactstrap'
 
-const avatar = require("./../../avatar.png")
 const gerardo = require("./../../gerardo.jpg")
 const georgina = require("./../../georgina.jpg")
 const edgar = require("./../../edgar.jpg")
