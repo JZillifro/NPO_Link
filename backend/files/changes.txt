@@ -1,3 +1,0 @@
-organize postman
-test/handle error case for gitlab api
-api inconsistencies 
