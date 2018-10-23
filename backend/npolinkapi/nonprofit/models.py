@@ -33,7 +33,7 @@ class Nonprofit(db.Model):
         self.ein = ein
         self.logo = logo
         self.description = description
-        slef.address = address
+        self.address = address
         self.location_id = location_id
         self.category_id = category_id
 
