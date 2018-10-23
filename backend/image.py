@@ -12,9 +12,12 @@ def get_image():
                 state == "New_York"
             r = requests.get(base_url + city + ",_" + state)
             try:
+                # Verbose, last line contains size information for images
+                '''
                 print("%s, %s" % (city, state))
                 print (r.json()["items"][0]["thumbnail"]["source"])# can change thumbnail for original for higher res image
                 print("width: %d, height %d " % (r.json()["items"][0]["thumbnail"]["width"],r.json()["items"][0]["thumbnail"]["height"]))
+                '''
                 loc["image"] = r.json()["items"][0]["thumbnail"]["source"]
             except:
                 print("Error finding image for %s, %s" % (city, state))
