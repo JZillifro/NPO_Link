@@ -11,11 +11,18 @@ def generate():
     with open('../data/codes.json') as category_json_data:
         category_results = json.load(category_json_data)
         id = 1
+        images = {}
         for key in category_results:
             category = category_results[key]
             category.pop('keywords', None)
             category['id'] = id
             category['code'] = key
+            if len(key) == 1:
+                images[key] = category['image']
+            else:
+                code = key[0]
+                category['image'] = images[code]
+
             id += 1
 
     with open('../data/proj_results-2.json') as org_json_data:

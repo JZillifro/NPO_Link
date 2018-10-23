@@ -3,13 +3,13 @@ import json
 
 def get_image():
     base_url = 'https://en.wikipedia.org/api/rest_v1/page/media/'
-    with open("loc-results-desc.json", 'r') as f:
+    with open("files/data/results/loc-results-desc.json", 'r') as f:
         locations =  json.load(f)
         for loc in locations:
             city = loc["city"]
             state = loc["state"]
             if city == "Barrytown" and state == "NY":
-                state == "New_York"
+                state = "New_York"
             r = requests.get(base_url + city + ",_" + state)
             try:
                 # Verbose, last line contains size information for images
@@ -21,7 +21,7 @@ def get_image():
                 loc["image"] = r.json()["items"][0]["thumbnail"]["source"]
             except:
                 print("Error finding image for %s, %s" % (city, state))
-    with open("loc-results-desc.json", 'w') as f:
+    with open("files/data/results/loc-results-desc.json", 'w') as f:
         json.dump(locations, f)
 if __name__ == "__main__":
     get_image()
