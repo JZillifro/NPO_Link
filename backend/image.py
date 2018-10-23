@@ -3,7 +3,7 @@ import json
 
 def get_image():
     base_url = 'https://en.wikipedia.org/api/rest_v1/page/media/'
-    with open("loc-results.json", 'r') as f:
+    with open("loc-results-desc.json", 'r') as f:
         locations =  json.load(f)
         for loc in locations:
             city = loc["city"]
@@ -18,7 +18,7 @@ def get_image():
                 loc["image"] = r.json()["items"][0]["thumbnail"]["source"]
             except:
                 print("Error finding image for %s, %s" % (city, state))
-    with open("loc-image.json", 'w') as f:
+    with open("loc-results-desc.json", 'w') as f:
         json.dump(locations, f)
 if __name__ == "__main__":
     get_image()
