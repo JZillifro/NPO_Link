@@ -13,7 +13,8 @@ def get_image():
             r = requests.get(base_url + city + ",_" + state)
             try:
                 print("%s, %s" % (city, state))
-                print (r.json()["items"][0]["thumbnail"]["source"])
+                print (r.json()["items"][0]["thumbnail"]["source"])# can change thumbnail for original for higher res image
+                print("width: %d, height %d " % (r.json()["items"][0]["thumbnail"]["width"],r.json()["items"][0]["thumbnail"]["height"]))
             except:
                 print("Error finding image for %s, %s" % (city, state))
 if __name__ == "__main__":
