@@ -1,0 +1,4 @@
+Flask==0.10.1
+Flask-Restless==0.17.0
+flask-sqlalchemy==2.3.2
+psycopg2==2.7.5
