@@ -8,9 +8,11 @@ def get_image():
         for loc in locations:
             city = loc["city"]
             state = loc["state"]
+            if city == "Barrytown" and state == "NY":
+                state == "New_York"
             r = requests.get(base_url + city + ",_" + state)
             try:
-                print(city)
+                print("%s, %s" % (city, state))
                 print (r.json()["items"][0]["thumbnail"]["source"])
             except:
                 print("Error finding image for %s, %s" % (city, state))
