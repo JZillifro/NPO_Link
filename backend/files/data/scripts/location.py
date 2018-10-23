@@ -14,6 +14,8 @@ def getdata():
 
     static_map_api = 'https://maps.googleapis.com/maps/api/staticmap?zoom=12&size=600x600&maptype=roadmap&key=AIzaSyBLZSNg1-dw_h_R8VlX0MQ84-p_27XFgNk'
 
+    location_image_api = 'https://api.teleport.org/api/urban_areas/slug:'
+
     locations = []
     with open('../results/loc-results.json') as location_json_data:
         locations = json.load(location_json_data)
@@ -36,7 +38,6 @@ def getdata():
             page = pages[next(page_iter)]
             page_id = page['pageid']
             loc['description'] = page['extract']
-
 
             # r = requests.get(place_search_api + '&input=' + location)
             # json_result = r.json()
