@@ -30,9 +30,21 @@ with open('files/data/org-results.json') as json_data:
         org = Nonprofit(id=nonprofit['id'],name=nonprofit['name'], description=nonprofit['description'], ein=nonprofit['ein'], logo=nonprofit['logo'], address=nonprofit['address'], location_id=nonprofit['location_id'], category_id=nonprofit['category_id'])
         nonprofits.append(org)
 
-db.session.add_all(locations)
-db.session.add_all(categories)
-db.session.add_all(nonprofits)
+for location in locations:
+    exists = Location.query.filter_by(id=location.id).first()
+    if not exists:
+        db.session.add(location)
+
+for category in categories:
+    exists = Category.query.filter_by(id=category.id).first()
+    if not exists:
+        db.session.add(category)
+
+for nonprofit in nonprofits:
+    exists = Nonprofit.query.filter_by(id=nonprofit.id).first()
+    if not exists:
+        db.session.add(nonprofit)
+
 
 db.session.flush()
 db.session.commit()
