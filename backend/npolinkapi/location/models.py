@@ -9,7 +9,8 @@ class Location(db.Model):
        "city": "Portland",
        "state": "OR",
        "id": 1,
-       "description": ""
+       "description": "",
+       "image": ""
     }
     """
     id = db.Column(db.Integer, primary_key=True)
@@ -17,13 +18,15 @@ class Location(db.Model):
     city = db.Column(db.String(80), unique=False, nullable=False)
     state = db.Column(db.String(80), unique=False, nullable=False)
     description = db.Column(db.String(25600), unique=False, nullable=False)
+    image = db.Column(db.String(80), unique=False, nullable=False)
     nonprofits = db.relationship("Nonprofit", back_populates="location")
 
-    def __init__(self, id, name, city, state, description):
+    def __init__(self, id, name, city, state, image, description):
         self.id = id
         self.name = name
         self.city = city
         self.state = state
+        self.image = image
         self.description = description
 
     def __repr__(self):

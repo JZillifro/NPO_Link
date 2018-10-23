@@ -25,3 +25,17 @@ class Nonprofit(db.Model):
     location = db.relationship("Location")
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship("Category")
+
+
+    def __init__(self, id, name, ein, logo, description, address, location_id, category_id):
+        self.id = id
+        self.name = name
+        self.ein = ein
+        self.logo = logo
+        self.description = description
+        slef.address = address
+        self.location_id = location_id
+        self.category_id = category_id
+
+    def __repr__(self):
+        return '<Nonprofit %r>' % (self.name)
