@@ -9,7 +9,7 @@ def get_image():
             city = loc["city"]
             state = loc["state"]
             if city == "Barrytown" and state == "NY":
-                state == "New_York"
+                state = "New_York"
             r = requests.get(base_url + city + ",_" + state)
             try:
                 # Verbose, last line contains size information for images
