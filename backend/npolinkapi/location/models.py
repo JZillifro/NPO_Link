@@ -31,3 +31,13 @@ class Location(db.Model):
 
     def __repr__(self):
         return '<Location %r>' % (self.name)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'city': self.city,
+            'state': self.state,
+            'description': self.description,
+            'image': self.image
+        }

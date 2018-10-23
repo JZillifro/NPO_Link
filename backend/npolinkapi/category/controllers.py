@@ -9,16 +9,12 @@ from sqlalchemy import inspect
 from npolinkapi.category.models import Category
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
-mod_category = Blueprint('category', __name__, url_prefix='/category')
-
-def object_as_dict(obj):
-    return {c.key: getattr(obj, c.key)
-            for c in inspect(obj).mapper.column_attrs}
+categories_blueprint = Blueprint('categories', __name__, url_prefix='/categories')
 
 # Set the route and accepted methods
-@mod_category.route('/<id>/', methods=['GET'])
-def getNonprofit(id):
-
-    category = Category.query.filter_by(id=id).first()
-
-    return jsonify(object_as_dict(category))
+@categories_blueprint.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({
+        'status': 'success',
+        'message': 'pong!'
+    })

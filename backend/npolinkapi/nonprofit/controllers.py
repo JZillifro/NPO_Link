@@ -9,15 +9,12 @@ from sqlalchemy import inspect
 from npolinkapi.nonprofit.models import Nonprofit
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
-mod_nonprofit = Blueprint('nonprofit', __name__, url_prefix='/nonprofit')
-
-def object_as_dict(obj):
-    return {c.key: getattr(obj, c.key)
-            for c in inspect(obj).mapper.column_attrs}
+nonprofits_blueprint = Blueprint('nonprofits', __name__, url_prefix='/nonprofits')
 
 # Set the route and accepted methods
-@mod_nonprofit.route('/<id>/', methods=['GET'])
-def getNonprofit(id):
-
-    nonprofit = Nonprofit.query.filter_by(id=id).first()
-    return jsonify(object_as_dict(nonprofit))
+@nonprofits_blueprint.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({
+        'status': 'success',
+        'message': 'pong!'
+    })

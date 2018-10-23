@@ -9,17 +9,13 @@ from sqlalchemy import inspect
 from npolinkapi.location.models import Location
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
-mod_location = Blueprint('location', __name__, url_prefix='/location')
+locations_blueprint = Blueprint('locations', __name__, url_prefix='/locations')
 
-
-def object_as_dict(obj):
-    return {c.key: getattr(obj, c.key)
-            for c in inspect(obj).mapper.column_attrs}
 
 # Set the route and accepted methods
-@mod_location.route('/<id>/', methods=['GET'])
-def getLocation(id):
-
-    location = Location.query.filter_by(id=id).first()
-
-    return jsonify(object_as_dict(location))
+@locations_blueprint.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({
+        'status': 'success',
+        'message': 'pong!'
+    })

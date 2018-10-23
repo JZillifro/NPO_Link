@@ -1,17 +1,23 @@
-FROM ubuntu:16.04
+FROM python:3.7.0-alpine
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
+RUN apk update && \
+    apk add --virtual build-deps gcc python-dev musl-dev && \
+    apk add postgresql-dev && \
+    apk add netcat-openbsd
 
-# We copy just the requirements.txt first to leverage Docker cache
-COPY ./requirements.txt /app/requirements.txt
 
-WORKDIR /app
+WORKDIR /usr/backend
+
+COPY ./requirements.txt /usr/backend/requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY . /app
+COPY ./entrypoint.sh /usr/backend/entrypoint.sh
+RUN chmod 755 /usr/backend/entrypoint.sh
 
-ENTRYPOINT [ "python" ]
 
-CMD [ "wsgi.py" ]
+COPY . /usr/backend
+
+EXPOSE 5000
+
+ENTRYPOINT [ "/usr/backend/entrypoint.sh" ]

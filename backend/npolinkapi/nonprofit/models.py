@@ -39,3 +39,15 @@ class Nonprofit(db.Model):
 
     def __repr__(self):
         return '<Nonprofit %r>' % (self.name)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'ein': self.ein,
+            'logo': self.logo,
+            'description': self.description,
+            'address': self.address,
+            'location_id': self.location_id,
+            'category_id': self.category_id
+        }

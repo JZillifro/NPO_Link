@@ -1,5 +1,7 @@
+import os
 # Import flask and template operators
 from flask import Flask, redirect, session, render_template
+from flask.cli import FlaskGroup
 
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
@@ -8,7 +10,8 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Configurations
-app.config.from_object('config')
+app_settings = os.getenv('APP_SETTINGS')
+app.config.from_object(app_settings)
 
 # Define the database object which is imported
 # by modules and controllers
@@ -20,17 +23,11 @@ def not_found(error):
     return render_template('404.html'), 404
 
 # Import a module / component using its blueprint handler variable (mod_auth)
-from npolinkapi.location.controllers import mod_location as location_module
-from npolinkapi.category.controllers import mod_category as category_module
-from npolinkapi.nonprofit.controllers import mod_nonprofit as nonprofit_module
+from npolinkapi.location.controllers import locations_blueprint
+from npolinkapi.category.controllers import categories_blueprint
+from npolinkapi.nonprofit.controllers import nonprofits_blueprint
 
 # Register blueprint(s)
-app.register_blueprint(location_module)
-app.register_blueprint(category_module)
-app.register_blueprint(nonprofit_module)
-
-
-
-# Build the database:
-# This will create the database file using SQLAlchemy
-db.create_all()
+app.register_blueprint(locations_blueprint)
+app.register_blueprint(categories_blueprint)
+app.register_blueprint(nonprofits_blueprint)
