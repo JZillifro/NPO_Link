@@ -66,7 +66,7 @@ def getdata():
 
 
 
-    with open('../results/loc-results-desc.json', 'w') as outfile:
+    with open('../results/loc-results.json', 'w') as outfile:
         json.dump(locations, outfile)
 
 

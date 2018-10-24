@@ -90,6 +90,44 @@ def generate():
             volunteer_list.append(ve)
         org.pop('projects', None)
 
+
+    loc_data = {}
+    for loc in location_list:
+        id = loc['id']
+        loc_data[id] = {'orgs': [], 'cats': []}
+
+    cat_data = {}
+    for cat in category_list:
+        id = cat['id']
+        cat_data[id] = {'orgs': [], 'locs': []}
+
+    for npo in org_list:
+        npo_id = npo['id']
+        loc_id = npo['location_id']
+        cat_id = npo['category_id']
+
+        if npo_id not in loc_data[loc_id]['orgs']:
+            loc_data[loc_id]['orgs'].append(npo_id)
+
+        if cat_id not in loc_data[loc_id]['cats']:
+            loc_data[loc_id]['cats'].append(cat_id)
+
+        if npo_id not in cat_data[cat_id]['orgs']:
+            cat_data[cat_id]['orgs'].append(npo_id)
+
+        if loc_id not in cat_data[cat_id]['locs']:
+            cat_data[cat_id]['locs'].append(loc_id)
+
+    for loc in location_list:
+        id = loc['id']
+        loc['nonprofits'] = loc_data[id]['orgs']
+        loc['categories'] = loc_data[id]['cats']
+
+    for cat in category_list:
+        id = cat['id']
+        cat['nonprofits'] = cat_data[id]['orgs']
+        cat['locations'] = cat_data[id]['locs']
+
     with open('../results/org-results.json', 'w') as org_outfile:
         json.dump(org_list, org_outfile)
 
