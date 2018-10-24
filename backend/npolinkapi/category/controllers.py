@@ -24,5 +24,4 @@ def get_all():
 
 @categories_blueprint.route('/<id>', methods=['GET'])
 def get_by_id(id):
-    return "Trying to query for %s\n" % (id)
     return jsonify( [cat.to_json() for cat in Category.query.filter_by(code=id)])
