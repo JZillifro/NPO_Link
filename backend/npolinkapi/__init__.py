@@ -22,6 +22,7 @@ db = SQLAlchemy(app)
 def not_found(error):
     return render_template('404.html'), 404
 
+
 # Import a module / component using its blueprint handler variable (mod_auth)
 from npolinkapi.location.controllers import locations_blueprint
 from npolinkapi.category.controllers import categories_blueprint
@@ -31,3 +32,8 @@ from npolinkapi.nonprofit.controllers import nonprofits_blueprint
 app.register_blueprint(locations_blueprint)
 app.register_blueprint(categories_blueprint)
 app.register_blueprint(nonprofits_blueprint)
+
+@app.route("/")
+def greet():
+    #insert any documenation/behaviour for interaction with api at default endpoint here
+    return "Welcome to the NPO link api <Placeholder> <Placeholder> <Placeholder>\n"
