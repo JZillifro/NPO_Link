@@ -29,7 +29,7 @@ def seed_db():
         for category in data:
             exists = Category.query.filter_by(id=category['id']).first()
             if not exists:
-                cat = Category(id=category['id'],name=category['title'], description=location['description'], code=category['code'], image=category['image'], parent_category=category['parent_code'])
+                cat = Category(id=category['id'],name=category['title'], description=category['description'], code=category['code'], image=category['image'], parent_category=category['parent_code'])
                 db.session.add(cat)
                 db.session.commit()
 
