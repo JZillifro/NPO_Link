@@ -1,0 +1,17 @@
+#run before to build everything
+docker-compose -f docker-compose.local.yml up -d --build
+
+#run after built to run the backend
+docker-compose -f docker-compose-dev.yml run backend python manage.py run
+
+#run after built to recreate the database
+docker-compose -f docker-compose-dev.yml run backend python manage.py recreate_db
+
+#run after built to run tests
+docker-compose -f docker-compose-dev.yml run backend python manage.py test
+
+#run after built to seed data into database
+docker-compose -f docker-compose-dev.yml run backend python manage.py seed_db
+
+#run to shut everything down
+docker-compose -f docker-compose.local.yml down
