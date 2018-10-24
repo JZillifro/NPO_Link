@@ -1,23 +1,28 @@
+# base image
 FROM python:3.7.0-alpine
 
+# new
+# install dependencies
 RUN apk update && \
     apk add --virtual build-deps gcc python-dev musl-dev && \
     apk add postgresql-dev && \
     apk add netcat-openbsd
 
+# set working directory
+WORKDIR /usr/src/app
 
-WORKDIR /usr/backend
-
-COPY ./requirements.txt /usr/backend/requirements.txt
-
+# add and install requirements
+COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
-COPY ./entrypoint.sh /usr/backend/entrypoint.sh
-RUN chmod 755 /usr/backend/entrypoint.sh
+# new
+# add entrypoint.sh
+COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
 
+# add app
+COPY . /usr/src/app
 
-COPY . /usr/backend
-
-EXPOSE 5000
-
-ENTRYPOINT [ "/usr/backend/entrypoint.sh" ]
+# new
+# run server
+CMD ["/usr/src/app/entrypoint.sh"]
