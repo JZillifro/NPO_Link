@@ -19,9 +19,11 @@ def generate():
             category['code'] = key
             if len(key) == 1:
                 images[key] = category['image']
+                category['parent_code'] = key
             else:
                 code = key[0]
                 category['image'] = images[code]
+                category['parent_code'] = key[0]
 
             id += 1
 
@@ -128,17 +130,17 @@ def generate():
         cat['nonprofits'] = cat_data[id]['orgs']
         cat['locations'] = cat_data[id]['locs']
 
-    with open('../results/org-results.json', 'w') as org_outfile:
-        json.dump(org_list, org_outfile)
-
-    with open('../results/loc-results.json', 'w') as location_outfile:
-        json.dump(location_list, location_outfile)
+    # with open('../results/org-results.json', 'w') as org_outfile:
+    #     json.dump(org_list, org_outfile)
+    #
+    # with open('../results/loc-results.json', 'w') as location_outfile:
+    #     json.dump(location_list, location_outfile)
 
     with open('../results/cat-results.json', 'w') as category_outfile:
         json.dump(category_list, category_outfile)
 
-    with open('../results/vol-results.json', 'w') as volunteer_outfile:
-        json.dump(volunteer_list, volunteer_outfile)
+    # with open('../results/vol-results.json', 'w') as volunteer_outfile:
+    #     json.dump(volunteer_list, volunteer_outfile)
 
 
 if __name__ == "__main__":
