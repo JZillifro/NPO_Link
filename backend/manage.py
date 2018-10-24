@@ -18,7 +18,7 @@ def seed_db():
         for location in data:
             exists = Location.query.filter_by(id=location['id']).first()
             if not exists:
-                nonprofits = location['orgs']
+                nonprofits = location['nonprofits']
                 categories = location['categories']
                 loc = Location(id=location['id'],name=location['name'], city=location['city'], state=location['state'], description=location['description'], image=location['image'], category_list=categories, nonprofit_list=nonprofits)
                 db.session.add(loc)
@@ -31,7 +31,7 @@ def seed_db():
         for category in data:
             exists = Category.query.filter_by(id=category['id']).first()
             if not exists:
-                nonprofits = category['orgs']
+                nonprofits = category['nonprofits']
                 locations = category['locations']
                 cat = Category(id=category['id'],name=category['title'], description=category['description'], code=category['code'], image=category['image'], parent_category=category['parent_code'], location_list=locations, nonprofit_list=nonprofits)
                 db.session.add(cat)
