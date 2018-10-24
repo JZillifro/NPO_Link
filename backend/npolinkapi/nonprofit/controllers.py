@@ -18,3 +18,11 @@ def ping():
         'status': 'success',
         'message': 'pong!'
     })
+
+@nonprofits_blueprint.route('/all', methods=['GET'])
+def get_all():
+    nonprofits = Nonprofit.query.all()
+    if not nonprofits:
+        return jsonify({"result": "no results"})
+
+    return jsonify([nonprofit.to_json() for nonprofit in nonprofits])
