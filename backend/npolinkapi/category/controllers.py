@@ -25,3 +25,13 @@ def get_all():
 @categories_blueprint.route('/<id>', methods=['GET'])
 def get_by_id(id):
     return jsonify( [cat.to_json() for cat in Category.query.filter_by(code=id)])
+
+@categories_blueprint.rout('/npos/<category_id>', methods=['GET'])
+def get_npos_by_location(category_id):
+    npos = Category.query.filter_by(id=category_id).options(load_only("npo_ids")).one().to_json()['npo_ids']
+
+    npo_id_list = json.loads(npos)
+
+    npo_list = Nonprofit.query.filter(Nonprofit.id.in_(npo_id_list)).all()
+
+    return jsonify(npo.to_json() for npo in npo_list)
