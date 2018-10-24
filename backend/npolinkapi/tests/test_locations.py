@@ -4,12 +4,12 @@ import unittest
 from npolinkapi.tests.base import BaseTestCase
 
 
-class TestNonprofitService(BaseTestCase):
-    """Tests for the Nonprofit Service."""
+class TestLocationService(BaseTestCase):
+    """Tests for the Location Service."""
 
-    def test_nonprofits(self):
+    def test_locations(self):
         """Ensure the /ping route behaves correctly."""
-        response = self.client.get('/nonprofits/ping')
+        response = self.client.get('/locations/ping')
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertIn('pong!', data['message'])

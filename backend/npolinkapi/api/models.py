@@ -71,15 +71,19 @@ class Location(db.Model):
     state = db.Column(db.String(80), unique=False, nullable=False)
     description = db.Column(db.String(25600), unique=False, nullable=False)
     image = db.Column(db.String(20000), unique=False, nullable=False)
+    nonprofit_list = db.Column(db.PickleType, unique=False, nullable=False)
+    category_list = db.Column(db.PickleType, unique=False, nullable=False)
     nonprofits = db.relationship("Nonprofit", back_populates="location")
 
-    def __init__(self, id, name, city, state, image, description):
+    def __init__(self, id, name, city, state, image, description, nonprofit_list, category_list):
         self.id = id
         self.name = name
         self.city = city
         self.state = state
         self.image = image
         self.description = description
+        self.nonprofit_list = nonprofit_list
+        self.category_list = category_list
 
     def __repr__(self):
         return '<Location %r>' % (self.name)
@@ -91,7 +95,9 @@ class Location(db.Model):
             'city': self.city,
             'state': self.state,
             'description': self.description,
-            'image': self.image
+            'image': self.image,
+            'categories': self.category_list,
+            'nonprofits': self.nonprofit_list
         }
 
 class Category(db.Model):
@@ -113,15 +119,19 @@ class Category(db.Model):
     parent_category = db.Column(db.String(80), unique=False, nullable=False)
     name = db.Column(db.String(80), unique=False, nullable=False)
     image = db.Column(db.String(20000), unique=False, nullable=False)
+    nonprofit_list = db.Column(db.PickleType, unique=False, nullable=False)
+    location_list = db.Column(db.PickleType, unique=False, nullable=False)
     nonprofits = db.relationship("Nonprofit", back_populates="category")
 
-    def __init__(self, id, name, code, parent_category, image, description):
+    def __init__(self, id, name, code, parent_category, image, description, location_list, nonprofit_list):
         self.id = id
         self.name = name
         self.code = code
         self.parent_category = parent_category
         self.image = image
         self.description = description
+        self.location_list = location_list,
+        self.nonprofit_list = nonprofit_list
 
     def __repr__(self):
         return '<Category %r>' % (self.name)
@@ -133,5 +143,7 @@ class Category(db.Model):
             'code': self.code,
             'image': self.image,
             'description': self.description,
-            'parent_category': self.parent_category
+            'parent_category': self.parent_category,
+            'locations': self.location_list,
+            'nonprofits': self.nonprofit_list
         }
