@@ -6,7 +6,7 @@ from npolinkapi import db
 from sqlalchemy import inspect
 
 # Import module models (i.e. User)
-from npolinkapi.category.models import Category
+from npolinkapi.api.models import Category
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 categories_blueprint = Blueprint('categories', __name__, url_prefix='/categories')

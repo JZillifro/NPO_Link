@@ -8,6 +8,7 @@ class BaseConfig:
     CSRF_SESSION_KEY = "secret"
     SECRET_KEY = "secret"
     THREADS_PER_PAGE = 2
+    SECRET_KEY = 'my_precious'
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration"""

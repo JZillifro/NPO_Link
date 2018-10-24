@@ -6,7 +6,7 @@ from npolinkapi import db
 from sqlalchemy import inspect
 
 # Import module models (i.e. User)
-from npolinkapi.nonprofit.models import Nonprofit
+from npolinkapi.api.models import Nonprofit
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 nonprofits_blueprint = Blueprint('nonprofits', __name__, url_prefix='/nonprofits')
