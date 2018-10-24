@@ -18,7 +18,7 @@ def ping():
         'status': 'success',
         'message': 'pong!'
     })
-@categories_blueprint.route('/', methods=['GET'])
+@categories_blueprint.route('/all', methods=['GET'])
 def get_all():
     return jsonify([cat.to_json() for cat in Category.query.all()])
 
