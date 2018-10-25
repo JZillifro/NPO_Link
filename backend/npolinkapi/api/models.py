@@ -130,7 +130,7 @@ class Category(db.Model):
         self.parent_category = parent_category
         self.image = image
         self.description = description
-        self.location_list = location_list,
+        self.location_list = location_list
         self.nonprofit_list = nonprofit_list
 
     def __repr__(self):

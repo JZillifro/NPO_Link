@@ -4,6 +4,8 @@ from flask import Blueprint, request, jsonify
 # Import the database object from the main app module
 from npolinkapi import db
 from sqlalchemy import inspect
+from sqlalchemy.orm import load_only
+
 import json
 
 # Import module models (i.e. User)
@@ -26,21 +28,64 @@ def get_all():
 
 @categories_blueprint.route('/<id>', methods=['GET'])
 def get_by_id(id):
-    return jsonify( [cat.to_json() for cat in Category.query.filter_by(code=id)])
-
-@categories_blueprint.route('locations/<category_id>', methods=['GET'])
-def get_locations_for_category(category_id):
-
-    location_ids = Category.query.filter_by(id=category_id).options(load_only("location_ids")).one().to_json()['location_ids']
-    location_id_list = json.loads(location_ids)
-
-    Location.query.filter(Location.id.in_(location_id_list)).all()
-
-    """Get all locations for a category"""
+    return jsonify( [cat.to_json() for cat in Category.query.filter_by(id=id)])
     response_object = {
-        'status': 'success',
-        'data': {
-            'locations': [location.to_json() for location in Location.query.filter(Location.id.in_(location_id_list)).all()]
-        }
+        'status': 'fail',
+        'message': 'No location for given id'
     }
-    return jsonify(response_object), 200
+
+    try:
+        category = Location.query.filter_by(id=int(id)).one()
+        if not category:
+            response_object = {
+                'status': 'fail',
+                'message': 'No category for given id'
+            }
+            return jsonify(response_object), 404
+        else:
+            response_object = {
+                'status': 'success',
+                'data': {
+                    'category' : category.to_json()
+                }
+            }
+
+            return jsonify(response_object), 200
+
+    except ValueError:
+        return jsonify(response_object), 404
+
+@categories_blueprint.route('/location/<location_id>', methods=['GET'])
+def get_category_by_location(location_id):
+    response_object = {
+        'status': 'fail',
+        'message': 'Location id invalid'
+    }
+
+    try:
+        location = Location.query.filter_by(id=int(location_id)).options(load_only("category_list")).one()
+
+        if not location:
+            response_object['message'] = 'Invalid location'
+            return jsonify(response_object), 404
+        else:
+            category_ids = location.to_json()['categories']
+            if len(category_ids) == 0:
+                response_object = {
+                    'status': 'success',
+                    'data': {
+                        'categories': []
+                    }
+                }
+            else:
+                categories = Category.query.filter(Category.id.in_(category_ids)).all()
+                response_object = {
+                    'status': 'success',
+                    'data': {
+                        'categories': [category.to_json() for category in categories]
+                    }
+                }
+
+        return jsonify(response_object), 200
+    except ValueError:
+        return jsonify(response_object), 404
