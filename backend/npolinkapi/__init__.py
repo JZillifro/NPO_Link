@@ -22,9 +22,9 @@ def create_app(script_info=None):
     db.init_app(app)
 
     # register blueprints
-    from npolinkapi.location.controllers import locations_blueprint
-    from npolinkapi.category.controllers import categories_blueprint
-    from npolinkapi.nonprofit.controllers import nonprofits_blueprint
+    from npolinkapi.api.location import locations_blueprint
+    from npolinkapi.api.category import categories_blueprint
+    from npolinkapi.api.nonprofit import nonprofits_blueprint
     # Register blueprint(s)
     app.register_blueprint(locations_blueprint)
     app.register_blueprint(categories_blueprint)
