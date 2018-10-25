@@ -12,7 +12,7 @@ import json
 from npolinkapi.api.models import Category, Location
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
-categories_blueprint = Blueprint('categories', __name__, url_prefix='/categories')
+categories_blueprint = Blueprint('categories', __name__, url_prefix='/v1.0/categories')
 
 # Set the route and accepted methods
 @categories_blueprint.route('/ping', methods=['GET'])

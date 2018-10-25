@@ -9,7 +9,7 @@ class TestNonprofitService(BaseTestCase):
 
     def test_nonprofits(self):
         """Ensure the /ping route behaves correctly."""
-        response = self.client.get('/nonprofits/ping')
+        response = self.client.get('/v1.0/nonprofits/ping')
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertIn('pong!', data['message'])

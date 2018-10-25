@@ -10,7 +10,7 @@ from sqlalchemy.orm import load_only
 from npolinkapi.api.models import Location, Category
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
-locations_blueprint = Blueprint('locations', __name__, url_prefix='/locations')
+locations_blueprint = Blueprint('locations', __name__, url_prefix='/v1.0/locations')
 
 
 # Set the route and accepted methods

@@ -9,7 +9,7 @@ class TestLocationService(BaseTestCase):
 
     def test_locations(self):
         """Ensure the /ping route behaves correctly."""
-        response = self.client.get('/locations/ping')
+        response = self.client.get('/v1.0/locations/ping')
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertIn('pong!', data['message'])
