@@ -32,7 +32,23 @@ def get_all_locations():
     }
     return jsonify(response_object), 200
 
-@locations_blueprint.route('/<id>', methods=['GET'])
+@locations_blueprint.route('/<int:page>',methods=['GET'])
+def view(page=1):
+    per_page = 16
+    locations = Location.query.order_by(Location.id.asc()).paginate(page,per_page,error_out=False)
+    paged_response_object = {
+        'status': 'success',
+        'data': {
+            'locations': [location.to_json() for location in locations.items]
+        },
+        'has_next': locations.has_next,
+        'has_prev': locations.has_prev,
+        'next_page': locations.next_num,
+        'pages': locations.pages
+    }
+    return jsonify(paged_response_object), 200
+
+@locations_blueprint.route('/location/<id>', methods=['GET'])
 def get_by_location_by_id(id):
     response_object = {
         'status': 'fail',

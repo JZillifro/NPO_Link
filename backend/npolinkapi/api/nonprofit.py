@@ -33,7 +33,23 @@ def get_all_nonprofits():
     }
     return jsonify(response_object), 200
 
-@nonprofits_blueprint.route('/<nonprofit_id>', methods=['GET'])
+@nonprofits_blueprint.route('/<int:page>',methods=['GET'])
+def view(page=1):
+    per_page = 16
+    nonprofits = Nonprofit.query.order_by(Nonprofit.id.asc()).paginate(page,per_page,error_out=False)
+    paged_response_object = {
+        'status': 'success',
+        'data': {
+            'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits.items]
+        },
+        'has_next': nonprofits.has_next,
+        'has_prev': nonprofits.has_prev,
+        'next_page': nonprofits.next_num,
+        'pages': nonprofits.pages
+    }
+    return jsonify(paged_response_object), 200
+
+@nonprofits_blueprint.route('/nonprofit/<nonprofit_id>', methods=['GET'])
 def get_nonprofit_by_id(nonprofit_id):
     """Get single nonprofit details"""
     response_object = {

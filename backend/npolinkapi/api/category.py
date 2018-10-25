@@ -26,7 +26,24 @@ def ping():
 def get_all():
     return jsonify([cat.to_json() for cat in Category.query.all()])
 
-@categories_blueprint.route('/<id>', methods=['GET'])
+@categories_blueprint.route('/<int:page>',methods=['GET'])
+def view(page=1):
+    per_page = 16
+    categories = Category.query.order_by(Category.id.asc()).paginate(page,per_page,error_out=False)
+    paged_response_object = {
+        'status': 'success',
+        'data': {
+            'categories': [category.to_json() for category in categories.items]
+        },
+        'has_next': categories.has_next,
+        'has_prev': categories.has_prev,
+        'next_page': categories.next_num,
+        'pages': categories.pages
+    }
+    return jsonify(paged_response_object), 200
+
+
+@categories_blueprint.route('/category/<id>', methods=['GET'])
 def get_by_id(id):
     return jsonify( [cat.to_json() for cat in Category.query.filter_by(id=id)])
     response_object = {
