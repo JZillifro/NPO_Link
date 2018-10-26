@@ -20,7 +20,10 @@ def seed_db():
             if not exists:
                 nonprofits = location['nonprofits']
                 categories = location['categories']
-                loc = Location(id=location['id'],name=location['name'], city=location['city'], state=location['state'], description=location['description'], image=location['image'], category_list=categories, nonprofit_list=nonprofits)
+                loc = Location(id=location['id'],name=location['name'], city=location['city'],
+                               state=location['state'], description=location['description'],
+                               image=location['image'], category_list=categories, nonprofit_list=nonprofits)
+
                 db.session.add(loc)
                 db.session.commit()
 
@@ -33,7 +36,9 @@ def seed_db():
             if not exists:
                 nonprofits = category['nonprofits']
                 locations = category['locations']
-                cat = Category(id=category['id'],name=category['title'], description=category['description'], code=category['code'], image=category['image'], parent_category=category['parent_code'], location_list=locations, nonprofit_list=nonprofits)
+                cat = Category(id=category['id'],name=category['title'], description=category['description'],
+                               code=category['code'], image=category['image'], parent_category=category['parent_code'],
+                               location_list=locations, nonprofit_list=nonprofits)
                 db.session.add(cat)
                 db.session.commit()
 
@@ -44,7 +49,11 @@ def seed_db():
         for nonprofit in data:
             exists = Nonprofit.query.filter_by(id=nonprofit['id']).first()
             if not exists:
-                org = Nonprofit(id=nonprofit['id'],name=nonprofit['name'], description=nonprofit['description'], ein=nonprofit['ein'], logo=nonprofit['logo'], address=nonprofit['address'], location_id=nonprofit['location_id'], category_id=nonprofit['category_id'])
+                org = Nonprofit(id=nonprofit['id'],name=nonprofit['name'], description=nonprofit['description'],
+                                ein=nonprofit['ein'], logo=nonprofit['logo'], address=nonprofit['address'],
+                                location_id=nonprofit['location_id'], category_id=nonprofit['category_id'],
+                                projects=nonprofit['projects'])
+
                 db.session.add(org)
                 db.session.commit()
 
