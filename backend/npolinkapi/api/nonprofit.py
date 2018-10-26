@@ -5,7 +5,7 @@ from flask import Blueprint, request, jsonify
 from npolinkapi import db
 from sqlalchemy import inspect, and_
 from sqlalchemy.orm import load_only
-
+from sqlalchemy.orm.exc import NoResultFound
 
 # Import module models (i.e. nonprofit)
 from npolinkapi.api.models import Nonprofit, Location, Category
@@ -35,6 +35,7 @@ def get_all_nonprofits():
 
 @nonprofits_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
+    """Get all nonprofits paged"""
     per_page = 12
     nonprofits = Nonprofit.query.order_by(Nonprofit.id.asc()).paginate(page,per_page,error_out=False)
     paged_response_object = {
@@ -57,27 +58,24 @@ def get_nonprofit_by_id(nonprofit_id):
         'message': 'Invalid nonprofit id provided'
     }
     try:
-        nonprofit = Nonprofit.query.filter_by(id=int(nonprofit_id)).first()
-        if not nonprofit:
-            response_object = {
-                'status': 'fail',
-                'message': 'Nonprofit not found'
+        nonprofit = Nonprofit.query.filter_by(id=int(nonprofit_id)).one()
+        response_object = {
+            'status': 'success',
+            'data': {
+                'nonprofit' :  nonprofit.to_json()
             }
-            return jsonify(response_object), 404
-        else:
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'nonprofit' :  nonprofit.to_json()
-                }
-            }
-            return jsonify(response_object), 200
+        }
+        return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404
-
+    except NoResultFound:
+        response_object['message'] = 'No nonprofit found for given id'
+        return jsonify(response_object), 404
 
 @nonprofits_blueprint.route('/category/<category_id>', methods=['GET'])
 def get_nonprofits_by_category(category_id):
+    """Get all nonprofits for a given category"""
+
     response_object = {
         'status': 'fail',
         'message': 'Invalid category id provided'
@@ -85,21 +83,21 @@ def get_nonprofits_by_category(category_id):
 
     try:
         nonprofits = Nonprofit.query.filter_by(category_id=int(category_id)).all()
-        if nonprofits:
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits]
-                }
+        response_object = {
+            'status': 'success',
+            'data': {
+                'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits]
             }
+        }
 
         return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404
 
-
 @nonprofits_blueprint.route('/location/<location_id>', methods=['GET'])
 def get_nonprofits_by_location(location_id):
+    """Get all nonprofits for a given location"""
+
     response_object = {
         'status': 'fail',
         'message': 'Invalid location id provided'
@@ -107,7 +105,63 @@ def get_nonprofits_by_location(location_id):
 
     try:
         nonprofits = Nonprofit.query.filter_by(location_id=int(location_id)).all()
-        if nonprofits:
+
+        response_object = {
+            'status': 'success',
+            'data': {
+                'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits]
+            }
+        }
+
+        return jsonify(response_object), 200
+    except ValueError:
+        return jsonify(response_object), 404
+
+@nonprofits_blueprint.route('/location/city/<city>', methods=['GET'])
+def get_nonprofits_by_city(city):
+    """"Get all nonprofits in a city, state"""
+    response_object = {
+        'status': 'fail',
+        'message': 'Invalid request'
+    }
+
+    try:
+        location = Location.query.filter_by(name=str(city)).options(load_only("id")).one()
+        nonprofits =  Nonprofit.query.filter_by(location_id=int(location.id)).all()
+        response_object = {
+            'status': 'success',
+            'data': {
+                'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits]
+            }
+        }
+
+        return jsonify(response_object), 200
+    except ValueError:
+        return jsonify(response_object), 404
+    except NoResultFound:
+        response_object['message'] = 'No location wa found for given city'
+        return jsonify(response_object), 404
+
+@nonprofits_blueprint.route('/location/state/<state>', methods=['GET'])
+def get_nonprofits_by_state(state):
+    """Get all nonprofits in a given state"""
+
+    response_object = {
+        'status': 'fail',
+        'message': 'Invalid request'
+    }
+
+    try:
+        location_ids = [loc.id for loc in Location.query.filter_by(state=str(state)).options(load_only('id')).all()]
+        if len(location_ids) == 0:
+            response_object = {
+                'status': 'success',
+                'data': {
+                    'nonprofits': []
+                }
+            }
+        else :
+            nonprofits =  Nonprofit.query.filter(Nonprofit.location_id.in_(location_ids)).all()
             response_object = {
                 'status': 'success',
                 'data': {
@@ -116,73 +170,16 @@ def get_nonprofits_by_location(location_id):
             }
 
         return jsonify(response_object), 200
-    except:
-        return jsonify(response_object), 404
-
-
-@nonprofits_blueprint.route('/location/city/<city>', methods=['GET'])
-def get_nonprofits_by_city(city):
-    response_object = {
-        'status': 'fail',
-        'message': 'Invalid request'
-    }
-
-    try:
-        location_id = Location.query.filter_by(name=str(city)).options(load_only("id")).one().to_json()['id']
-        if not location_id:
-            return jsonify(response_object), 404
-        else:
-
-            nonprofits =  Nonprofit.query.filter_by(location_id=int(location_id)).all()
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits]
-                }
-            }
-
-            return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404
-
-@nonprofits_blueprint.route('/location/state/<state>', methods=['GET'])
-def get_nonprofits_by_state(state):
-    response_object = {
-        'status': 'fail',
-        'message': 'Invalid request'
-    }
-
-    try:
-        location_ids = [loc.id for loc in Location.query.filter_by(state=str(state)).options(load_only('id')).all()]
-        if not location_ids:
-            return jsonify(response_object), 404
-        else:
-            if len(location_ids) == 0:
-                response_object = {
-                    'status': 'success',
-                    'data': {
-                        'nonprofits': []
-                    }
-                }
-            else:
-                nonprofits =  Nonprofit.query.filter(Nonprofit.location_id.in_(location_ids)).all()
-                response_object = {
-                    'status': 'success',
-                    'data': {
-                        'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits]
-                    }
-                }
-
-            return jsonify(response_object), 200
-    except ValueError:
-        return jsonify(response_object), 404
-
 
 @nonprofits_blueprint.route('/location/<location_id>/category/<category_id>', methods=['GET'])
 def get_nonprofits_by_state_and_category_ids(location_id, category_id):
+    """Get all nonprofits for a given location and category"""
+
     response_object = {
         'status': 'fail',
-        'message': 'Invalid request'
+        'message': 'Invalid ids provided'
     }
 
     try:
@@ -198,7 +195,6 @@ def get_nonprofits_by_state_and_category_ids(location_id, category_id):
     except ValueError:
         return jsonify(response_object), 404
 
-
 @nonprofits_blueprint.route('/location/state/<state>/category/code/<category>', methods=['GET'])
 def get_nonprofits_by_state_and_category(state, category):
     response_object = {
@@ -208,11 +204,16 @@ def get_nonprofits_by_state_and_category(state, category):
 
     try:
         location_ids = [loc.id for loc in Location.query.filter_by(state=str(state)).options(load_only('id')).all()]
-        category = Category.query.filter_by(code=str(category)).one()
-        if not location_ids or not category:
-            return jsonify(response_object), 404
+        if len(location_ids) == 0:
+            response_object = {
+                'status': 'success',
+                'data': {
+                    'nonprofits': []
+                }
+            }
         else:
-            if len(location_ids) == 0:
+            category = Category.query.filter_by(code=str(category)).one()
+            if category == None:
                 response_object = {
                     'status': 'success',
                     'data': {

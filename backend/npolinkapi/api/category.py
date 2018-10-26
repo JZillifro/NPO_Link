@@ -5,6 +5,7 @@ from flask import Blueprint, request, jsonify
 from npolinkapi import db
 from sqlalchemy import inspect
 from sqlalchemy.orm import load_only
+from sqlalchemy.orm.exc import NoResultFound
 
 import json
 
@@ -24,6 +25,7 @@ def ping():
 
 @categories_blueprint.route('/all', methods=['GET'])
 def get_all():
+    """Get all categories"""
     categories = Category.query.all()
     response_object = {
         'status': 'success',
@@ -35,6 +37,7 @@ def get_all():
 
 @categories_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
+    """Get all categories paged"""
     per_page = 12
     categories = Category.query.order_by(Category.id.asc()).paginate(page,per_page,error_out=False)
     paged_response_object = {
@@ -49,37 +52,34 @@ def view(page=1):
     }
     return jsonify(paged_response_object), 200
 
-
 @categories_blueprint.route('/category/<id>', methods=['GET'])
 def get_by_id(id):
+    """Get a category by it"""
     response_object = {
         'status': 'fail',
-        'message': 'No location for given id'
+        'message': 'Invalid id provided'
     }
 
     try:
         category = Category.query.filter_by(id=int(id)).one()
-        if not category:
-            response_object = {
-                'status': 'fail',
-                'message': 'No category for given id'
+        response_object = {
+            'status': 'success',
+            'data': {
+                'category' : category.to_json()
             }
-            return jsonify(response_object), 404
-        else:
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'category' : category.to_json()
-                }
-            }
+        }
 
-            return jsonify(response_object), 200
-
+        return jsonify(response_object), 200
     except ValueError:
+        return jsonify(response_object), 404
+    except NoResultFound:
+        response_object['message'] = 'No category found for given id'
         return jsonify(response_object), 404
 
 @categories_blueprint.route('/location/<location_id>', methods=['GET'])
 def get_category_by_location(location_id):
+    """Get categories by location"""
+
     response_object = {
         'status': 'fail',
         'message': 'Location id invalid'
@@ -87,28 +87,17 @@ def get_category_by_location(location_id):
 
     try:
         location = Location.query.filter_by(id=int(location_id)).options(load_only("category_list")).one()
-
-        if not location:
-            response_object['message'] = 'Invalid location'
-            return jsonify(response_object), 404
-        else:
-            category_ids = location.to_json()['categories']
-            if len(category_ids) == 0:
-                response_object = {
-                    'status': 'success',
-                    'data': {
-                        'categories': []
-                    }
-                }
-            else:
-                categories = Category.query.filter(Category.id.in_(category_ids)).all()
-                response_object = {
-                    'status': 'success',
-                    'data': {
-                        'categories': [category.to_json() for category in categories]
-                    }
-                }
+        categories = Category.query.filter(Category.id.in_(location.category_list)).all()
+        response_object = {
+            'status': 'success',
+            'data': {
+                'categories': [category.to_json() for category in categories]
+            }
+        }
 
         return jsonify(response_object), 200
     except ValueError:
+        return jsonify(response_object), 404
+    except NoResultFound:
+        response_object['message'] = 'No location found for given location id'
         return jsonify(response_object), 404
