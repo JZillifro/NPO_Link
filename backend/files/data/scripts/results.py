@@ -83,14 +83,14 @@ def generate():
         org.pop('city', None)
         org.pop('state', None)
 
-        volunteer_events = org['projects']
-
-        for ve in volunteer_events:
-            ve['organization_id'] = org['id']
-            ve['id'] = volunteer_id
-            volunteer_id += 1
-            volunteer_list.append(ve)
-        org.pop('projects', None)
+        # volunteer_events = org['projects']
+        #
+        # for ve in volunteer_events:
+        #     ve['organization_id'] = org['id']
+        #     ve['id'] = volunteer_id
+        #     volunteer_id += 1
+        #     volunteer_list.append(ve)
+        # org.pop('projects', None)
 
 
     loc_data = {}
@@ -130,11 +130,11 @@ def generate():
         cat['nonprofits'] = cat_data[id]['orgs']
         cat['locations'] = cat_data[id]['locs']
 
-    # with open('../results/org-results.json', 'w') as org_outfile:
-    #     json.dump(org_list, org_outfile)
-    #
-    # with open('../results/loc-results.json', 'w') as location_outfile:
-    #     json.dump(location_list, location_outfile)
+    with open('../results/org-results.json', 'w') as org_outfile:
+        json.dump(org_list, org_outfile)
+
+    with open('../results/loc-results.json', 'w') as location_outfile:
+        json.dump(location_list, location_outfile)
 
     with open('../results/cat-results.json', 'w') as category_outfile:
         json.dump(category_list, category_outfile)
