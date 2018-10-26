@@ -34,7 +34,7 @@ def get_all_locations():
 
 @locations_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
-    per_page = 16
+    per_page = 12
     locations = Location.query.order_by(Location.id.asc()).paginate(page,per_page,error_out=False)
     paged_response_object = {
         'status': 'success',

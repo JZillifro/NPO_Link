@@ -35,7 +35,7 @@ def get_all_nonprofits():
 
 @nonprofits_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
-    per_page = 16
+    per_page = 12
     nonprofits = Nonprofit.query.order_by(Nonprofit.id.asc()).paginate(page,per_page,error_out=False)
     paged_response_object = {
         'status': 'success',
@@ -67,7 +67,9 @@ def get_nonprofit_by_id(nonprofit_id):
         else:
             response_object = {
                 'status': 'success',
-                'data': nonprofit.to_json()
+                'data': {
+                    'nonprofit' :  nonprofit.to_json()
+                }
             }
             return jsonify(response_object), 200
     except ValueError:

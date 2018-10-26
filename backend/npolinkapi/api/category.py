@@ -24,11 +24,18 @@ def ping():
 
 @categories_blueprint.route('/all', methods=['GET'])
 def get_all():
-    return jsonify([cat.to_json() for cat in Category.query.all()])
+    categories = Category.query.all()
+    response_object = {
+        'status': 'success',
+        'data': {
+            'categories' : [cat.to_json() for cat in categories]
+        }
+    }
+    return jsonify(response_object), 200
 
 @categories_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
-    per_page = 16
+    per_page = 12
     categories = Category.query.order_by(Category.id.asc()).paginate(page,per_page,error_out=False)
     paged_response_object = {
         'status': 'success',
@@ -45,14 +52,13 @@ def view(page=1):
 
 @categories_blueprint.route('/category/<id>', methods=['GET'])
 def get_by_id(id):
-    return jsonify( [cat.to_json() for cat in Category.query.filter_by(id=id)])
     response_object = {
         'status': 'fail',
         'message': 'No location for given id'
     }
 
     try:
-        category = Location.query.filter_by(id=int(id)).one()
+        category = Category.query.filter_by(id=int(id)).one()
         if not category:
             response_object = {
                 'status': 'fail',
