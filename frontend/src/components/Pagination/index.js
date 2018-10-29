@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Row, Col } from 'reactstrap';
 
 const propTypes = {
     onChangePage: PropTypes.func.isRequired,
@@ -85,10 +86,10 @@ class Pagination extends React.Component {
 
         return (
            <div className="container">
-             <div className="row">
-                 <div className="col-6 offset-3 d-flex">
+             <Row className="justify-content-center">
+                 <Col xs={3} md={8} style={{margin: "0 auto"}}>
                      <nav aria-label="...">
-                       <ul className="mx-auto pagination">
+                       <ul className="pagination">
                           <li className={pager.currentPage === 1 ? 'page-item disabled' : 'page-item'}>
                               <a className="page-link" onClick={() => this.setPage(1)}>First</a>
                           </li>
@@ -108,9 +109,9 @@ class Pagination extends React.Component {
                          </li>
                        </ul>
                      </nav>
-                     </div>
-               </div>
-         </div>
+                 </Col>
+             </Row>
+           </div>
         );
     }
 }
