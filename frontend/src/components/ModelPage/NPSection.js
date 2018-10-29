@@ -1,47 +1,47 @@
 import React from 'react';
-import ReactDOM from "react-dom";
-import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
 import ModelPanel from './ModelPanel.js';
+import NonProfitAPI from './../../api/NonProfitAPI';
+import LocationAPI from './../../api/LocationAPI';
+import CategoryAPI from './../../api/CategoryAPI';
 import axios from 'axios';
 import { BASE_API_URL } from './../constants.jsx';
-
-import Pagination from "react-js-pagination";
+import Pagination from "./../Pagination";
 
 export default class NPSection extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       activePage: 1,
-      dataForPage : [],
-      totalNum: 12
+      dataForPage : []
     }
+    this.onChangePage = this.onChangePage.bind(this);
   }
 
-  componentDidMount() {
-    axios.get(`${BASE_API_URL}/v1.0/${this.props.type}/1`).then(res => {
+  componentWillMount() {
+    axios.get(`${BASE_API_URL}/v1.0/nonprofits/1`).then(res => {
       const dataForPage = res.data.data.nonprofits
-
-      this.setState({dataForPage: dataForPage, activePage: 1})
+      const pages = res.data.pages
+      this.setState({dataForPage: dataForPage, activePage: 1, totalPages: pages })
     }).catch(err => {
       console.log(err)
     });
   }
 
-  changePage(i) {
-       axios.get(`${BASE_API_URL}/v1.0/${this.props.type}/${i}`).then(res => {
-         const dataForPage = res.data.data.nonprofits
+  onChangePage(page) {
+     axios.get(`${BASE_API_URL}/v1.0/nonprofits/${page}`).then(res => {
+      const dataForPage = res.data.data.nonprofits
 
-         this.setState({activePage: i, dataForPage: dataForPage})
-         window.scrollTo(0, 0)
-       }).catch(err => {
-         console.log(err)
-       });
+      this.setState({activePage: page, dataForPage: dataForPage})
+      window.scrollTo(0, 0)
+     }).catch(err => {
+      console.log(err)
+     });
   }
 
   render() {
     if(this.state.dataForPage) {
       return(
-        <div>
+      <div className="container justify-content-center">
           <div className="row">
             {
               this.state.dataForPage.map((model, i) => {
@@ -65,12 +65,9 @@ export default class NPSection extends React.Component {
               })
             }
           </div>
-          <br/>
+          <hr/>
 
-          <Pagination pageRangeDisplayed={10} activePage={this.state.activePage}
-                      activeLinkClass = "active" totalItemsCount={this.state.totalNum}
-                      itemsCountPerPage={12}
-                      onChange={this.changePage} />
+         <Pagination  initialPage={1} onChangePage={this.onChangePage} totalPages={this.state.totalPages} />
 
         </div>
       );

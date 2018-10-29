@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-    items: PropTypes.array.isRequired,
     onChangePage: PropTypes.func.isRequired,
     initialPage: PropTypes.number,
-    pageSize: PropTypes.number
+    totalPages: PropTypes.number
 }
 
 const defaultProps = {
@@ -20,21 +19,12 @@ class Pagination extends React.Component {
     }
 
     componentWillMount() {
-        // set page if items array isn't empty
-        if (this.props.items && this.props.items.length) {
-            this.setPage(this.props.initialPage);
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        // reset page if items array has changed
-        if (this.props.items !== prevProps.items) {
-            this.setPage(this.props.initialPage);
-        }
+      this.setPage(this.props.initialPage);
     }
 
     setPage(page) {
-        var { items, pageSize } = this.props;
+        var { totalPages } = this.props;
+        console.log(this.props);
         var pager = this.state.pager;
 
         if (page < 1 || page > pager.totalPages) {
@@ -42,27 +32,18 @@ class Pagination extends React.Component {
         }
 
         // get new pager object for specified page
-        pager = this.getPager(items.length, page, pageSize);
-
-        // get new page of items from items array
-        var pageOfItems = items;
+        pager = this.getPager(page, totalPages);
 
         // update state
         this.setState({ pager: pager });
 
         // call change page function in parent component
-        this.props.onChangePage(pageOfItems);
+        this.props.onChangePage(pager.currentPage);
     }
 
-    getPager(totalItems, currentPage, pageSize) {
+    getPager(currentPage, totalPages) {
         // default to first page
         currentPage = currentPage || 1;
-
-        // default page size is 12
-        pageSize = pageSize || 12;
-
-        // calculate total pages
-        var totalPages = Math.ceil(totalItems / pageSize);
 
         var startPage, endPage;
         if (totalPages <= 10) {
@@ -82,24 +63,15 @@ class Pagination extends React.Component {
                 endPage = currentPage + 4;
             }
         }
-
-        // calculate start and end item indexes
-        var startIndex = (currentPage - 1) * pageSize;
-        var endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
-
         // create an array of pages to ng-repeat in the pager control
         var pages = [...Array((endPage + 1) - startPage).keys()].map(i => startPage + i);
 
         // return object with all pager properties required by the view
         return {
-            totalItems: totalItems,
             currentPage: currentPage,
-            pageSize: pageSize,
             totalPages: totalPages,
             startPage: startPage,
             endPage: endPage,
-            startIndex: startIndex,
-            endIndex: endIndex,
             pages: pages
         };
     }
@@ -120,7 +92,7 @@ class Pagination extends React.Component {
                        <ul className="mx-auto pagination">
 
                           <li className={pager.currentPage === 1 ? 'page-item disabled' : 'page-item'}>
-                              <a className="page-link" onClick={() => this.setPage(pager.currentPage - 1)}>Previous</a>
+                              <a className="page-link" onClick={() => this.setPage(pager.currentPage - 1)}>Prev</a>
                           </li>
                           {pager.pages.map((page, index) =>
                                   <li key={index} className={pager.currentPage === page ? 'page-item active' : 'page-item'}>

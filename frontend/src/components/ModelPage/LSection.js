@@ -2,57 +2,44 @@ import React from 'react';
 import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
 import ModelPanel from './ModelPanel.js';
 import axios from 'axios';
-import {BASE_API_URL} from './../constants.jsx';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { BASE_API_URL } from './../constants.jsx';
+import Pagination from "./../Pagination";
 
 export default class LSection extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+   constructor(props) {
+     super(props)
+     this.state = {
+       activePage: 1,
+       dataForPage : []
+     }
+     this.onChangePage = this.onChangePage.bind(this);
+   }
 
-  componentDidMount() {
-    axios.get(`${BASE_API_URL}/v1.0/${this.props.type}/1`).then(res => {
+  componentWillMount() {
+    axios.get(`${BASE_API_URL}/v1.0/locations/1`).then(res => {
       const dataForPage = res.data.data.locations
-      console.log(dataForPage)
       const pages = res.data.pages
-
-      this.setState({pages, dataForPage})
+      this.setState({dataForPage: dataForPage, activePage: 1, totalPages: pages })
     }).catch(err => {
       console.log(err)
     });
   }
 
-  changePage(i) {
-    axios.get(`${BASE_API_URL}/v1.0/${this.props.type}/${i}`).then(res => {
+  onChangePage(page) {
+     axios.get(`${BASE_API_URL}/v1.0/locations/${page}`).then(res => {
       const dataForPage = res.data.data.locations
-      console.log(dataForPage)
-      const pages = res.data.pages
 
-      this.setState({pages, dataForPage})
-    }).catch(err => {
+      this.setState({activePage: page, dataForPage: dataForPage})
+      window.scrollTo(0, 0)
+     }).catch(err => {
       console.log(err)
-    });
+     });
   }
 
   render() {
-    // console.log("this.state.models")
-    // console.log(this.state.models[this.props.type])
-    var pagelinks = []
-    for(var i = 1; i <= this.state.pages; i++) {
-      const page = i;
-      pagelinks.push(
-        <PaginationItem>
-          <PaginationLink onClick={() => this.changePage(page)}>
-            {page}
-          </PaginationLink>
-        </PaginationItem>
-      );
-    }
-    console.log(pagelinks)
     if(this.state.pages && this.state.dataForPage) {
       return(
-        <div>
+        <div className="container justify-content-center">
           <div className="row">
             {
               this.state.dataForPage.map((model, i) => {
@@ -76,14 +63,8 @@ export default class LSection extends React.Component {
               })
             }
           </div>
-          <br/>
-          <Pagination aria-label="Page navigation example" className="container" style={{width: "90%"}}>
-            {
-              pagelinks.map((link) => {
-                return(link)
-              })
-            }
-          </Pagination>
+          <hr/>
+          <Pagination  initialPage={1} onChangePage={this.onChangePage} totalPages={this.state.totalPages} />
         </div>
       );
     } else {
