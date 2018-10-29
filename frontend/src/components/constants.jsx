@@ -1,4 +1,4 @@
-const BASE_API_URL = 'https://clever-parrot-50.localtunnel.me'
+const BASE_API_URL = 'http://localhost:5001'
 export {
  BASE_API_URL
 }
