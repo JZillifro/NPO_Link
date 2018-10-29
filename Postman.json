@@ -1,0 +1,2691 @@
+{
+	"info": {
+		"_postman_id": "37a46186-190f-4816-bd9a-5b166e5519ba",
+		"name": "Unit Tests ",
+		"description": "Unit tests for the API for all endpoint\nCurrently only for local host ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Categories Endpoint",
+			"item": [
+				{
+					"name": "GET by Page",
+					"item": [
+						{
+							"name": "Invalid Page",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e0a22780-b954-4b0b-bd0d-8965dbf0801d",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Correctly returns Page not found for invalid page number\", function() {",
+											"    pm.response.to.have.status(404);",
+											"})",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "e6dc45af-d3cf-4a32-922f-05d28e36a047",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(pm.request.url)"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/categories/-1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"categories",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Page 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "9b2f2523-cdbc-4dc3-bc5b-1101fcb2a004",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful return\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"has_prev is a key for response\", function(){",
+											"    pm.response.to.have.jsonBody(\"has_prev\");",
+											"});",
+											"",
+											"pm.test(\"First Page should not have a previous page\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.has_prev).to.eql(false);",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"if (!pm.response.json().has_next){",
+											"    pm.setNextRequest(\"Category 1\")",
+											"}",
+											"else{;",
+											"    pm.environment.set(\"page_no\", pm.response.json().next_page);",
+											"    postman.setNextRequest(\"Cat Page N\")",
+											"}"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/categories/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"categories",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cat Page N",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "35080a90-b53e-4f7d-9260-14aa94d6ba52",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful return\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"has_prev is a key for response\", function(){",
+											"    pm.response.to.have.jsonBody(\"has_prev\");",
+											"});",
+											"",
+											"pm.test(\"Non-First Page should have a previous page\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.has_prev).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"if (pm.response.json().has_next){",
+											"    pm.environment.set(\"page_no\", pm.response.json().next_page);",
+											"    postman.setNextRequest(\"Cat Page N\");",
+											"}",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "125c2c77-7780-4322-81d6-a0f0af134dba",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(pm.environment.get(\"page_no\"))"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/categories/{{page_no}}",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"categories",
+										"{{page_no}}"
+									]
+								},
+								"description": "Test all pages"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET by Category ID",
+					"item": [
+						{
+							"name": "Category 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b7e0ccce-0914-4619-9850-fcb673aee7ed",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Id of returned category matches queried category id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.data.category.id).to.eql(1);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/categories/category/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"categories",
+										"category",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Category 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0201f5d8-d1d9-4582-a87d-a403798aeae9",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Id of returned category matches queried category id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.data.category.id).to.eql(2);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/categories/category/2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"categories",
+										"category",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET by Location ID",
+					"item": [
+						{
+							"name": "Location 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ef2bc7ea-42e4-4bee-8cf9-63a65fe54cb5",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/categories/location/2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"categories",
+										"location",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Location 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "61aa2cfc-c4b8-4fba-b9b1-a7b57014f528",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Specified location is present in locations of every category\", function() {",
+											"    //stuff",
+											"    var jsonData = pm.response.json().data.categories;",
+											"    //pseudo",
+											"    for (let category in jsonData){",
+											"        var found = false",
+											"        for (let num in jsonData[category].locations) {",
+											"            if(jsonData[category].locations[num] == 1)",
+											"                found = true;",
+											"        }",
+											"        if(!found)",
+											"            pm.expect(true).to.eql(false);",
+											"    }",
+											"    pm.expect(true).to.eql(true);",
+											"});",
+											"",
+											"//TODO:",
+											"//check for every entry in data[categories] <location> is a member of [locations]"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/categories/location/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"categories",
+										"location",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5e88a4c4-3049-4695-9621-6d3712822ae9",
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"Unit Tests get Category By location ID\")"
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8a1027eb-5c6d-4a8d-b0e4-6ea08e0310b3",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successful call\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"pm.test(\"Data is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5001/v1.0/categories/all",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5001",
+							"path": [
+								"v1.0",
+								"categories",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ping",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee6b4101-fd68-45fd-b0a3-ea6639894e2d",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successfull call\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"pm.test(\"Message is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"message\");",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Test contents of message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"pong!\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5001/v1.0/categories/ping",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5001",
+							"path": [
+								"v1.0",
+								"categories",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Nonprofits Endpoint",
+			"item": [
+				{
+					"name": "GET by Page",
+					"item": [
+						{
+							"name": "Invalid Page",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e0a22780-b954-4b0b-bd0d-8965dbf0801d",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Correctly returns Page not found for invalid page number\", function() {",
+											"    pm.response.to.have.status(404);",
+											"})",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "e6dc45af-d3cf-4a32-922f-05d28e36a047",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(pm.request.url)"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/-1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Page 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "6f8696fa-263b-4391-be87-f8afe086d70d",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful return\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"has_prev is a key for response\", function(){",
+											"    pm.response.to.have.jsonBody(\"has_prev\");",
+											"});",
+											"",
+											"pm.test(\"First Page should not have a previous page\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.has_prev).to.eql(false);",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"if (!pm.response.json().has_next){",
+											"    pm.setNextRequest(\"Category 1\")",
+											"}",
+											"else{;",
+											"    pm.environment.set(\"page_no\", pm.response.json().next_page);",
+											"    postman.setNextRequest(\"NP Page N\")",
+											"}"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "NP Page N",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f770a4e7-88b6-43fd-ac96-d87165051beb",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful return\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"has_prev is a key for response\", function(){",
+											"    pm.response.to.have.jsonBody(\"has_prev\");",
+											"});",
+											"",
+											"pm.test(\"Non-First Page should have a previous page\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.has_prev).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"if (pm.response.json().has_next){",
+											"    pm.environment.set(\"page_no\", pm.response.json().next_page);",
+											"    postman.setNextRequest(\"NP Page N\");",
+											"}",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "125c2c77-7780-4322-81d6-a0f0af134dba",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(pm.environment.get(\"page_no\"))"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/{{page_no}}",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"{{page_no}}"
+									]
+								},
+								"description": "Test all pages"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET by Category ID",
+					"item": [
+						{
+							"name": "Category 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "cc06ee55-ebcf-4d64-9dce-30d2a467b92a",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Id of returned category matches queried category id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    for (var i = 0; i < jsonData.data.nonprofits.length; i++){",
+											"        pm.expect(jsonData.data.nonprofits[i][\"category_id\"]).to.eql(1);",
+											"",
+											"    }",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/category/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"category",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Category 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2ab2201a-752d-4480-b624-2fa892bd5660",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Id of returned category matches queried category id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    for (var i = 0; i < jsonData.data.nonprofits.length; i++){",
+											"        pm.expect(jsonData.data.nonprofits[i][\"category_id\"]).to.eql(399);",
+											"",
+											"    }",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/category/399",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"category",
+										"399"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET by Location ID",
+					"item": [
+						{
+							"name": "GET by State",
+							"item": [
+								{
+									"name": "Location TX",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "b06f3423-9875-4ab3-bca4-a4fc2b22f0c2",
+												"type": "text/javascript",
+												"exec": [
+													"pm.test(\"Valid api call status\", function() {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"valid response and functioning body\", function (){",
+													"    //assert response has ok return",
+													"    pm.response.to.be.ok;",
+													"    ",
+													"    //response has a body",
+													"    pm.response.to.be.withBody;",
+													"    ",
+													"    //respsone is in json",
+													"    pm.response.to.be.json;",
+													"})",
+													"",
+													"",
+													"pm.test(\"Status is present in response\", function () {",
+													"    pm.response.to.have.jsonBody(\"status\");",
+													"});",
+													"",
+													"pm.test(\"Successful call\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.status).to.eql(\"success\");",
+													"});",
+													"",
+													"pm.test(\"Data is present in response\", function () {",
+													"    pm.response.to.have.jsonBody(\"data\");",
+													"});",
+													"/*",
+													"pm.test(\"Specified location is present in locations of every category\", function() {",
+													"    //stuff",
+													"    var jsonData = pm.response.json().data.categories",
+													"    var location = 1",
+													"    //pseudo",
+													"    for category in jsonData:",
+													"        if (location not in category.locations):",
+													"            return False",
+													"    return True",
+													"    ",
+													"});",
+													"*/",
+													"//TODO:",
+													"//check for every entry in data[categories] <location> is a member of [locations]"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://127.0.0.1:5001/v1.0/nonprofits/location/state/TX",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "5001",
+											"path": [
+												"v1.0",
+												"nonprofits",
+												"location",
+												"state",
+												"TX"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "GET by City",
+							"item": [
+								{
+									"name": "Location Austin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "b06f3423-9875-4ab3-bca4-a4fc2b22f0c2",
+												"type": "text/javascript",
+												"exec": [
+													"pm.test(\"Valid api call status\", function() {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"valid response and functioning body\", function (){",
+													"    //assert response has ok return",
+													"    pm.response.to.be.ok;",
+													"    ",
+													"    //response has a body",
+													"    pm.response.to.be.withBody;",
+													"    ",
+													"    //respsone is in json",
+													"    pm.response.to.be.json;",
+													"})",
+													"",
+													"",
+													"pm.test(\"Status is present in response\", function () {",
+													"    pm.response.to.have.jsonBody(\"status\");",
+													"});",
+													"",
+													"pm.test(\"Successful call\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.status).to.eql(\"success\");",
+													"});",
+													"",
+													"pm.test(\"Data is present in response\", function () {",
+													"    pm.response.to.have.jsonBody(\"data\");",
+													"});",
+													"/*",
+													"pm.test(\"Specified location is present in locations of every category\", function() {",
+													"    //stuff",
+													"    var jsonData = pm.response.json().data.categories",
+													"    var location = 1",
+													"    //pseudo",
+													"    for category in jsonData:",
+													"        if (location not in category.locations):",
+													"            return False",
+													"    return True",
+													"    ",
+													"});",
+													"*/",
+													"//TODO:",
+													"//check for every entry in data[categories] <location> is a member of [locations]"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://127.0.0.1:5001/v1.0/nonprofits/location/city/Austin,%20TX",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "5001",
+											"path": [
+												"v1.0",
+												"nonprofits",
+												"location",
+												"city",
+												"Austin,%20TX"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Location 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "6622d2fa-d6fa-492c-b3ca-809c2817bdba",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"pm.test(\"All nonprofits location id matches provided location id\", function() {",
+											"    var nonprofit_arr = pm.response.json().data.nonprofits",
+											"    for (var i = 0; i < nonprofit_arr.length; i++){",
+											"        pm.expect(nonprofit_arr[i][\"location_id\"]).to.eql(1)",
+											"    }",
+											"})",
+											"",
+											"/*",
+											"pm.test(\"Specified location is present in locations of every category\", function() {",
+											"    //stuff",
+											"    var jsonData = pm.response.json().data.categories",
+											"    var location = 1",
+											"    //pseudo",
+											"    for category in jsonData:",
+											"        if (location not in category.locations):",
+											"            return False",
+											"    return True",
+											"    ",
+											"});",
+											"*/",
+											"//TODO:",
+											"//check for every entry in data[categories] <location> is a member of [locations]"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/location/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"location",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Location 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ef2c83e8-16bd-49ca-9f5c-f9a0515ad725",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"pm.test(\"All nonprofits location id matches provided location id\", function() {",
+											"    var nonprofit_arr = pm.response.json().data.nonprofits",
+											"    for (var i = 0; i < nonprofit_arr.length; i++){",
+											"        pm.expect(nonprofit_arr[i][\"location_id\"]).to.eql(2)",
+											"    }",
+											"})",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/location/2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"location",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Location and Category 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8662edfd-256e-4ec6-9972-04057ffd3c9d",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Match the location id and category id of returned nonprofit to provided values\", function () {",
+											"    var jsonData = pm.response.json().data.nonprofits;",
+											"    for (var i = 0; i < jsonData.length; i++){",
+											"        non_profit = jsonData[i];",
+											"        pm.expect(non_profit[\"location_id\"]).to.equal(1)",
+											"        pm.expect(non_profit[\"category_id\"]).to.equal(461)",
+											"    }",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/location/1/category/461",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"location",
+										"1",
+										"category",
+										"461"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5e88a4c4-3049-4695-9621-6d3712822ae9",
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"Unit Tests get Category By location ID\")"
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8a1027eb-5c6d-4a8d-b0e4-6ea08e0310b3",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successful call\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"pm.test(\"Data is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5001/v1.0/categories/all",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5001",
+							"path": [
+								"v1.0",
+								"categories",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ping",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee6b4101-fd68-45fd-b0a3-ea6639894e2d",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successfull call\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"pm.test(\"Message is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"message\");",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Test contents of message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"pong!\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5001/v1.0/categories/ping",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5001",
+							"path": [
+								"v1.0",
+								"categories",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d6d95eb8-cb7c-44f9-b3e0-a3621a855d2b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "70e5f955-281b-4a54-ab46-2acc46582d2f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Location Endpoint",
+			"item": [
+				{
+					"name": "GET by Page",
+					"item": [
+						{
+							"name": "Invalid Page",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e0a22780-b954-4b0b-bd0d-8965dbf0801d",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Correctly returns Page not found for invalid page number\", function() {",
+											"    pm.response.to.have.status(404);",
+											"})",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "e6dc45af-d3cf-4a32-922f-05d28e36a047",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(pm.request.url)"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/locations/-1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"locations",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Page 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "cbb1058a-5aae-4b72-8ec9-de5f4487fd82",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful return\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"has_prev is a key for response\", function(){",
+											"    pm.response.to.have.jsonBody(\"has_prev\");",
+											"});",
+											"",
+											"pm.test(\"First Page should not have a previous page\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.has_prev).to.eql(false);",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"if (!pm.response.json().has_next){",
+											"    pm.setNextRequest(\"Category 1\")",
+											"}",
+											"else{;",
+											"    pm.environment.set(\"page_no\", pm.response.json().next_page);",
+											"    postman.setNextRequest(\"Loc Page N\")",
+											"}"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/locations/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"locations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Loc Page N",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8f03c8eb-c126-4e04-b4af-e1c812cb354f",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful return\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"has_prev is a key for response\", function(){",
+											"    pm.response.to.have.jsonBody(\"has_prev\");",
+											"});",
+											"",
+											"pm.test(\"Non-First Page should have a previous page\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.has_prev).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"if (pm.response.json().has_next){",
+											"    pm.environment.set(\"page_no\", pm.response.json().next_page);",
+											"    postman.setNextRequest(\"Loc Page N\");",
+											"}",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "125c2c77-7780-4322-81d6-a0f0af134dba",
+										"type": "text/javascript",
+										"exec": [
+											"console.log(pm.environment.get(\"page_no\"))"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/nonprofits/{{page_no}}",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"nonprofits",
+										"{{page_no}}"
+									]
+								},
+								"description": "Test all pages"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET by Category ID",
+					"item": [
+						{
+							"name": "GET by Category Code",
+							"item": [
+								{
+									"name": "Category 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "347e1de4-6f19-4864-87bc-4b931b73caf8",
+												"type": "text/javascript",
+												"exec": [
+													"pm.test(\"Valid api call status\", function() {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"valid response and functioning body\", function (){",
+													"    //assert response has ok return",
+													"    pm.response.to.be.ok;",
+													"    ",
+													"    //response has a body",
+													"    pm.response.to.be.withBody;",
+													"    ",
+													"    //respsone is in json",
+													"    pm.response.to.be.json;",
+													"})",
+													"",
+													"",
+													"pm.test(\"Status is present in response\", function () {",
+													"    pm.response.to.have.jsonBody(\"status\");",
+													"});",
+													"",
+													"pm.test(\"Successful call\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.status).to.eql(\"success\");",
+													"});",
+													"",
+													"pm.test(\"Data is present in response\", function () {",
+													"    pm.response.to.have.jsonBody(\"data\");",
+													"});",
+													"",
+													"",
+													"/*",
+													"pm.test(\"Id of returned category matches queried category id\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    for (var i = 0; i < jsonData.data.locations.length; i++){",
+													"        pm.expect(jsonData.data.locations[i][\"categories\"]).to.contain(1);",
+													"",
+													"    }",
+													"});",
+													"*/",
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://127.0.0.1:5001/v1.0/locations/category/code/A",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "5001",
+											"path": [
+												"v1.0",
+												"locations",
+												"category",
+												"code",
+												"A"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Category 2",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "a8b9d3b2-224e-4da5-8432-af3f99a6dc3b",
+												"type": "text/javascript",
+												"exec": [
+													"pm.test(\"Valid api call status\", function() {",
+													"    pm.response.to.have.status(200);",
+													"})",
+													"",
+													"pm.test(\"valid response and functioning body\", function (){",
+													"    //assert response has ok return",
+													"    pm.response.to.be.ok;",
+													"    ",
+													"    //response has a body",
+													"    pm.response.to.be.withBody;",
+													"    ",
+													"    //respsone is in json",
+													"    pm.response.to.be.json;",
+													"})",
+													"",
+													"",
+													"pm.test(\"Status is present in response\", function () {",
+													"    pm.response.to.have.jsonBody(\"status\");",
+													"});",
+													"",
+													"pm.test(\"Successful call\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.status).to.eql(\"success\");",
+													"});",
+													"",
+													"pm.test(\"Data is present in response\", function () {",
+													"    pm.response.to.have.jsonBody(\"data\");",
+													"});",
+													"",
+													"",
+													"/*",
+													"pm.test(\"Id of returned category matches queried category id\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    for (var i = 0; i < jsonData.data.locations.length; i++){",
+													"        pm.expect(jsonData.data.locations[i][\"categories\"]).to.contain(399);",
+													"",
+													"    }",
+													"});",
+													"*/"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://127.0.0.1:5001/v1.0/locations/category/code/N12",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "5001",
+											"path": [
+												"v1.0",
+												"locations",
+												"category",
+												"code",
+												"N12"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c98cc5d0-18b6-4b7f-9cf5-ebe203b4bb5f",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "1b23e1da-720b-4fa7-a6be-c5e4cfa16481",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Category 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e6348bec-62de-47b5-b2b6-33d4ba1b6858",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Id of returned category matches queried category id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    for (var i = 0; i < jsonData.data.locations.length; i++){",
+											"        pm.expect(jsonData.data.locations[i][\"categories\"]).to.contain(1);",
+											"",
+											"    }",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/locations/category/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"locations",
+										"category",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Category 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "52446a85-e856-465d-8f85-4460973327b5",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Id of returned category matches queried category id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    for (var i = 0; i < jsonData.data.locations.length; i++){",
+											"        pm.expect(jsonData.data.locations[i][\"categories\"]).to.contain(399);",
+											"",
+											"    }",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/locations/category/399",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"locations",
+										"category",
+										"399"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET by Location ID",
+					"item": [
+						{
+							"name": "Location 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b23709ef-fcb0-44ed-8121-ca08af2b6b16",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"pm.test(\"All nonprofits location id matches provided location id\", function() {",
+											"    var jsonData = pm.response.json().data.location",
+											"    pm.expect(jsonData.id).to.eql(1)",
+											"})",
+											"",
+											"/*",
+											"pm.test(\"Specified location is present in locations of every category\", function() {",
+											"    //stuff",
+											"    var jsonData = pm.response.json().data.categories",
+											"    var location = 1",
+											"    //pseudo",
+											"    for category in jsonData:",
+											"        if (location not in category.locations):",
+											"            return False",
+											"    return True",
+											"    ",
+											"});",
+											"*/",
+											"//TODO:",
+											"//check for every entry in data[categories] <location> is a member of [locations]"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/locations/location/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"locations",
+										"location",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Location 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ad7f0f67-8e83-4a64-b7b0-f9b2b4396589",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Valid api call status\", function() {",
+											"    pm.response.to.have.status(200);",
+											"})",
+											"",
+											"pm.test(\"valid response and functioning body\", function (){",
+											"    //assert response has ok return",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    //response has a body",
+											"    pm.response.to.be.withBody;",
+											"    ",
+											"    //respsone is in json",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"",
+											"pm.test(\"Status is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"status\");",
+											"});",
+											"",
+											"pm.test(\"Successful call\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"success\");",
+											"});",
+											"",
+											"pm.test(\"Data is present in response\", function () {",
+											"    pm.response.to.have.jsonBody(\"data\");",
+											"});",
+											"",
+											"pm.test(\"All nonprofits location id matches provided location id\", function() {",
+											"    var jsonData = pm.response.json().data.location",
+											"    pm.expect(jsonData.id).to.eql(2)",
+											"",
+											"})",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:5001/v1.0/locations/location/2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5001",
+									"path": [
+										"v1.0",
+										"locations",
+										"location",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5e88a4c4-3049-4695-9621-6d3712822ae9",
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"Unit Tests get Category By location ID\")"
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8a1027eb-5c6d-4a8d-b0e4-6ea08e0310b3",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successful call\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"pm.test(\"Data is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5001/v1.0/locations/all",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5001",
+							"path": [
+								"v1.0",
+								"locations",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ping",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee6b4101-fd68-45fd-b0a3-ea6639894e2d",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successfull call\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"pm.test(\"Message is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"message\");",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Test contents of message\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql(\"pong!\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5001/v1.0/locations/ping",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5001",
+							"path": [
+								"v1.0",
+								"locations",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d6d95eb8-cb7c-44f9-b3e0-a3621a855d2b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "70e5f955-281b-4a54-ab46-2acc46582d2f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
