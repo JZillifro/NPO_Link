@@ -10,7 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import json
 
 # Import module models (i.e. User)
-from npolinkapi.api.models import Category, Location
+from npolinkapi.api.models import Category, Nonprofit, Location
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 categories_blueprint = Blueprint('categories', __name__, url_prefix='/v1.0/categories')
@@ -100,4 +100,29 @@ def get_category_by_location(location_id):
         return jsonify(response_object), 404
     except NoResultFound:
         response_object['message'] = 'No location found for given location id'
+
+@categories_blueprint.route('/nonprofit/<nonprofit_id>', methods=['GET'])
+def get_category_for_nonprofit(nonprofit_id):
+    """Get category for a nonprofit"""
+
+    response_object = {
+        'status': 'fail',
+        'message': 'Invalid nonprofit id provided'
+    }
+
+    try:
+        nonprofit = Nonprofit.query.filter_by(id=int(nonprofit_id)).options(load_only("category_id")).one()
+        category = Category.query.filter_by(id=nonprofit.category_id).one()
+        response_object = {
+            'status': 'success',
+            'data': {
+                'category': category.to_json()
+            }
+        }
+
+        return jsonify(response_object), 200
+    except ValueError:
+        return jsonify(response_object), 404
+    except NoResultFound:
+        response_object['message'] = 'The nonprofit id provided does not exist'
         return jsonify(response_object), 404
