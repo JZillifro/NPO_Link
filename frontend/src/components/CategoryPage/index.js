@@ -13,9 +13,7 @@ export default class CategoryPage extends React.Component {
    constructor(props) {
      super(props);
      this.state = {
-      nonprofit: {},
-      category: {},
-      location: {}
+      category: {}
      };
    }
 
@@ -52,17 +50,11 @@ export default class CategoryPage extends React.Component {
             <Row className="row justify-content-center">
                   <Col xs={12}>
                       <article className="">
-                        <header>
-                          <h3><a>Nonprofits</a></h3>
-                        </header>
                         <RelatedModelList model={"nonprofits"} property={"category"} value={this.props.match.params.id}/>
                       </article>
                   </Col>
                   <Col xs={12} className="pt-3">
                     <article className="">
-                      <header>
-                        <h3><a>Locations</a></h3>
-                      </header>
                       <RelatedModelList model={"locations"} property={"category"} value={this.props.match.params.id}/>
                     </article>
                   </Col>

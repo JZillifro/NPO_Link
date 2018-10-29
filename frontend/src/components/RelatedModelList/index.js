@@ -28,6 +28,9 @@ export default class RelatedModelList extends React.Component {
     if(this.state.models){
       return (
         <div>
+          <header>
+            <h3><a>{this.props.model}</a></h3>
+          </header>
           {
             this.state.models.map((model) => {
               return(

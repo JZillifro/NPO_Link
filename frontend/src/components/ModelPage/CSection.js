@@ -1,0 +1,93 @@
+import React from 'react';
+import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
+import ModelPanel from './ModelPanel.js';
+import axios from 'axios';
+import {BASE_API_URL} from './../constants.jsx';
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+
+export default class CSection extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  componentDidMount() {
+    axios.get(`${BASE_API_URL}/v1.0/${this.props.type}/1`).then(res => {
+      const dataForPage = res.data.data.categories
+      console.log(dataForPage)
+      const pages = res.data.pages
+
+      this.setState({pages, dataForPage})
+    }).catch(err => {
+      console.log(err)
+    });
+  }
+
+  changePage(i) {
+    axios.get(`${BASE_API_URL}/v1.0/${this.props.type}/${i}`).then(res => {
+      const dataForPage = res.data.data.categories
+      console.log(dataForPage)
+      const pages = res.data.pages
+
+      this.setState({pages, dataForPage})
+    }).catch(err => {
+      console.log(err)
+    });
+  }
+
+  render() {
+    // console.log("this.state.models")
+    // console.log(this.state.models[this.props.type])
+    var pagelinks = []
+    for(var i = 1; i <= this.state.pages; i++) {
+      const page = i;
+      pagelinks.push(
+        <PaginationItem>
+          <PaginationLink onClick={() => this.changePage(page)}>
+            {page}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+    console.log(pagelinks)
+    if(this.state.pages && this.state.dataForPage) {
+      return(
+        <div>
+          <div className="row">
+            {
+              this.state.dataForPage.map((model, i) => {
+                return(
+                  <article className="col-4 col-12-mobile special"  style={{maxWidth: "30%"}}>
+                    <a href={"/category/" + model.id} className="image feautured"><img className="img-fluid" src={model.image} alt="" height="250" width="300"/></a>
+                    <header>
+                      <h3><a href="#">{model.name}</a></h3>
+                    </header>
+                    <p>
+                      {model.description}
+                    </p>
+                    <p>
+                      EIN: {model.ein}
+                    </p>
+                    <p>
+                      Address: {model.address}
+                    </p>
+                  </article>
+                )
+              })
+            }
+          </div>
+          <br/>
+          <Pagination aria-label="Page navigation example">
+            {
+              pagelinks.map((link) => {
+                return(link)
+              })
+            }
+          </Pagination>
+        </div>
+      );
+    } else {
+      return(<div></div>)
+    }
+  }
+}

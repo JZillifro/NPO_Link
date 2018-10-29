@@ -2,9 +2,6 @@ import React from 'react';
 import ReactDOM from "react-dom";
 import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
 import ModelPanel from './ModelPanel.js';
-import NonProfitAPI from './../../api/NonProfitAPI';
-import LocationAPI from './../../api/LocationAPI';
-import CategoryAPI from './../../api/CategoryAPI';
 import axios from 'axios';
 import { BASE_API_URL } from './../constants.jsx';
 
@@ -49,8 +46,8 @@ export default class NPSection extends React.Component {
             {
               this.state.dataForPage.map((model, i) => {
                 return(
-                  <article className="col-4 col-12-mobile special">
-                    <a href={"/nonprofit/" + model.id} className="image featured"><img src={model.logo} alt="" height="250"/></a>
+                  <article className="col-4 col-12-mobile special" style={{maxWidth: "30%"}}>
+                    <a href={"/nonprofit/" + model.id} className="image featured"><img src={model.logo} alt="" height="250" width="300"/></a>
                     <header>
                       <h3><a href="#">{model.name}</a></h3>
                     </header>
