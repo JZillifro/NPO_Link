@@ -131,7 +131,7 @@ class About extends Component {
                <CardHeader>Project Links</CardHeader>
                <CardBody>
                 <CardText className="pt-2">
-                    <p><a href="https://documenter.getpostman.com/view/5491513/RWgm3gY7">Postman API</a></p>
+                    <p><a href="https://documenter.getpostman.com/view/5491513/RzZ3K1zY">Postman API</a></p>
                     <p><a href="https://gitlab.com/gerardomares/npolink">GitLab Repository</a></p>
                 </CardText>
                </CardBody>
