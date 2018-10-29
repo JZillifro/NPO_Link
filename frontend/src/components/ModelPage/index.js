@@ -7,6 +7,8 @@ import CategoryAPI from './../../api/CategoryAPI';
 import axios from 'axios';
 import {BASE_API_URL} from './../constants.jsx';
 import NPSection from './NPSection.js'
+import LSection from './LSection.js'
+import CSection from './CSection.js'
 
 export default class ModelPage extends React.Component {
   constructor(props) {
@@ -28,10 +30,10 @@ export default class ModelPage extends React.Component {
               this.props.match.params.title == "nonprofits" && <NPSection type={this.props.match.params.title} />
             }
             {
-              this.props.match.params.title == "categories" && <div>C</div>
+              this.props.match.params.title == "categories" && <CSection type={this.props.match.params.title} />
             }
             {
-              this.props.match.params.title == "locations" && <div>L</div>
+              this.props.match.params.title == "locations" && <LSection type={this.props.match.params.title} />
             }
           </div>
         </section>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import {BASE_API_URL} from './../constants.jsx';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
-export default class NPSection extends React.Component {
+export default class LSection extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -13,7 +13,7 @@ export default class NPSection extends React.Component {
 
   componentDidMount() {
     axios.get(`${BASE_API_URL}/v1.0/${this.props.type}/1`).then(res => {
-      const dataForPage = res.data.data.nonprofits
+      const dataForPage = res.data.data.locations
       console.log(dataForPage)
       const pages = res.data.pages
 
@@ -25,7 +25,7 @@ export default class NPSection extends React.Component {
 
   changePage(i) {
     axios.get(`${BASE_API_URL}/v1.0/${this.props.type}/${i}`).then(res => {
-      const dataForPage = res.data.data.nonprofits
+      const dataForPage = res.data.data.locations
       console.log(dataForPage)
       const pages = res.data.pages
 
@@ -58,7 +58,7 @@ export default class NPSection extends React.Component {
               this.state.dataForPage.map((model, i) => {
                 return(
                   <article className="col-4 col-12-mobile special" style={{maxWidth: "30%"}}>
-                    <a href={"/nonprofit/" + model.id} className="image featured"><img src={model.logo} alt="" height="250" width="300"/></a>
+                    <a href={"/location/" + model.id} className="image featured"><img src={model.image} alt="" height="250" /></a>
                     <header>
                       <h3><a href="#">{model.name}</a></h3>
                     </header>
@@ -77,7 +77,7 @@ export default class NPSection extends React.Component {
             }
           </div>
           <br/>
-          <Pagination aria-label="Page navigation example">
+          <Pagination aria-label="Page navigation example" className="container" style={{width: "90%"}}>
             {
               pagelinks.map((link) => {
                 return(link)
