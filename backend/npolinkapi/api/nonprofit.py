@@ -139,7 +139,7 @@ def get_nonprofits_by_city(city):
     except ValueError:
         return jsonify(response_object), 404
     except NoResultFound:
-        response_object['message'] = 'No location wa found for given city'
+        response_object['message'] = 'No location was found for given city'
         return jsonify(response_object), 404
 
 @nonprofits_blueprint.route('/location/state/<state>', methods=['GET'])
