@@ -44,13 +44,13 @@ class About extends Component {
       this.setState({commits});
    })
 
-    fetch('https://gitlab.com/api/v4/projects/8623652/issues')
+    fetch('https://gitlab.com/api/v4/projects/8623652/issues?state=closed')
     .then(issues => issues.json())
     .then(issues => {
       var contributors = this.state.contributors;
       contributors.forEach(c => {
-         const data = issues.filter(i => i.author.name === c.gitlab_name);
-         if(data){
+         const data = issues.filter((issue) => issue.assignees.filter((assignee) => (assignee.name === c.name)).length > 0);
+         if(data.length > 0){
             c.issues = data.length;
          }
       });
