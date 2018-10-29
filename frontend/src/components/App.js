@@ -3,6 +3,7 @@ import AppHeader from './AppHeader'
 import Main from './Main'
 import AppFooter from './AppFooter'
 import './App.css'
+import './assets/css/main.css'
 
 const App = () => (
    <div className="App Site">

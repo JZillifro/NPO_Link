@@ -4,24 +4,21 @@ import LocationAPI from './../../api/LocationAPI';
 import CategoryAPI from './../../api/CategoryAPI';
 import {Row, Col} from 'reactstrap';
 import {Card, CardBody, CardText, CardTitle, Button, CardHeader} from 'reactstrap'
+import {BASE_API_URL} from './../constants.jsx'
+import axios from 'axios';
 
 export default class NonprofitPage extends React.Component {
    constructor(props) {
      super(props);
-     this.state = {
-      nonprofit: {},
-      location: {},
-      category: {},
-      vol_event: {}
-     };
+     this.state = {};
    }
 
    componentDidMount() {
-      const nonprofit = NonProfitAPI.get(parseInt(this.props.match.params.id, 10));
-      const location = LocationAPI.get(parseInt(nonprofit.location, 10));
-      const category = CategoryAPI.get(parseInt(nonprofit.category, 10));
-      const vol_event = nonprofit.vol_event;
-      this.setState({nonprofit, location, category, vol_event});
+     axios.get(`${BASE_API_URL}/v1.0/nonprofit/${this.props.match.params.ID}`).then(res => {
+       console.log(res.data)
+     }).catch(err => {
+       console.log(err)
+     });
    };
 
   render() {
