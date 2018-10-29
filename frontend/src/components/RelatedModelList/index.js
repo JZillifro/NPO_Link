@@ -1,9 +1,4 @@
 import React from 'react';
-import NonProfitAPI from './../../api/NonProfitAPI';
-import LocationAPI from './../../api/LocationAPI';
-import CategoryAPI from './../../api/CategoryAPI';
-import {Row, Col} from 'reactstrap';
-import {Card, CardBody, CardText, CardTitle, Button, CardHeader} from 'reactstrap'
 import {BASE_API_URL} from './../constants.jsx'
 import axios from 'axios';
 
@@ -15,17 +10,30 @@ export default class RelatedModelList extends React.Component {
    }
 
    componentDidMount() {
-      axios.get(`${BASE_API_URL}/v1.0/${this.props.model}/${this.props.property}/${this.props.value}`).then(res => {
-        const models = res.data.data[this.props.model];
-        console.log(models)
-        this.setState({models});
-      }).catch(err => {
-        console.log(err)
-      });
+      if(this.props.property === 'nonprofit') {
+         axios.get(`${BASE_API_URL}/v1.0/${this.props.model}/${this.props.property}/${this.props.value}`).then(res => {
+           const model = res.data.data[this.props.value2];
+           // console.log(res.json())
+           this.setState({models : [model]});
+         }).catch(err => {
+           // console.log(err)
+           this.setState({models : []});
+         });
+      } else {
+         axios.get(`${BASE_API_URL}/v1.0/${this.props.model}/${this.props.property}/${this.props.value}`).then(res => {
+           const models = res.data.data[this.props.model];
+           // console.log(res.json())
+           this.setState({models});
+         }).catch(err => {
+           // console.log(err)
+           this.setState({models : []});
+         });
+      }
+
    };
 
   render() {
-    if(this.state.models){
+    if(this.state.models && this.state.models.length > 0){
       return (
         <div>
           <header>
@@ -34,8 +42,8 @@ export default class RelatedModelList extends React.Component {
           {
             this.state.models.map((model) => {
               return(
-                <div>
-                  <a href={"/" + this.props.model + "/" + model.id}>{model.name}</a>
+                <div key={model.id}>
+                  <a href={"/" + this.props.value2 + "/" + model.id}>{model.name}</a>
                   <br/>
                 </div>
               )
@@ -44,7 +52,14 @@ export default class RelatedModelList extends React.Component {
         </div>
       )
     } else {
-      return (<div></div>)
+      return (
+         <div>
+            <header>
+               <h3><a>{this.props.model}</a></h3>
+            </header>
+            <div><p>No {this.props.model} found</p></div>
+         </div>
+      )
     }
 
   }

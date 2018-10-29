@@ -24,7 +24,6 @@ class Pagination extends React.Component {
 
     setPage(page) {
         var { totalPages } = this.props;
-        console.log(this.props);
         var pager = this.state.pager;
 
         if (page < 1 || page > pager.totalPages) {
@@ -90,7 +89,9 @@ class Pagination extends React.Component {
                  <div className="col-6 offset-3 d-flex">
                      <nav aria-label="...">
                        <ul className="mx-auto pagination">
-
+                          <li className={pager.currentPage === 1 ? 'page-item disabled' : 'page-item'}>
+                              <a className="page-link" onClick={() => this.setPage(1)}>First</a>
+                          </li>
                           <li className={pager.currentPage === 1 ? 'page-item disabled' : 'page-item'}>
                               <a className="page-link" onClick={() => this.setPage(pager.currentPage - 1)}>Prev</a>
                           </li>
@@ -101,6 +102,9 @@ class Pagination extends React.Component {
                          }
                          <li className={pager.currentPage === pager.totalPages ? 'page-item disabled' : 'page-item'}>
                              <a className="page-link" onClick={() => this.setPage(pager.currentPage + 1)}>Next</a>
+                         </li>
+                         <li className={pager.currentPage === pager.totalPages ? 'page-item disabled' : 'page-item'}>
+                             <a className="page-link" onClick={() => this.setPage(pager.totalPages)}>Last</a>
                          </li>
                        </ul>
                      </nav>

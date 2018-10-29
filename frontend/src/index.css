@@ -30,3 +30,8 @@ body {
   margin-bottom: 1rem;
 
 }
+
+
+CardHeader {
+   height: 50px;
+}

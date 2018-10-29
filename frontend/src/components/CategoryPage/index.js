@@ -1,9 +1,5 @@
 import React from 'react';
-import NonProfitAPI from './../../api/NonProfitAPI';
-import LocationAPI from './../../api/LocationAPI';
-import CategoryAPI from './../../api/CategoryAPI';
 import {Row, Col} from 'reactstrap';
-import {Card, CardBody, CardText, CardTitle, Button, CardHeader} from 'reactstrap'
 import {BASE_API_URL} from './../constants.jsx'
 import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
@@ -34,13 +30,12 @@ export default class CategoryPage extends React.Component {
             <Row className="row">
                <div className="col">
                  <div className="containter special" style={{textAlign: "center", marginRight:"5%", marginLeft:"5%"}}>
-                   {/* <img src={this.state.category.image} alt={this.state.category.name} className="img-fluid" /> */}
                    <a className="image featured"><img src={this.state.category.image} alt=""/></a>
                    <header>
                      <h2>{this.state.category.name}</h2>
                      <br/>
                      <p>{this.state.category.description}</p>
-                     <a href="/categories" class="button">Back</a>
+                     <a href="/categories" className="button">Back</a>
                    </header>
                  </div>
                </div>
@@ -50,12 +45,14 @@ export default class CategoryPage extends React.Component {
             <Row className="row justify-content-center">
                   <Col xs={12}>
                       <article className="">
-                        <RelatedModelList model={"nonprofits"} property={"category"} value={this.props.match.params.id}/>
+                        <RelatedModelList model={"nonprofits"} property={"category"}
+                                          value={this.props.match.params.id} value2={"nonprofit"}/>
                       </article>
                   </Col>
                   <Col xs={12} className="pt-3">
                     <article className="">
-                      <RelatedModelList model={"locations"} property={"category"} value={this.props.match.params.id}/>
+                      <RelatedModelList model={"locations"} property={"category"}
+                                        value={this.props.match.params.id} value2={"location"}/>
                     </article>
                   </Col>
             </Row>

@@ -1,6 +1,5 @@
 import React from 'react';
 import {Row, Col} from 'reactstrap';
-import {Card, CardBody, CardText, CardTitle, Button, CardHeader} from 'reactstrap'
 import {BASE_API_URL} from './../constants.jsx'
 import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
@@ -37,7 +36,7 @@ export default class locationPage extends React.Component {
                      <h2>{this.state.location.name}</h2>
                      <br/>
                      <p>{this.state.location.description}</p>
-                     <a href="/categories" class="button">Back</a>
+                     <a href="/categories" className="button">Back</a>
                    </header>
                  </div>
                </div>
@@ -47,12 +46,12 @@ export default class locationPage extends React.Component {
             <Row className="row justify-content-center">
                   <Col xs={12}>
                       <article className="">
-                        <RelatedModelList model={"categories"} property={"location"} value={this.props.match.params.id}/>
+                        <RelatedModelList model={"categories"} property={"location"} value={this.props.match.params.id} value2={"category"}/>
                       </article>
                   </Col>
                   <Col xs={12} className="pt-3">
                     <article className="">
-                      <RelatedModelList model={"nonprofits"} property={"location"} value={this.props.match.params.id}/>
+                      <RelatedModelList model={"nonprofits"} property={"location"} value={this.props.match.params.id} value2={"nonprofit"}/>
                     </article>
                   </Col>
             </Row>

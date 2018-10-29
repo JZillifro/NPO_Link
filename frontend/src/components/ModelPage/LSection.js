@@ -1,9 +1,8 @@
 import React from 'react';
-import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
-import ModelPanel from './ModelPanel.js';
 import axios from 'axios';
 import { BASE_API_URL } from './../constants.jsx';
 import Pagination from "./../Pagination";
+import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader } from 'reactstrap'
 
 export default class LSection extends React.Component {
    constructor(props) {
@@ -37,35 +36,41 @@ export default class LSection extends React.Component {
   }
 
   render() {
-    if(this.state.pages && this.state.dataForPage) {
+    if(this.state.dataForPage) {
       return(
-        <div className="container justify-content-center">
-          <div className="row">
-            {
-              this.state.dataForPage.map((model, i) => {
-                return(
-                  <article className="col-4 col-12-mobile special" style={{maxWidth: "30%"}}>
-                    <a href={"/location/" + model.id} className="image featured"><img src={model.image} alt="" height="250" /></a>
-                    <header>
-                      <h3><a href="#">{model.name}</a></h3>
-                    </header>
-                    <p>
-                      {model.description}
-                    </p>
-                    <p>
-                      EIN: {model.ein}
-                    </p>
-                    <p>
-                      Address: {model.address}
-                    </p>
-                  </article>
-                )
-              })
-            }
+         <div className="container justify-content-center">
+             <Row className="row justify-content-center">
+              {
+                this.state.dataForPage.map(model => (
+                   <Col xs={12} sm={12} md={6} lg={4} className="pb-4 d-flex align-items-stretch" key={model.id}>
+                      <Card>
+                          <CardImg top width="100%"
+                          href={"/location/" + model.id}
+                          src={model.image}
+                          className="card-img-top"
+                          alt="Card image" />
+                          <CardHeader style={{minHeight: "10vh"}}><a href={"/location/" + model.id} >{model.name}</a></CardHeader>
+                          <CardBody className="block-with-text">
+                             <CardText className="pt-2">
+                               City: {model.city}
+                            </CardText>
+                            <CardText className="pt-2">
+                               State: {model.state}
+                            </CardText>
+                            <CardText className="pt-2">
+                               Description: {model.description}
+                            </CardText>
+                          </CardBody>
+                      </Card>
+                   </Col>
+                ))
+              }
+            </Row>
+            <Row  className="pt-5 pb-1">
+              <Pagination  initialPage={1} onChangePage={this.onChangePage} totalPages={this.state.totalPages} />
+            </Row>
+
           </div>
-          <hr/>
-          <Pagination  initialPage={1} onChangePage={this.onChangePage} totalPages={this.state.totalPages} />
-        </div>
       );
     } else {
       return(<div></div>)

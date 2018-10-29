@@ -1,11 +1,8 @@
 import React from 'react';
-import ModelPanel from './ModelPanel.js';
-import NonProfitAPI from './../../api/NonProfitAPI';
-import LocationAPI from './../../api/LocationAPI';
-import CategoryAPI from './../../api/CategoryAPI';
 import axios from 'axios';
 import { BASE_API_URL } from './../constants.jsx';
 import Pagination from "./../Pagination";
+import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
 
 export default class NPSection extends React.Component {
   constructor(props) {
@@ -42,32 +39,36 @@ export default class NPSection extends React.Component {
     if(this.state.dataForPage) {
       return(
       <div className="container justify-content-center">
-          <div className="row">
+           <Row className="row justify-content-center">
             {
-              this.state.dataForPage.map((model, i) => {
-                return(
-                  <article className="col-4 col-12-mobile special" style={{maxWidth: "30%"}}>
-                    <a href={"/nonprofit/" + model.id} className="image featured"><img src={model.logo} alt="" height="250" width="300"/></a>
-                    <header>
-                      <h3><a href="#">{model.name}</a></h3>
-                    </header>
-                    <p>
-                      {model.description}
-                    </p>
-                    <p>
-                      EIN: {model.ein}
-                    </p>
-                    <p>
-                      Address: {model.address}
-                    </p>
-                  </article>
-                )
-              })
+              this.state.dataForPage.map(model => (
+                 <Col xs={12} sm={12} md={6} lg={4} className="pb-4 d-flex align-items-stretch" key={model.id}>
+                    <Card>
+                        <CardImg top width="100%"
+                        href={"/nonprofit/" + model.id}
+                        src={model.logo}
+                        className="card-img-top"
+                        alt="Card image" />
+                        <CardHeader style={{minHeight: "10vh"}}><a href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
+                        <CardBody className="block-with-text">
+                          <CardText className="pt-2">
+                             Address: {model.address}
+                          </CardText>
+                          <CardText className="pt-2">
+                             EIN: {model.ein}
+                          </CardText>
+                          <CardText className="pt-2">
+                             Description: {model.description}
+                          </CardText>
+                        </CardBody>
+                    </Card>
+                 </Col>
+              ))
             }
-          </div>
-          <hr/>
-
-         <Pagination  initialPage={1} onChangePage={this.onChangePage} totalPages={this.state.totalPages} />
+          </Row>
+          <Row  className="pt-5 pb-1">
+            <Pagination  initialPage={1} onChangePage={this.onChangePage} totalPages={this.state.totalPages} />
+          </Row>
 
         </div>
       );

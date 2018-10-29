@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, CardBody, CardImg, CardText, CardSubtitle, Row, Col , CardDeck, CardHeader, CardFooter} from 'reactstrap'
+import { Card, CardBody, CardImg, CardText, CardSubtitle, Row, Col , CardHeader, CardFooter} from 'reactstrap'
 
 const gerardo = require("./../../gerardo.jpg")
 const georgina = require("./../../georgina.jpg")
@@ -73,28 +73,34 @@ class About extends Component {
                            on location and category as well as see what non-profits exist for various categories
                            and what non-profits exist in a location.</p>
           </header>
-          <div class="row">
+           <Row className="row justify-content-center text-center">
             {
-               this.state.contributors.map(contributor => (
-                 <article class="col-4 col-12-mobile special">
-                   <a href="#" class="image featured"><img src={contributor.image} alt="" /></a>
-                   <header>
-                     <h3>{contributor.name}</h3>
-                     <h3>{contributor.role}</h3>
-                   </header>
-
-                   <p>
-                     {contributor.bio}
-                   </p>
-                   <p>
-                     commits: {contributor.commits} <br/>
-                     issues: {contributor.issues} <br/>
-                     unit tests: {contributor.unit_tests}
-                   </p>
-                 </article>
-               ))
-             }
-          </div>
+              this.state.contributors.map(contributor => (
+                 <Col xs={12} sm={12} md={6} lg={4} className="pb-4 d-flex align-items-stretch">
+                    <Card key={contributor.email}>
+                        <CardImg top width="100%"
+                        src={contributor.image}
+                        className="card-img-top"
+                        alt="Card image" />
+                        <CardHeader>{contributor.name}</CardHeader>
+                        <CardBody>
+                          <CardSubtitle>{contributor.role}</CardSubtitle>
+                          <hr/>
+                          <CardText className="pt-2">
+                             <p>{contributor.bio}</p>
+                          </CardText>
+                        </CardBody>
+                        <CardFooter>
+                        <p>
+                        commits: {contributor.commits} <br/>
+                        issues: {contributor.issues} <br/>
+                        unit tests: {contributor.unit_tests}
+                        </p></CardFooter>
+                    </Card>
+                 </Col>
+              ))
+            }
+          </Row>
         </section>
 
       </div>
