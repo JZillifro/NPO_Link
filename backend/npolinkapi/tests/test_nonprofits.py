@@ -113,7 +113,7 @@ class TestNonprofitService(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 404)
         self.assertEqual('fail',data['status'])
-        self.assertEqual('No location wa found for given city', data['message'])
+        self.assertEqual('No location was found for given city', data['message'])
 
 
     def test_get_nonprofit_by_state(self):
