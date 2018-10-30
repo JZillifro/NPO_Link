@@ -3,13 +3,18 @@ import {Row, Col} from 'reactstrap';
 import {BASE_API_URL} from './../constants.jsx'
 import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
+import GoogleMapReact from 'google-map-react';
 
 export default class locationPage extends React.Component {
 
    constructor(props) {
      super(props);
      this.state = {
-      location: {}
+      location: {},
+      coords: {
+        lat: 59.95,
+        lng: 30.33
+      }
      };
    }
 
@@ -53,6 +58,15 @@ export default class locationPage extends React.Component {
                     <article className="">
                       <RelatedModelList model={"nonprofits"} property={"location"} value={this.props.match.params.id} value2={"nonprofit"}/>
                     </article>
+                  </Col>
+                  <Col xs={12} className="pt-3">
+                    <div style={{ height: '400px', width: '400px' }}>
+                      <GoogleMapReact
+                        bootstrapURLKeys={{ key: "AIzaSyDfi87OPz0rr6f1oIQ_iH3boI4H53zLFAg"}}
+                        defaultCenter={this.state.coords}
+                        defaultZoom={11}>
+                      </GoogleMapReact>
+                    </div>
                   </Col>
             </Row>
          </Col>

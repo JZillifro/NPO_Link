@@ -66,7 +66,7 @@ class About extends Component {
       <div className="wrapper style1" style={{color: "rgb(43, 37, 44)"}}>
         <section id="features" className="container special">
           <header>
-            <h2>About</h2>
+            <h2>about</h2>
             <p>NPO Link aims to help you learn more about nonprofits in your area
                            and how you can contribute. We provide a way for you to search nonprofits based
                            on location and category as well as see what non-profits exist for various categories

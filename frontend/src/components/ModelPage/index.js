@@ -16,7 +16,7 @@ export default class ModelPage extends React.Component {
         <section id="features" className="container special">
           <header>
             <h2>{this.props.match.params.title}</h2>
-            <p>Ipsum volutpat consectetur orci metus consequat imperdiet duis integer semper magna.</p>
+            <br/>
           </header>
           <div className="row">
             {
