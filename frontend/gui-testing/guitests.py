@@ -34,22 +34,22 @@ class AcceptanceTests (TestCase):
     # Tests that the homepage header is correct
     def test3(self):
         self.browser.find_element_by_link_text('Home').click()
-        given = self.browser.find_element_by_class_name("container").text
-        self.assertIn('Welcome to NPOLink!', given)
+        given = self.browser.find_element_by_class_name("inner").text
+        self.assertIn('NPOLink', given)
 
     # Tests that nonprofits component on navigation bar works
     def test4(self):
         try:
-            self.browser.find_element_by_link_text('Non-profits').click()
+            self.browser.find_element_by_link_text('Nonprofits').click()
             self.assertEqual("http://npolink.me/nonprofits", self.browser.current_url)
         except NoSuchElementException:
             self.fail("The element doesn't exist")
 
     # Tests that the nonprofits header is correct
     def test5(self):
-        self.browser.find_element_by_link_text('Non-profits').click()
+        self.browser.find_element_by_link_text('Nonprofits').click()
         given = self.browser.find_element_by_class_name("container").text
-        self.assertIn('Non-Profit Organizations', given)
+        self.assertIn('nonprofits', given)
 
     # Tests that categories component on navigation bar works
     def test6(self):
@@ -63,7 +63,7 @@ class AcceptanceTests (TestCase):
     def test7(self):
         self.browser.find_element_by_link_text('Categories').click()
         given = self.browser.find_element_by_class_name("container").text
-        self.assertIn('Categories', given)
+        self.assertIn('categories', given)
 
     # Tests that locations component on navigation bar works
     def test8(self):
@@ -77,7 +77,7 @@ class AcceptanceTests (TestCase):
     def test9(self):
         self.browser.find_element_by_link_text('Locations').click()
         given = self.browser.find_element_by_class_name("container").text
-        self.assertIn('Locations', given)
+        self.assertIn('locations', given)
 
     # Tests that about component on navigation bar works
     def test10(self):
