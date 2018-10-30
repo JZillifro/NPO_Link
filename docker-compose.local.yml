@@ -1,17 +1,19 @@
 version: '3.6'
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend-src/frontend
+      dockerfile: Dockerfile
     volumes:
-      - ./frontend:/usr/frontend
+      - ./frontend-src/frontend:/usr/frontend
     ports:
       - "80:3000"
   backend:
     build:
-      context: ./backend
+      context: ./backend-src/backend
       dockerfile: Dockerfile
     volumes:
-      - './backend/:/usr/src/app'
+      - './backend-src/backend:/usr/src/app'
     ports:
       - 5000:5000
     environment:
@@ -25,7 +27,7 @@ services:
 
   npolink-db:  # new
     build:
-      context: ./backend/db
+      context: ./backend-src/backend/db
       dockerfile: Dockerfile
     ports:
       - 5435:5432
