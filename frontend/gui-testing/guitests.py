@@ -13,9 +13,9 @@ class AcceptanceTests (TestCase):
         if platform == "linux" or platform == "linux2":
             self.browser = webdriver.Chrome('./chrome_drivers/chromedriver_linux')
         elif platform == "darwin": # macOS
-            self.browser =webdriver.Chrome('./chrome_drivers/chromedriver_macosx')
+            self.browser = webdriver.Chrome('./chrome_drivers/chromedriver_macosx')
         elif platform == "win32":
-            self.browser =webdriver.Chrome('./chrome_drivers/chromedriver.exe')
+            self.browser = webdriver.Chrome('./chrome_drivers/chromedriver.exe')
         self.browser.get(self.homeurl)
 
     # Tests that the browser title for the homepage is correct
@@ -49,7 +49,7 @@ class AcceptanceTests (TestCase):
     def test5(self):
         self.browser.find_element_by_link_text('Nonprofits').click()
         given = self.browser.find_element_by_class_name("container").text
-        self.assertIn('nonprofits', given)
+        self.assertIn('Nonprofits', given)
 
     # Tests that categories component on navigation bar works
     def test6(self):
@@ -63,7 +63,7 @@ class AcceptanceTests (TestCase):
     def test7(self):
         self.browser.find_element_by_link_text('Categories').click()
         given = self.browser.find_element_by_class_name("container").text
-        self.assertIn('categories', given)
+        self.assertIn('Categories', given)
 
     # Tests that locations component on navigation bar works
     def test8(self):
@@ -77,7 +77,7 @@ class AcceptanceTests (TestCase):
     def test9(self):
         self.browser.find_element_by_link_text('Locations').click()
         given = self.browser.find_element_by_class_name("container").text
-        self.assertIn('locations', given)
+        self.assertIn('Locations', given)
 
     # Tests that about component on navigation bar works
     def test10(self):
