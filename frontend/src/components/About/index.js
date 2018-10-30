@@ -63,32 +63,20 @@ class About extends Component {
 
   render() {
     return (
-        <div className="container">
-           <hr/>
-           <h2>About</h2>
-           <hr/>
-           <Row className="row">
-               <Col xs={12} sm={12} md={6} lg={6}>
-                  <img src="https://openclipart.org/download/276483/1490609861.svg"
-                       alt="home" className="img-fluid"/>
-               </Col>
-               <Col xs={12} sm={12} md={6} lg={6}>
-                     <h2>About NPO Link</h2><hr/>
-                     <p>NPO Link aims to help you learn more about nonprofits in your area
-                     and how you can contribute. We provide a way for you to search nonprofits based
-                     on location and category as well as see what non-profits exist for various categories
-                     and what non-profits exist in a location.
-                     </p>
-               </Col>
-           </Row>
-           <hr/>
-           <h2>Team</h2>
-           <hr/>
+      <div className="wrapper style1" style={{color: "rgb(43, 37, 44)"}}>
+        <section id="features" className="container special">
+          <header>
+            <h2>About</h2>
+            <p>NPO Link aims to help you learn more about nonprofits in your area
+                           and how you can contribute. We provide a way for you to search nonprofits based
+                           on location and category as well as see what non-profits exist for various categories
+                           and what non-profits exist in a location.</p>
+          </header>
            <Row className="row justify-content-center text-center">
             {
-              this.state.contributors.map(contributor => (
-                 <Col xs={12} sm={12} md={6} lg={4} className="pb-4 d-flex align-items-stretch">
-                    <Card key={contributor.email}>
+              this.state.contributors.map((contributor) => (
+                 <Col key={contributor.name + "-col"} xs={12} sm={12} md={6} lg={4} className="pb-4 d-flex align-items-stretch">
+                    <Card>
                         <CardImg top width="100%"
                         src={contributor.image}
                         className="card-img-top"
@@ -96,9 +84,8 @@ class About extends Component {
                         <CardHeader>{contributor.name}</CardHeader>
                         <CardBody>
                           <CardSubtitle>{contributor.role}</CardSubtitle>
-                          <hr/>
                           <CardText className="pt-2">
-                             <p>{contributor.bio}</p>
+                             {contributor.bio}
                           </CardText>
                         </CardBody>
                         <CardFooter>
@@ -112,35 +99,34 @@ class About extends Component {
               ))
             }
           </Row>
-          <hr/>
-          <h2>Details</h2>
-          <hr/>
-          <CardDeck className="pb-5 text-center justify-content-center">
-            <Card>
-               <CardHeader>Project Stats</CardHeader>
-               <CardBody>
+        </section>
+        <section id="details" className="container special">
+           <CardDeck className="pb-5 text-center justify-content-center">
+             <Card>
+                <CardHeader>Project Stats</CardHeader>
+                <CardBody>
                 <CardText className="pt-2">
-                    <p>issues: {this.state.issues.length}
-                    </p>
-                    <p>commits: {this.state.commits}</p>
-                    <p>unit tests: 0</p>
+                     issues: {this.state.issues.length}<br/>
+                     commits: {this.state.commits}<br/>
+                     unit tests: 0
                 </CardText>
-               </CardBody>
-            </Card>
-            <Card>
-               <CardHeader>Project Links</CardHeader>
-               <CardBody>
+                </CardBody>
+             </Card>
+             <Card>
+                <CardHeader>Project Links</CardHeader>
+                <CardBody>
                 <CardText className="pt-2">
                     <p><a href="https://documenter.getpostman.com/view/5491513/RzZ3K1zY">Postman API</a></p>
-                    <p><a href="https://gitlab.com/gerardomares/npolink">GitLab Repository</a></p>
                 </CardText>
-               </CardBody>
-            </Card>
-            <Card>
-               <CardHeader>Project Tools</CardHeader>
-               <CardBody>
                 <CardText className="pt-2">
-                     <p>
+                     <a href="https://gitlab.com/gerardomares/npolink">GitLab Repository</a>
+                </CardText>
+                </CardBody>
+             </Card>
+             <Card>
+                <CardHeader>Project Tools</CardHeader>
+                <CardBody>
+                <CardText className="pt-2">
                      React<br/>
                      Postman<br/>
                      GitLab<br/>
@@ -150,11 +136,11 @@ class About extends Component {
                      AWS S3<br/>
                      Namecheap<br/>
                      Grammarly
-                     </p>
                 </CardText>
-               </CardBody>
-            </Card>
-          </CardDeck>
+                </CardBody>
+             </Card>
+           </CardDeck>
+        </section>
        </div>
     );
   }

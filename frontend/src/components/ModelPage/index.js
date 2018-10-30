@@ -1,102 +1,37 @@
 import React from 'react';
-import {PageHeader, Grid, Row, Col} from 'react-bootstrap';
-import ModelPanel from './ModelPanel.js';
-import NonProfitAPI from './../../api/NonProfitAPI';
-import LocationAPI from './../../api/LocationAPI';
-import CategoryAPI from './../../api/CategoryAPI';
+import NPSection from './NPSection.js'
+import LSection from './LSection.js'
+import CSection from './CSection.js'
 
 export default class ModelPage extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
   render() {
-      if(this.props.match.params.title === "nonprofits"){
-        return(<div className="container">
-          <PageHeader style={{backgroundColor: "#b4eeb4"}}>
-            <div style={{marginLeft: "20px"}}>
-              <br/>
-              <h1>Non-Profit Organizations</h1>
-              <div><small>Nonprofit organizations are accountable to the donors, funders, volunteers, program recipients, and the public community.</small></div>
-              <br/>
-            </div>
-          </PageHeader>
+    return(
+      <div className="wrapper style1" style={{color: "rgb(43, 37, 44)"}}>
 
-          <Grid>
-            <Row>
-               {
-                NonProfitAPI.all().map(nonprofit => (
-                    <Col xs={6} md={4}>
-                      <ModelPanel
-                        title = {nonprofit.name}
-                        description = {nonprofit.description}
-                        image = {nonprofit.image} alt="242x200"
-                        id = {nonprofit.id}
-                        type = "nonprofit"
-                      />
-                    </Col>
-                ))
-               }
-            </Row>
-          </Grid>
-        </div>);
-     } else if(this.props.match.params.title === "locations"){
-        return(<div className="container">
-          <PageHeader style={{backgroundColor: "#b4eeb4"}}>
-            <div style={{marginLeft: "20px"}}>
-              <br/>
-              <h1>Locations</h1>
-              <div><small>These are various cities which have nonprofit organizations.</small></div>
-              <br/>
-            </div>
-          </PageHeader>
-
-
-          <Grid>
-            <Row>
+        <section id="features" className="container special">
+          <header>
+            <h2>{this.props.match.params.title}</h2>
+            <p>Ipsum volutpat consectetur orci metus consequat imperdiet duis integer semper magna.</p>
+          </header>
+          <div className="row">
             {
-             LocationAPI.all().map(location => (
-                 <Col xs={6} md={4}>
-                   <ModelPanel
-                     title = {location.name}
-                     description = {location.description}
-                     image = {location.image} alt="242x200"
-                     id = {location.id}
-                     type = "location"
-                   />
-                 </Col>
-             ))
+              this.props.match.params.title === "nonprofits" && <NPSection type={this.props.match.params.title} />
             }
-            </Row>
-          </Grid>
-        </div>);
-     } else if(this.props.match.params.title === "categories"){
-        return(<div className="container">
-          <PageHeader style={{backgroundColor: "#b4eeb4"}}>
-            <div style={{marginLeft: "20px"}}>
-              <br/>
-              <h1>Categories</h1>
-              <div><small>These are various types of nonprofit organizations.</small></div>
-              <br/>
-            </div>
-          </PageHeader>
-
-          <Grid>
-            <Row>
             {
-             CategoryAPI.all().map(category => (
-                 <Col xs={6} md={4}>
-                   <ModelPanel
-                     title = {category.name}
-                     description = {category.description}
-                     image = {category.image} alt="242x200"
-                     id = {category.id}
-                     type = "category"
-                   />
-                 </Col>
-             ))
+              this.props.match.params.title === "categories" && <CSection type={this.props.match.params.title} />
             }
-            </Row>
-          </Grid>
-        </div>);
-      } else {
-        return (<div>OUCH</div>)
-      }
+            {
+              this.props.match.params.title === "locations" && <LSection type={this.props.match.params.title} />
+            }
+          </div>
+        </section>
+
+      </div>
+    );
   }
 }

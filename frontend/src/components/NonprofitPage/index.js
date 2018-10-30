@@ -1,88 +1,85 @@
 import React from 'react';
-import NonProfitAPI from './../../api/NonProfitAPI';
-import LocationAPI from './../../api/LocationAPI';
-import CategoryAPI from './../../api/CategoryAPI';
 import {Row, Col} from 'reactstrap';
-import {Card, CardBody, CardText, CardTitle, Button, CardHeader} from 'reactstrap'
+import {BASE_API_URL} from './../constants.jsx'
+import axios from 'axios';
+import RelatedModelList from './../RelatedModelList'
 
 export default class NonprofitPage extends React.Component {
+
    constructor(props) {
      super(props);
-     this.state = {
-      nonprofit: {},
-      location: {},
-      category: {},
-      vol_event: {}
-     };
+     this.state = {};
    }
 
-   componentDidMount() {
-      const nonprofit = NonProfitAPI.get(parseInt(this.props.match.params.id, 10));
-      const location = LocationAPI.get(parseInt(nonprofit.location, 10));
-      const category = CategoryAPI.get(parseInt(nonprofit.category, 10));
-      const vol_event = nonprofit.vol_event;
-      this.setState({nonprofit, location, category, vol_event});
+   componentWillMount() {
+      axios.get(`${BASE_API_URL}/v1.0/nonprofits/nonprofit/${this.props.match.params.id}`).then(res => {
+        const nonprofit = res.data.data.nonprofit;
+        this.setState({nonprofit});
+      }).catch(err => {
+        console.log(err)
+      });
    };
 
   render() {
-    return (
-      <div className="container">
-        <Row  className="row">
-         <Col xs={8} md={8} lg={8} className="pb-4">
-            <Row className="row">
-               <div className="col">
-                  <img src={this.state.nonprofit.image} alt={this.state.nonprofit.name} className="img-fluid" />
-               </div>
-            </Row>
-            <hr/>
-            <Row className="row pt-5">
-               <div className="col">
-                  <h1>{this.state.nonprofit.name}</h1>
-                  <br/>
+    if(this.state.nonprofit){
+      return (
+        <div className="wrapper style1"  style={{background: "#fff", color: "rgb(43, 37, 44)", marginRight:"3%", marginLeft:"3%"}}>
+          <Row  className="row">
+           <Col xs={8} md={8} lg={8} className="pb-4">
+              <Row className="row">
+                 <div className="col">
+                   <div className="containter special" style={{textAlign: "center", marginRight:"5%", marginLeft:"5%"}}>
+                     <a className="image featured"><img src={this.state.nonprofit.logo} alt=""/></a>
+                     <header>
+                       <h2>{this.state.nonprofit.name}</h2>
+                       <br/>
+                       <p>{this.state.nonprofit.description}</p>
+                       <a href="/categories" className="button">Back</a>
+                     </header>
+                   </div>
+                 </div>
+              </Row>
+           </Col>
+           <Col xs={4} md={4} lg={4}  className="pb-4">
+              <Row className="row justify-content-center">
+                    <Col xs={12}>
+                        <article className="">
+                          <RelatedModelList model={"categories"} property={"nonprofit"}
+                             value={this.props.match.params.id} value2={"category"}
+                             value3={this.state.nonprofit.category_id} />
+                        </article>
+                    </Col>
+                    <Col xs={12} className="pt-3">
+                      <article className="">
+                        <RelatedModelList model={"locations"} model2={"location"} property={"nonprofit"}
+                             value={this.props.match.params.id} value2={"location"}
+                             value3={this.state.nonprofit.location_id} />
+                      </article>
+                    </Col>
+                    <Col xs={12}>
+                      <article className="">
+                      <header>
+                        <h3><a>Events</a></h3>
+                        {
+                          this.state.nonprofit.projects.map((project) => {
+                            return(
+                              <div><a href={project.projectLink}>{project.title}</a><br/></div>
+                            )
+                          })
+                        }
+                      </header>
+                      </article>
+                    </Col>
+              </Row>
+           </Col>
+          </Row>
+        </div>
+      )
+    } else {
+      return(
+        <div></div>
+      )
+    }
 
-                  <b>Description:</b><br/>
-                  <p>{this.state.nonprofit.description}</p>
-               </div>
-            </Row>
-
-         </Col>
-         <Col xs={4} md={4} lg={4}  className="pb-4">
-            <Row className="row justify-content-center">
-                  <Col xs={12}>
-                        <Card>
-                          <CardHeader>Location</CardHeader>
-                          <CardBody>
-                            <CardTitle>{this.state.location.name}</CardTitle>
-                            <CardText>{this.state.location.description}</CardText>
-                            <Button href={"/location/" + this.state.location.id}> Learn more</Button>
-                          </CardBody>
-                        </Card>
-                  </Col>
-                  <Col xs={12} className="pt-3">
-                        <Card>
-                          <CardHeader>Category</CardHeader>
-                          <CardBody>
-                            <CardTitle>{this.state.category.name}</CardTitle>
-                            <CardText>{this.state.category.description}</CardText>
-                            <Button href={"/category/" + this.state.category.id}> Learn more</Button>
-                          </CardBody>
-                        </Card>
-                  </Col>
-                  <Col xs={12} className="pt-3">
-                        <Card>
-                          <CardHeader>Events</CardHeader>
-                          <CardBody>
-                            <CardTitle>{this.state.vol_event.name}</CardTitle>
-                            <CardText></CardText>
-                            <Button href={this.state.vol_event.url}> Learn more</Button>
-                          </CardBody>
-                        </Card>
-                  </Col>
-            </Row>
-         </Col>
-        </Row>
-        <Button color="primary" href="/nonprofits">Back</Button>
-      </div>
-    )
   }
 }
