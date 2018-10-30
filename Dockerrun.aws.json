@@ -37,8 +37,7 @@
       "portMappings": [{
          "containerPort": 5000,
          "hostPort": 5000
-      }],
-      "links": ["frontend"]
+      }]
    }],
    "family": "",
    "volumes": [{
