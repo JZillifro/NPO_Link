@@ -48,6 +48,11 @@ class TestCategoryService(BaseTestCase):
         self.assertTrue(data['has_prev'])
         self.assertFalse(data['has_next'])
 
+    def test_get_all_categories_paged_badinput(self):
+        """Ensure the /categories/<page_id> route behaves correctly with invalid user input"""
+        response = self.client.get('/v1.0/categories/badid')
+        self.assertEqual(response.status_code, 404)
+
     def test_get_category(self):
         """Ensure the /categories/category/<category_id> route behaves correctly."""
         response = self.client.get('/v1.0/categories/category/1')
@@ -86,6 +91,10 @@ class TestCategoryService(BaseTestCase):
         self.assertEqual(1, categories[0]['id'])
         self.assertEqual(2, categories[1]['id'])
 
+    def test_get_category_by_location_id_badinput(self):
+        """Ensure the /categories/location/<location_id> route behaves correctly with invalid user input"""
+        response = self.client.get('/v1.0/categories/location/badid')
+        self.assertEqual(response.status_code, 404)
 
 if __name__ == '__main__':
     unittest.main()
