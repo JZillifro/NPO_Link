@@ -8,9 +8,12 @@ const CategoryAPI = {
             ],
   all: function() { return this.categories},
   get: function(id) {
-    const isCategory = p => p.id === id
-    return this.categories.find(isCategory)
-  }
+    axios.get(`${BASE_API_URL}/v1.0/categories/category/${this.props.match.params.id}`).then(res => {
+      const category = res.data.data.category;
+      this.setState({category});
+    }).catch(err => {
+      console.log(err)
+    });
 }
 
 export default CategoryAPI
