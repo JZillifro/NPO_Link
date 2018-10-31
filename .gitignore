@@ -1,0 +1,10 @@
+# Folder view configuration files
+.DS_Store
+
+# Compiled Python files
+*.pyc
+
+# Application specific files
+venv
+node_modules
+.sass-cache

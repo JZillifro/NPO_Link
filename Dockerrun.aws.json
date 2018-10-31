@@ -12,6 +12,31 @@
       "portMappings": [{
          "containerPort": 3000,
          "hostPort": 80
+      }],
+      "links": ["backend"]
+   },
+   {
+      "essential": true,
+      "memory": 256,
+      "image": "gerardomares/npolink:backend",
+      "environment": [
+        {
+          "name": "FLASK_ENV",
+          "value": "production"
+       },
+       {
+          "name": "APP_SETTINGS",
+          "value": "npolinkapi.config.ProductionConfig"
+       }
+     ],
+      "mountPoints": [{
+         "containerPath": "/usr/src/app",
+         "sourceVolume": "_backend"
+      }],
+      "name": "backend",
+      "portMappings": [{
+         "containerPort": 5000,
+         "hostPort": 5000
       }]
    }],
    "family": "",
@@ -20,5 +45,11 @@
          "sourcePath": "frontend"
       },
       "name": "_frontend"
+   },
+   {
+      "host": {
+         "sourcePath": "backend"
+      },
+      "name": "_backend"
    }]
 }
