@@ -21,4 +21,3 @@ nonprofit.getManyNonProfits = async function getManyNonProfits(page){
   const response = axios.get(`${BASE_API_URL}/v1.0/nonprofits/${page}`)
   return response
 }
-module.exports = nonprofit
