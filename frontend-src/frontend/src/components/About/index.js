@@ -66,7 +66,7 @@ class About extends Component {
       <div className="wrapper style1" style={{color: "rgb(43, 37, 44)"}}>
         <section id="features" className="container special">
           <header>
-            <h2>about</h2>
+            <h2>About</h2>
             <p>NPO Link aims to help you learn more about nonprofits in your area
                            and how you can contribute. We provide a way for you to search nonprofits based
                            on location and category as well as see what non-profits exist for various categories
@@ -116,7 +116,7 @@ class About extends Component {
                 <CardHeader>Project Links</CardHeader>
                 <CardBody>
                 <CardText className="pt-2">
-                    <p><a href="https://documenter.getpostman.com/view/5491513/RzZ3K1zY">Postman API</a></p>
+                     <a href="https://documenter.getpostman.com/view/5491513/RzZ3K1zY">Postman API</a>
                 </CardText>
                 <CardText className="pt-2">
                      <a href="https://gitlab.com/gerardomares/npolink">GitLab Repository</a>

@@ -3,6 +3,7 @@ import {Row, Col} from 'reactstrap';
 import {BASE_API_URL} from './../constants.jsx'
 import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
+import {getNonProfit} from './../../api/NonProfitAPI'
 
 export default class NonprofitPage extends React.Component {
 
@@ -11,14 +12,11 @@ export default class NonprofitPage extends React.Component {
      this.state = {};
    }
 
-   componentWillMount() {
-      axios.get(`${BASE_API_URL}/v1.0/nonprofits/nonprofit/${this.props.match.params.id}`).then(res => {
-        const nonprofit = res.data.data.nonprofit;
-        this.setState({nonprofit});
-      }).catch(err => {
-        console.log(err)
-      });
-   };
+   async componentDidMount() {
+    const response = await getNonProfit(this.props.match.params.id);
+    this.setState({nonprofit: response.data.data.nonprofit});
+        };
+
 
   render() {
     if(this.state.nonprofit){
@@ -34,7 +32,7 @@ export default class NonprofitPage extends React.Component {
                        <h2>{this.state.nonprofit.name}</h2>
                        <br/>
                        <p>{this.state.nonprofit.description}</p>
-                       <a href="/categories" className="button">Back</a>
+                       <a href="/Nonprofits" className="button">Back</a>
                      </header>
                    </div>
                  </div>

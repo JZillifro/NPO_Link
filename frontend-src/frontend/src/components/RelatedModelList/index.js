@@ -37,7 +37,7 @@ export default class RelatedModelList extends React.Component {
       return (
         <div>
           <header>
-            <h3><a>{this.props.model}</a></h3>
+            <h3><a>{this.props.model.charAt(0).toUpperCase() + this.props.model.slice(1)}</a></h3>
           </header>
           {
             this.state.models.map((model) => {
@@ -55,7 +55,7 @@ export default class RelatedModelList extends React.Component {
       return (
          <div>
             <header>
-               <h3><a>{this.props.model}</a></h3>
+               <h3><a>{this.props.model.charAt(0).toUpperCase() + this.props.model.slice(1)}</a></h3>
             </header>
             <div><p>No {this.props.model} found</p></div>
          </div>
