@@ -7,3 +7,7 @@ export async function getNonProfit(id) {
   const response = axios.get(`${BASE_API_URL}/v1.0/nonprofits/nonprofit/${id}`)
   return response
 }
+export async function getManyNonProfits(page){
+  const response = axios.get(`${BASE_API_URL}/v1.0/nonprofits/${page}`)
+  return response
+}
