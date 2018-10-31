@@ -19,10 +19,10 @@ class AppHeader extends Component {
       <nav id="nav" style={{background: "#2b252c"}}>
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="/nonprofits">Nonprofits</a></li>
-          <li><a href="/categories">Categories</a></li>
-          <li><a href="/locations">Locations</a></li>
-          <li><a href="/about">About</a></li>
+          <li><a href="/Nonprofits">Nonprofits</a></li>
+          <li><a href="/Categories">Categories</a></li>
+          <li><a href="/Locations">Locations</a></li>
+          <li><a href="/About">About</a></li>
         </ul>
       </nav>
     );
