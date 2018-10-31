@@ -27,7 +27,7 @@
    "family": "",
    "volumes": [{
       "host": {
-         "sourcePath": "./"
+         "sourcePath": "backend"
       },
       "name": "_backend"
    }]
