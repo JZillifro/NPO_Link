@@ -19,7 +19,12 @@ Name: Jacob Zillifro
 EID: jtz257
 GitLab ID: JZillifro
 
+Phase 1
 Git SHA: 9a3584150a3e2a9282dbe5560354d788df3e0385
+
+Phase 2
+Git SHA: aaaa1cc6d9bb231f7a8b03bf118ae813132b315e
+
 GitLab Pipelines: https://gitlab.com/gerardomares/npolink/pipelines
 
 Estimated Completion Time Phase 1: 12hrs
