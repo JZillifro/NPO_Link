@@ -7,3 +7,7 @@ export async function getLocation(id) {
   const response = axios.get(`${BASE_API_URL}/v1.0/locations/location/${id}`)
   return response
 }
+export async function getManyLocation(id) {
+  const response = axios.get(`${BASE_API_URL}/v1.0/locations/${id}`)
+  return response
+}
