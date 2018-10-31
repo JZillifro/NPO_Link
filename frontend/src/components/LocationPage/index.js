@@ -21,7 +21,7 @@ export default class locationPage extends React.Component {
 
    async componentDidMount() {
     const response = await getLocation(this.props.match.params.id);
-    this.setState({location: response.data.data.category});
+    this.setState({location: response.data.data.location});
         };
 
   render() {
