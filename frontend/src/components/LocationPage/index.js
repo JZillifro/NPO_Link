@@ -4,6 +4,7 @@ import {BASE_API_URL} from './../constants.jsx'
 import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
 import GoogleMapReact from 'google-map-react';
+import {getLocation} from './../../api/LocationAPI'
 
 export default class locationPage extends React.Component {
 
@@ -18,14 +19,10 @@ export default class locationPage extends React.Component {
      };
    }
 
-   componentDidMount() {
-      axios.get(`${BASE_API_URL}/v1.0/locations/location/${this.props.match.params.id}`).then(res => {
-        const location = res.data.data.location;
-        this.setState({location});
-      }).catch(err => {
-        console.log(err)
-      });
-   };
+   async componentDidMount() {
+    const response = await getLocation(this.props.match.params.id);
+    this.setState({location: response.data.data.category});
+        };
 
   render() {
     return (
