@@ -32,7 +32,7 @@ export default class CategoryPage extends React.Component {
                      <h2>{this.state.category.name}</h2>
                      <br/>
                      <p>{this.state.category.description}</p>
-                     <a href="/categories" className="button">Back</a>
+                     <a href="/Categories" className="button">Back</a>
                    </header>
                  </div>
                </div>

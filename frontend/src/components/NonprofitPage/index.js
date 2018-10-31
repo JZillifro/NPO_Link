@@ -32,7 +32,7 @@ export default class NonprofitPage extends React.Component {
                        <h2>{this.state.nonprofit.name}</h2>
                        <br/>
                        <p>{this.state.nonprofit.description}</p>
-                       <a href="/categories" className="button">Back</a>
+                       <a href="/Nonprofits" className="button">Back</a>
                      </header>
                    </div>
                  </div>

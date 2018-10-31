@@ -39,7 +39,7 @@ export default class locationPage extends React.Component {
                          <h2>{this.state.location.name}</h2>
                          <br/>
                          <p>{this.state.location.description}</p>
-                         <a href="/categories" className="button">Back</a>
+                         <a href="/Locations" className="button">Back</a>
                        </header>
                      </div>
                    </div>
