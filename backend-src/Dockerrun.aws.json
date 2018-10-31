@@ -3,21 +3,6 @@
    "containerDefinitions": [{
       "essential": true,
       "memory": 256,
-      "image": "gerardomares/npolink:frontend",
-      "mountPoints": [{
-         "containerPath": "/usr/frontend",
-         "sourceVolume": "_frontend"
-      }],
-      "name": "frontend",
-      "portMappings": [{
-         "containerPort": 3000,
-         "hostPort": 80
-      }],
-      "links": ["backend"]
-   },
-   {
-      "essential": true,
-      "memory": 256,
       "image": "gerardomares/npolink:backend",
       "environment": [
         {
@@ -36,17 +21,11 @@
       "name": "backend",
       "portMappings": [{
          "containerPort": 5000,
-         "hostPort": 5000
+         "hostPort": 80
       }]
    }],
    "family": "",
    "volumes": [{
-      "host": {
-         "sourcePath": "frontend"
-      },
-      "name": "_frontend"
-   },
-   {
       "host": {
          "sourcePath": "backend"
       },
