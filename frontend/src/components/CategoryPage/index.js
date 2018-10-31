@@ -3,6 +3,7 @@ import {Row, Col} from 'reactstrap';
 import {BASE_API_URL} from './../constants.jsx'
 import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
+import {getCategory} from './../../api/CategoryAPI'
 
 export default class CategoryPage extends React.Component {
 
@@ -13,13 +14,9 @@ export default class CategoryPage extends React.Component {
      };
    }
 
-   componentDidMount() {
-      axios.get(`${BASE_API_URL}/v1.0/categories/category/${this.props.match.params.id}`).then(res => {
-        const category = res.data.data.category;
-        this.setState({category});
-      }).catch(err => {
-        console.log(err)
-      });
+   async componentDidMount() {
+     const response = await getCategory(this.props.match.params.id);
+     this.setState({category: response.data.data.category});
    };
 
   render() {
