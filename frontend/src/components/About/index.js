@@ -116,7 +116,7 @@ class About extends Component {
                 <CardHeader>Project Links</CardHeader>
                 <CardBody>
                 <CardText className="pt-2">
-                     <a href="https://documenter.getpostman.com/view/5491513/RWgm3gY7">Postman API</a>
+                     <a href="https://documenter.getpostman.com/view/5491513/RzZ3K1zY">Postman API</a>
                 </CardText>
                 <CardText className="pt-2">
                      <a href="https://gitlab.com/gerardomares/npolink">GitLab Repository</a>
