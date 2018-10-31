@@ -14,7 +14,7 @@ category.getCategory = async function getCategory(id) {
   return response
 }
 
-export async function getManyCategory(id) {
+export async function getManyCategories(id) {
   const response = axios.get(`${BASE_API_URL}/v1.0/categories/${id}`)
   return response
 }
