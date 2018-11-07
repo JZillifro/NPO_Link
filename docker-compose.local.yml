@@ -4,14 +4,22 @@ services:
     build:
       context: ./frontend-src/frontend
       dockerfile: Dockerfile
+      args:
+        - app_env=development
     volumes:
       - ./frontend-src/frontend:/usr/frontend
     ports:
-      - "80:3000"
+      - 80:3000
+    environment:
+      - API_URL="http://localhost:5000"
+    depends_on:  # new
+      - backend
   backend:
     build:
       context: ./backend-src/backend
       dockerfile: Dockerfile
+      args:
+         - app_env=development
     volumes:
       - './backend-src/backend:/usr/src/app'
     ports:

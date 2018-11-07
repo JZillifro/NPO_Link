@@ -1,6 +1,10 @@
 # base image
 FROM python:3.7.0-alpine
 
+
+ARG app_env
+ENV APP_ENV $app_env
+
 # new
 # install dependencies
 RUN apk update && \
@@ -18,7 +22,9 @@ RUN pip install -r requirements.txt
 # new
 # add entrypoint.sh
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
+COPY ./entrypoint-prod.sh /usr/src/app/entrypoint-prod.sh
 RUN chmod +x /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint-prod.sh
 
 # add app
 COPY . /usr/src/app
@@ -26,4 +32,9 @@ COPY . /usr/src/app
 EXPOSE 5000
 # new
 # run server
-CMD ["/usr/src/app/entrypoint.sh"]
+CMD if [ ${APP_ENV} = production ]; \
+	then \
+	/usr/src/app/entrypoint-prod.sh; \
+	else \
+	/usr/src/app/entrypoint.sh; \
+	fi
