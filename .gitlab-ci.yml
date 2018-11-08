@@ -7,16 +7,16 @@ variables:
 services:
    - docker:dind
 
-stages:
-  - build
-  - test
-  - deploy
-
 before_script:
    - docker info
    - apk add --no-cache py-pip
    - apk add --no-cache make
    - pip install docker-compose
+
+stages:
+  - build
+  - test
+  - cleanup
 
 build:all:
    stage: build
