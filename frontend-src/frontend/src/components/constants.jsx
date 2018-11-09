@@ -1,4 +1,6 @@
-const BASE_API_URL = 'http://api.npolink.me'
+const BASE_API_URL = (process.env.NODE_ENV === 'development')
+    ? 'http://localhost:5000'
+    : 'http://api.npolink.me';
 export {
  BASE_API_URL
 }

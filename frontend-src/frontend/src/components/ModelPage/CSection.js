@@ -3,35 +3,72 @@ import axios from 'axios';
 import { BASE_API_URL } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col, CardHeader } from 'reactstrap'
+import SearchBar from './../SearchBar'
 
 export default class CSection extends React.Component {
    constructor(props) {
      super(props)
      this.state = {
       activePage: 1,
-      dataForPage : []
+      dataForPage : [],
+      query : '',
+      search_key: 'name',
+      sort_key: 'name',
+      sort: 'asc'
      }
+
      this.onChangePage = this.onChangePage.bind(this);
+     this.onQueryChange = this.onQueryChange.bind(this);
+     this.onSortChange = this.onSortChange.bind(this);
+     this.resetPage = this.resetPage.bind(this);
    }
 
    componentWillMount() {
-     axios.get(`${BASE_API_URL}/v1.0/categories/1`).then(res => {
-       const dataForPage = res.data.data.categories
-       const pages = res.data.pages
-       this.setState({dataForPage: dataForPage, activePage: 1, totalPages: pages })
-     }).catch(err => {
-       console.log(err)
-     });
+      this.setState({activePage: 1}, () => {
+         this.refreshPage(1);
+      })
    }
 
    onChangePage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/categories/${page}`).then(res => {
-       const dataForPage = res.data.data.categories
+      this.setState({activePage: page}, () => {
+          this.refreshPage(page);
+      })
+   }
 
-       this.setState({activePage: page, dataForPage: dataForPage})
-       window.scrollTo(0, 0)
+   onQueryChange(search_key, query) {
+      this.setState({query: query, search_key: search_key }, () => {
+          this.refreshPage(1);
+      })
+   }
+
+   onSortChange(sort_key, sort) {
+      console.log(sort)
+      this.setState({sort_key: sort_key, sort: sort }, () => {
+          this.refreshPage(1);
+      })
+   }
+
+   resetPage() {
+      this.setState({
+       activePage: 1,
+       dataForPage : [],
+       query : '',
+       search_key: 'name',
+       sort_key: 'id',
+       sort: 'asc'
+     }, () => {
+        this.refreshPage(1);
+     })
+   }
+
+   refreshPage(page) {
+      axios.get(`${BASE_API_URL}/v1.0/categories/${page}?q=${this.state.query}&search_key=${this.state.search_key}&sort=${this.state.sort}&sort_key=${this.state.sort_key}`).then(res => {
+        const dataForPage = res.data.data.categories
+        const pages = res.data.pages
+        this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
+        window.scrollTo(0, 0)
       }).catch(err => {
-       console.log(err)
+        console.log(err)
       });
    }
 
@@ -39,6 +76,13 @@ export default class CSection extends React.Component {
     if(this.state.dataForPage) {
       return(
          <div className="container justify-content-center">
+             <Row className="mb-5">
+               <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
+                          sort_keys={['name', 'code']}
+                          onSearchChange={this.onQueryChange} initialSearchValue={'name'}
+                          search_keys={['name', 'code', 'parent', 'desc']}
+                          resetPage={this.resetPage} />
+             </Row>
              <Row className="row justify-content-center">
               {
                 this.state.dataForPage.map(model => (

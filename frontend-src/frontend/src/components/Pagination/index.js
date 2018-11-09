@@ -23,6 +23,13 @@ class Pagination extends React.Component {
       this.setPage(this.props.initialPage);
     }
 
+    componentWillReceiveProps(props) {
+      const {totalPages} = this.props
+      if (props.totalPages !== totalPages) {
+         this.refreshPage(this.props.initialPage, props.totalPages);
+      }
+    }
+
     setPage(page) {
         var { totalPages } = this.props;
         var pager = this.state.pager;
@@ -33,6 +40,23 @@ class Pagination extends React.Component {
 
         // get new pager object for specified page
         pager = this.getPager(page, totalPages);
+
+        // update state
+        this.setState({ pager: pager });
+
+        // call change page function in parent component
+        this.props.onChangePage(pager.currentPage);
+    }
+
+    refreshPage(page, pages) {
+        var pager = this.state.pager;
+
+        if (page < 1 || page > pages) {
+            return;
+        }
+
+        // get new pager object for specified page
+        pager = this.getPager(page, pages);
 
         // update state
         this.setState({ pager: pager });
