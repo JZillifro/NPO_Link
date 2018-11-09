@@ -11,7 +11,7 @@ services:
     ports:
       - 80:3000
     environment:
-      - API_URL="http://localhost:5000"
+      - NODE_ENV=development
     depends_on:  # new
       - backend
   backend:

@@ -4,6 +4,12 @@
       "essential": true,
       "memory": 256,
       "image": "gerardomares/npolink:frontend",
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+       }
+      ],
       "mountPoints": [{
          "containerPath": "/usr/frontend",
          "sourceVolume": "_frontend"
