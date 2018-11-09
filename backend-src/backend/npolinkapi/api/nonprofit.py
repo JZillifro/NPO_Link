@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 
 # Import the database object from the main app module
 from npolinkapi import db
-from sqlalchemy import inspect, and_
+from sqlalchemy import inspect, and_, or_
 from sqlalchemy.orm import load_only
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -37,7 +37,46 @@ def get_all_nonprofits():
 def view(page=1):
     """Get all nonprofits paged"""
     per_page = 12
-    nonprofits = Nonprofit.query.order_by(Nonprofit.id.asc()).paginate(page,per_page,error_out=False)
+
+    search_key = request.args.get('search_key', 'name')
+    if search_key == 'name':
+        search_column = Nonprofit.name
+    elif search_key == 'ein':
+        search_column = Nonprofit.ein
+    elif search_key == 'desc':
+        search_column = Nonprofit.description
+    else:
+        search_column = Nonprofit.name
+
+    sort_key = request.args.get('sort_key', 'name')
+    if sort_key == 'ein':
+        sort_column = Nonprofit.ein
+    elif sort_key == 'id':
+        sort_column = Nonprofit.id
+    else:
+        sort_column = Nonprofit.name
+
+    searchword = request.args.get('q', '')
+    if len(searchword) > 0:
+        searchwordl = "{}%".format(searchword)
+        searchwordm = "%{}%".format(searchword)
+        searchwordr = "%{}".format(searchword)
+        nonprofits = Nonprofit.query.filter(or_(search_column.ilike(searchwordl),
+                                              search_column.ilike(searchwordm),
+                                              search_column.ilike(searchwordr)))
+    else:
+        searchword = "%"
+        nonprofits = Nonprofit.query.filter(search_column.like(searchword))
+
+    sort = request.args.get('sort', 'asc')
+
+    if sort == 'asc':
+        nonprofits = nonprofits.order_by(sort_column.asc())
+    else:
+        nonprofits = nonprofits.order_by(sort_column.desc())
+
+    nonprofits = nonprofits.paginate(page,per_page,error_out=False)
+
     paged_response_object = {
         'status': 'success',
         'data': {

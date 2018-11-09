@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 
 # Import the database object from the main app module
 from npolinkapi import db
-from sqlalchemy import inspect
+from sqlalchemy import inspect, or_
 from sqlalchemy.orm import load_only
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -39,7 +39,48 @@ def get_all_locations():
 def view(page=1):
     """Get all locations paged"""
     per_page = 12
-    locations = Location.query.order_by(Location.id.asc()).paginate(page,per_page,error_out=False)
+
+    search_key = request.args.get('search_key', 'name')
+    if search_key == 'city':
+        search_column = Location.city
+    elif search_key == 'state':
+        search_column = Location.state
+    elif search_key == 'desc':
+        search_column = Location.description
+    else:
+        search_column = Location.name
+
+    sort_key = request.args.get('sort_key', 'name')
+    if sort_key == 'city':
+        sort_column = Location.city
+    elif sort_key == 'state':
+        sort_column = Location.state
+    elif sort_key == 'id':
+        sort_column = Location.id
+    else:
+        sort_column = Location.name
+
+    searchword = request.args.get('q', '')
+    if len(searchword) > 0:
+        searchwordl = "{}%".format(searchword)
+        searchwordm = "%{}%".format(searchword)
+        searchwordr = "%{}".format(searchword)
+        locations = Location.query.filter(or_(search_column.ilike(searchwordl),
+                                              search_column.ilike(searchwordm),
+                                              search_column.ilike(searchwordr)))
+    else:
+        searchword = "%"
+        locations = Location.query.filter(search_column.like(searchword))
+
+    sort = request.args.get('sort', 'asc')
+
+    if sort == 'asc':
+        locations = locations.order_by(sort_column.asc())
+    else:
+        locations = locations.order_by(sort_column.desc())
+
+    locations = locations.paginate(page,per_page,error_out=False)
+
     paged_response_object = {
         'status': 'success',
         'data': {
