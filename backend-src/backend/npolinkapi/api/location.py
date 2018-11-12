@@ -35,6 +35,37 @@ def get_all_locations():
     }
     return jsonify(response_object), 200
 
+@locations_blueprint.route('/search/<int:page>', methods=['GET'])
+def search(page=1):
+    search_words = request.args.get("search_words", '').split(' ')
+    #nonzero query length
+    if len(search_words):
+        try:
+            #for all query terms search name, descrption and address
+            locations = Location.query.filter(or_(
+                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.city.ilike('%'+str(x)+ '%') for x in search_words],
+                *[Location.description.ilike('%'+str(x)+ '%') for x in search_words],
+                *[Location.state.ilike('%'+str(x)+ '%') for x in search_words]
+            ))
+        except Exception as e:
+            return str(e)
+        #output formatting
+        locations = locations.paginate(page,3,error_out=False)
+
+        paged_response_object = {
+            'status': 'success',
+            'data': {
+                'locations': [location.to_json() for location in locations.items]
+            },
+            'has_next': locations.has_next,
+            'has_prev': locations.has_prev,
+            'next_page': locations.next_num,
+            'pages': locations.pages
+        }
+        return jsonify(paged_response_object), 200
+    return "error, no args"
+
 @locations_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
     """Get all locations paged"""
