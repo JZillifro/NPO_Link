@@ -14,6 +14,8 @@ services:
       - NODE_ENV=development
     depends_on:  # new
       - backend
+    networks:
+      - npolink-network
   backend:
     build:
       context: ./backend-src/backend
@@ -32,6 +34,8 @@ services:
       - DATABASE_TEST_URL=postgres://postgres:postgres@npolink-db:5432/npolink_test  # new
     depends_on:  # new
       - npolink-db
+    networks:
+      - npolink-network
 
   npolink-db:  # new
     build:
@@ -42,3 +46,9 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - npolink-network
+
+networks:
+  npolink-network:
+    driver: bridge
