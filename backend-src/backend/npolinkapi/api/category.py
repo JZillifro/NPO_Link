@@ -35,6 +35,37 @@ def get_all():
     }
     return jsonify(response_object), 200
 
+@categories_blueprint.route('/search/<int:page>', methods=['GET'])
+def search(page=1):
+    search_words = request.args.get("search_words", '').split(' ')
+    #nonzero query length
+    if len(search_words):
+        try:
+            #for all query terms search name, descrption and address
+            categories = Category.query.filter(or_(
+                *[Category.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Category.code.ilike('%'+str(x)+ '%') for x in search_words],
+                *[Category.description.ilike('%'+str(x)+ '%') for x in search_words]
+            ))
+        except Exception as e:
+            return str(e)
+        #output formatting
+        categories = categories.paginate(page,3,error_out=False)
+
+        paged_response_object = {
+            'status': 'success',
+            'data': {
+                'categories': [category.to_json() for category in categories.items]
+            },
+            'has_next': categories.has_next,
+            'has_prev': categories.has_prev,
+            'next_page': categories.next_num,
+            'pages': categories.pages
+        }
+        return jsonify(paged_response_object), 200
+    return "error, no args"
+
+
 @categories_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
     """Get all categories paged"""
