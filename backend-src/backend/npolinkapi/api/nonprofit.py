@@ -42,8 +42,17 @@ def search(page=1):
             #for all query terms search name, descrption and address
             nonprofits = Nonprofit.query.filter(or_(
                 *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
+                #should'nt be necessary but might be according to some sites
+                *[Nonprofit.name.ilike(str(x) + '%') for x in search_words],
+                *[Nonprofit.name.ilike('%' + str(x)) for x in search_words],
+
                 *[Nonprofit.description.ilike('%'+str(x)+ '%') for x in search_words],
+                *[Nonprofit.description.ilike(str(x)+ '%') for x in search_words],
+                *[Nonprofit.description.ilike('%'+str(x)) for x in search_words],
+
                 *[Nonprofit.address.ilike('%'+str(x)+ '%') for x in search_words]
+                *[Nonprofit.address.ilike(str(x)+ '%') for x in search_words]
+                *[Nonprofit.address.ilike('%'+str(x)) for x in search_words]
             ))
         except Exception as e:
             return str(e)
