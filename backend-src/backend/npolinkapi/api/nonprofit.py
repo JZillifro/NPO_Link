@@ -36,8 +36,10 @@ def get_all_nonprofits():
 @nonprofits_blueprint.route('/search/<int:page>', methods=['GET'])
 def search(page=1):
     search_words = request.args.get("search_words", '').split(' ')
+    #nonzero query length
     if len(search_words):
         try:
+            #for all query terms search name, descrption and address
             nonprofits = Nonprofit.query.filter(or_(
                 *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
                 *[Nonprofit.description.ilike('%'+str(x)+ '%') for x in search_words],
@@ -45,6 +47,7 @@ def search(page=1):
             ))
         except Exception as e:
             return str(e)
+        #output formatting
         nonprofits = nonprofits.paginate(page,3,error_out=False)
 
         paged_response_object = {
@@ -58,10 +61,6 @@ def search(page=1):
             'pages': nonprofits.pages
         }
         return jsonify(paged_response_object), 200
-
-
-        return str(nonprofits)
-
     return "error, no args"
 
 @nonprofits_blueprint.route('/<int:page>',methods=['GET'])
