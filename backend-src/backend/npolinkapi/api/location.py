@@ -44,9 +44,21 @@ def search(page=1):
             #for all query terms search name, descrption and address
             locations = Location.query.filter(or_(
                 *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.city.ilike('%'+str(x)+ '%') for x in search_words],
-                *[Location.description.ilike('%'+str(x)+ '%') for x in search_words],
-                *[Location.state.ilike('%'+str(x)+ '%') for x in search_words]
+                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+
+                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+
+                *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.description.ilike(    + str(x) + '%') for x in search_words],
+                *[Location.description.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.state.ilike(      str(x) + '%') for x in search_words],
+                *[Location.state.ilike('%' + str(x)      ) for x in search_words]
+
             ))
         except Exception as e:
             return str(e)

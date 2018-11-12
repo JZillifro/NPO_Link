@@ -47,13 +47,13 @@ def search(page=1):
                 *[Category.name.ilike(      str(x) + '%') for x in search_words],
                 *[Category.name.ilike('%' + str(x)      ) for x in search_words],
 
-                *[Category.code.ilike('%'+ str(x) + '%') for x in search_words],
-                *[Category.code.ilike(     str(x) + '%') for x in search_words],
-                *[Category.code.ilike('%'+ str(x)      ) for x in search_words],
+                *[Category.code.ilike('%' + str(x) + '%') for x in search_words],
+                *[Category.code.ilike(      str(x) + '%') for x in search_words],
+                *[Category.code.ilike('%' + str(x)      ) for x in search_words],
 
-                *[Category.description.ilike('%'+ str(x) + '%') for x in search_words]
-                                                  str(x) + '%') for x in search_words]
-                *[Category.description.ilike('%'+ str(x)      ) for x in search_words]
+                *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Category.description.ilike(      str(x) + '%') for x in search_words],
+                *[Category.description.ilike('%' + str(x) + '%') for x in search_words]
 
             ))
         except Exception as e:
