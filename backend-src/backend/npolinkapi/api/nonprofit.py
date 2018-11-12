@@ -50,8 +50,8 @@ def search(page=1):
                 *[Nonprofit.description.ilike(str(x)+ '%') for x in search_words],
                 *[Nonprofit.description.ilike('%'+str(x)) for x in search_words],
 
-                *[Nonprofit.address.ilike('%'+str(x)+ '%') for x in search_words]
-                *[Nonprofit.address.ilike(str(x)+ '%') for x in search_words]
+                *[Nonprofit.address.ilike('%'+str(x)+ '%') for x in search_words],
+                *[Nonprofit.address.ilike(str(x)+ '%') for x in search_words],
                 *[Nonprofit.address.ilike('%'+str(x)) for x in search_words]
             ))
         except Exception as e:
