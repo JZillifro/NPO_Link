@@ -33,6 +33,37 @@ def get_all_nonprofits():
     }
     return jsonify(response_object), 200
 
+@nonprofits_blueprint.route('/search/<int:page>', methods=['GET'])
+def search(page=1):
+    search_words = request.args.get("search_words", '').split(' ')
+    if len(search_words):
+        try:
+            nonprofits = Nonprofit.query.filter(or_(
+                *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Nonprofit.description.ilike('%'+str(x)+ '%') for x in search_words],
+                *[Nonprofit.address.ilike('%'+str(x)+ '%') for x in search_words]
+            ))
+        except Exception as e:
+            return str(e)
+        nonprofits = nonprofits.paginate(page,3,error_out=False)
+
+        paged_response_object = {
+            'status': 'success',
+            'data': {
+                'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits.items]
+            },
+            'has_next': nonprofits.has_next,
+            'has_prev': nonprofits.has_prev,
+            'next_page': nonprofits.next_num,
+            'pages': nonprofits.pages
+        }
+        return jsonify(paged_response_object), 200
+
+
+        return str(nonprofits)
+
+    return "error, no args"
+
 @nonprofits_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
     """Get all nonprofits paged"""
