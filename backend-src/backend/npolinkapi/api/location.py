@@ -9,6 +9,8 @@ from sqlalchemy.orm.exc import NoResultFound
 
 # Import module models (i.e. User)
 from npolinkapi.api.models import Location, Category, Nonprofit
+ 
+import json
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 locations_blueprint = Blueprint('locations', __name__, url_prefix='/v1.0/locations')
@@ -80,30 +82,45 @@ def search(page=1):
 
 @locations_blueprint.route('/filter/<int:page>', methods=['GET'])
 def filter(page=1):
-    search_words = request.args()#.split(' ')
-    return str(search_words)
+    #expects input of form /filter/<page>?search_words=wordstosearchfor&filter_terms={State:TX,city:Austin}
+    search_words = request.args.get("search_words", type=str).split(" ")
+    try:
+        filter_terms = json.loads(request.args.get("filter_terms", default = None))
+    except Exception as e:
+        return str(e)
+
+    #return str(filter_terms)
     #nonzero query length
     if len(search_words):
         try:
             #for all query terms search name, descrption and address
-            locations = Location.query.filter(or_(
-                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+            locations = Location.query.filter(
+                and_(
+                    or_(
+                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
 
-                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
 
-                *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.description.ilike(    str(x) + '%') for x in search_words],
-                *[Location.description.ilike('%' + str(x)      ) for x in search_words],
+                    *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.description.ilike(    str(x) + '%') for x in search_words],
+                    *[Location.description.ilike('%' + str(x)      ) for x in search_words],
 
-                *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.state.ilike(      str(x) + '%') for x in search_words],
-                *[Location.state.ilike('%' + str(x)      ) for x in search_words]
+                    *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.state.ilike(      str(x) + '%') for x in search_words],
+                    *[Location.state.ilike('%' + str(x)      ) for x in search_words]
 
-            ))
+                ),
+                    and_(
+                        Location.state.like(str(filter_terms["State"])),
+                        Location.city.ilike(str(filter_terms["City"]))
+                    )
+
+            )
+            )
         except Exception as e:
             return str(e)
         #output formatting
