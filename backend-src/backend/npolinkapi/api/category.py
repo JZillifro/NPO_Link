@@ -44,8 +44,17 @@ def search(page=1):
             #for all query terms search name, descrption and address
             categories = Category.query.filter(or_(
                 *[Category.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Category.code.ilike('%'+str(x)+ '%') for x in search_words],
-                *[Category.description.ilike('%'+str(x)+ '%') for x in search_words]
+                *[Category.name.ilike(      str(x) + '%') for x in search_words],
+                *[Category.name.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Category.code.ilike('%' + str(x) + '%') for x in search_words],
+                *[Category.code.ilike(      str(x) + '%') for x in search_words],
+                *[Category.code.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Category.description.ilike(      str(x) + '%') for x in search_words],
+                *[Category.description.ilike('%' + str(x) + '%') for x in search_words]
+
             ))
         except Exception as e:
             return str(e)
