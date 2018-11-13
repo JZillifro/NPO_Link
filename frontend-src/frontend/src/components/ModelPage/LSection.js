@@ -5,6 +5,7 @@ import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
+
 export default class LSection extends React.Component {
    constructor(props) {
      super(props)
@@ -13,10 +14,9 @@ export default class LSection extends React.Component {
        dataForPage : [],
        query : '',
        dropdownOpen: false,
-       search_key: 'city',
        sort_key: 'name',
        sort: 'asc',
-       location: {state:""}
+       filters: {}
      }
 
      this.onChangePage = this.onChangePage.bind(this);
@@ -32,7 +32,6 @@ export default class LSection extends React.Component {
        dataForPage : [],
        query : '',
        dropdownOpen: false,
-       search_key: 'city',
        sort_key: 'id',
        sort: 'asc'
      }, () => {
@@ -53,23 +52,19 @@ export default class LSection extends React.Component {
      })
   }
 
-  onQueryChange(search_key, query) {
-     this.setState({query: query, search_key: search_key }, () => {
+  onQueryChange(query) {
+     this.setState({query: query}, () => {
          this.refreshPage(1);
      })
   }
 
   onStateChange(state) {
-     this.setState({location: {state: state}}, () => {
-         this.refreshFilter();
+    var filters = this.state.filters;
+    filters['State'] = state;
+     this.setState({filters}, () => {
+         this.refreshPage(1);
      })
   }
-
-  // onCityChange(state) {
-  //    this.setState({query: query, search_key: search_key }, () => {
-  //        this.refreshPage(1);
-  //    })
-  // }
 
   onSortChange(sort_key, sort) {
      console.log(sort)
@@ -79,21 +74,10 @@ export default class LSection extends React.Component {
   }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/locations/${page}?q=${this.state.query}&search_key=${this.state.search_key}&sort=${this.state.sort}&sort_key=${this.state.sort_key}`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
         const dataForPage = res.data.data.locations
         const pages = res.data.pages
         this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
-        window.scrollTo(0, 0)
-      }).catch(err => {
-        console.log(err)
-      });
-   }
-
-   refreshFilter() {
-      axios.get(`${BASE_API_URL}/v1.0/locations/search?${JSON.stringify(this.state.location)}`).then(res => {
-        const dataForPage = res.data.data.locations
-        const pages = res.data.pages
-        this.setState({dataForPage: dataForPage, activePage: 1, totalPages: pages })
         window.scrollTo(0, 0)
       }).catch(err => {
         console.log(err)
@@ -106,16 +90,14 @@ export default class LSection extends React.Component {
          <div className="container justify-content-center">
             <Row className="mb-5">
                 <Col xs={1}>
-                  {this.state.location.state}
                    <DropdownChoices onClick={this.onStateChange}
                                     items={["TX", "OK"]}
-                                    value={"AnyString"}>
+                                    value={"State"}>
                    </DropdownChoices>
                 </Col>
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'city'}
                           sort_keys={['city', 'state']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'city'}
-                          search_keys={['city', 'state', 'desc']}
                           resetPage={this.resetPage} />
             </Row>
 
