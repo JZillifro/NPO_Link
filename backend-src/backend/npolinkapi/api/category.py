@@ -71,6 +71,10 @@ def search(page=1):
             if "Parent_code" in filters:
                 filter_queries.append(Category.parent_category.like(filters["Parent_code"]))
             if "Has_nonprofits" in filters:
+                valid_categories = Category.nonprofit_list) >= 1 #pseudo
+                select * 
+                from categories
+                    where count(categories.nonprofit_list) > 0
                 filter_queries.append(Category.nonprofit_list)
 
             category_filters = and_(*filter_queries)
