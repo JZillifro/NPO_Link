@@ -87,21 +87,23 @@ class SearchBar extends Component {
                <Button onClick={this.resetPage}>Reset</Button>
             </Col>
             <Col xs={3}>
-               <form id="search_bar" className="form-inline">
-                <input className="form-control mr-md-2" type="search" placeholder="Search..." aria-label="Search"
+               <form className="form-inline">
+                <input id="search_bar" className="form-control mr-md-2" type="search" placeholder="Search..." aria-label="Search"
                         ref={input => this.search = input} onChange={this.handleInputChange}/>
                </form>
             </Col>
             <Col xs={1}>
                <DropdownChoices onClick={this.onSortKeyChange}
                                 items={this.props.sort_keys}
-                                value={this.props.initialSortValue}>
+                                value={this.props.initialSortValue}
+                                dropdownType={"sort_key"}>
                </DropdownChoices>
             </Col>
             <Col xs={1}>
                <DropdownChoices onClick={this.onSortValueChange}
                                 items={['asc', 'desc']}
-                                value={'asc'}>
+                                value={'asc'}
+                                dropdownType={"selection"}>
                </DropdownChoices>
             </Col>
          </Row>
