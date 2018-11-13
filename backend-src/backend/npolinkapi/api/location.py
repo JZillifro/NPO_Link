@@ -39,13 +39,18 @@ def get_all_locations():
 
 @locations_blueprint.route('/search/<int:page>', methods=['GET'])
 def search(page=1):
-    search_words = request.args.get("search_words", '').split(' ')
-    filters = json.loads(request.args.get("filters", default = None))
-
-    #nonzero query length
+    #Parse args
+    search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
     try:
-        location_search_queries = None
-        if len(search_words):
+        if search_words is not None:
+            search_words = search_words.split(" ")
+        filters = json.loads(filters)
+    except Exception as e:
+        return "Error parsing args" + str(e)
+
+    try:
+        location_search_queries = True
+        if search_words is not None and len(search_words):
             #for all query terms search name, descrption and address
             location_search_queries = or_(
             *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
@@ -65,9 +70,10 @@ def search(page=1):
             *[Location.state.ilike('%' + str(x)      ) for x in search_words]
 
             )
-        location_filters = None
-        if len(filters):
+        location_filters = True
+        if filters is not None and len(filters):
             filter_queries = []
+            #Filter by all provided filters
             if "State" in filters:
                 filter_queries.append(Location.state.like(filters["State"]))
             if "City" in filters:
@@ -75,18 +81,28 @@ def search(page=1):
 
             location_filters = and_(*filter_queries)
     except Exception as e:
-        return str(e)
+        return "Error in constructing queries" + str(e)
         
     try:
+        #Apply queries
         locations = Location.query.filter(and_(location_filters,location_search_queries ))
+        #Sort results
+        sort = request.args.get('sort', 'asc')
+
+        if sort == 'asc':
+            locations = locations.order_by(Location.name.asc())
+        else:
+            locations = locations.order_by(Location.name.desc())
+
+
     except Exception as e:
-        return str(e)
+        return "Error in applying queries" + str(e)
 
     #output formatting
     try:
         locations = locations.paginate(page,3,error_out=False)
     except Exception as e:
-        return str(e)
+        return "Error in paginating" + str(e)
 
     paged_response_object = {
         'status': 'success',
@@ -99,45 +115,29 @@ def search(page=1):
         'pages': locations.pages
     }
     return jsonify(paged_response_object), 200
-    return "error, no args"
 
+#Deprecated, please don't use
 @locations_blueprint.route('/filter/<int:page>', methods=['GET'])
 def filter(page=1):
+    return 'Deprecated, please use search endopint instead\n'
     #expects input of form /filter/<page>?search_words=wordstosearchfor&filter_terms={State:TX,city:Austin}
     search_words = request.args.get("search_words", type=str).split(" ")
-    filter_terms = json.loads(request.args.get("filter_terms", default = None))
+    filters = json.loads(request.args.get("filters", default = None))
 
-    #return str(filter_terms)
+    #return str(filters)
     #nonzero query length
-    if len(search_words):
+    if len(filters):
         try:
+            location_filter = []
+            if "State" in filters:
+                location_filter.append(Location.state.like(filters["State"]))
+            if "City" in filters:
+                location_filter.append(Location.city.ilike(filters["City"]))
             #for all query terms search name, descrption and address
             locations = Location.query.filter(
-                and_(
-                    or_(
-                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-
-                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
-                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
-                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
-
-                    *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
-                    *[Location.description.ilike(    str(x) + '%') for x in search_words],
-                    *[Location.description.ilike('%' + str(x)      ) for x in search_words],
-
-                    *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
-                    *[Location.state.ilike(      str(x) + '%') for x in search_words],
-                    *[Location.state.ilike('%' + str(x)      ) for x in search_words]
-
-                ),
                     and_(
-                        Location.state.like(str(filter_terms["State"])),
-                        Location.city.ilike(str(filter_terms["City"]))
+                        *location_filter
                     )
-
-            )
             )
         except Exception as e:
             return str(e)
