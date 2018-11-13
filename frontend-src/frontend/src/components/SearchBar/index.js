@@ -87,7 +87,7 @@ class SearchBar extends Component {
                <Button onClick={this.resetPage}>Reset</Button>
             </Col>
             <Col xs={3}>
-               <form className="form-inline">
+               <form id="search_bar" className="form-inline">
                 <input className="form-control mr-md-2" type="search" placeholder="Search..." aria-label="Search"
                         ref={input => this.search = input} onChange={this.handleInputChange}/>
                </form>
