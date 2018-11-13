@@ -70,7 +70,7 @@ def search(page=1):
             #Filter by all provided filters
             #Filters are State, Range
             if "State" in filters:
-                filter_queries.append(Nonprofit.Location.state.like(filters["State"]))
+                filter_queries.append(Location.state.like(filters["State"]))
             if "Range" in filters:
                 filter_queries.append(Nonprofit.num_projects.isnot(None))
 
