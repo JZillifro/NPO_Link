@@ -4,7 +4,7 @@ import { BASE_API_URL } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
 import SearchBar from './../SearchBar'
-
+import DropdownChoices from './../Dropdown'
 export default class LSection extends React.Component {
    constructor(props) {
      super(props)
@@ -15,13 +15,15 @@ export default class LSection extends React.Component {
        dropdownOpen: false,
        search_key: 'city',
        sort_key: 'name',
-       sort: 'asc'
+       sort: 'asc',
+       location: {state:""}
      }
 
      this.onChangePage = this.onChangePage.bind(this);
      this.onQueryChange = this.onQueryChange.bind(this);
      this.onSortChange = this.onSortChange.bind(this);
      this.resetPage = this.resetPage.bind(this);
+     this.onStateChange = this.onStateChange.bind(this);
    }
 
    resetPage() {
@@ -39,6 +41,7 @@ export default class LSection extends React.Component {
    }
 
   componentWillMount() {
+    console.log("");
      this.setState({activePage: 1}, () => {
         this.refreshPage(1);
      })
@@ -55,6 +58,18 @@ export default class LSection extends React.Component {
          this.refreshPage(1);
      })
   }
+
+  onStateChange(state) {
+     this.setState({location: {state: state}}, () => {
+         this.refreshFilter();
+     })
+  }
+
+  // onCityChange(state) {
+  //    this.setState({query: query, search_key: search_key }, () => {
+  //        this.refreshPage(1);
+  //    })
+  // }
 
   onSortChange(sort_key, sort) {
      console.log(sort)
@@ -74,11 +89,29 @@ export default class LSection extends React.Component {
       });
    }
 
+   refreshFilter() {
+      axios.get(`${BASE_API_URL}/v1.0/locations/search?${JSON.stringify(this.state.location)}`).then(res => {
+        const dataForPage = res.data.data.locations
+        const pages = res.data.pages
+        this.setState({dataForPage: dataForPage, activePage: 1, totalPages: pages })
+        window.scrollTo(0, 0)
+      }).catch(err => {
+        console.log(err)
+      });
+   }
+
   render() {
     if(this.state.dataForPage) {
       return(
          <div className="container justify-content-center">
             <Row className="mb-5">
+                <Col xs={1}>
+                  {this.state.location.state}
+                   <DropdownChoices onClick={this.onStateChange}
+                                    items={["TX", "OK"]}
+                                    value={"AnyString"}>
+                   </DropdownChoices>
+                </Col>
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'city'}
                           sort_keys={['city', 'state']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'city'}
