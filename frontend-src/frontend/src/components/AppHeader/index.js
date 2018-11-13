@@ -23,6 +23,7 @@ class AppHeader extends Component {
           <li><a href="/Categories">Categories</a></li>
           <li><a href="/Locations">Locations</a></li>
           <li><a href="/About">About</a></li>
+          <li><a href="/all/search">Search</a></li>
         </ul>
       </nav>
     );
