@@ -116,8 +116,10 @@ def search(page=1):
     return jsonify(paged_response_object), 200
     return "error, no args"
 
+#Deprecated, please don't use
 @locations_blueprint.route('/filter/<int:page>', methods=['GET'])
 def filter(page=1):
+    return 'Deprecated, please use search endopint instead\n'
     #expects input of form /filter/<page>?search_words=wordstosearchfor&filter_terms={State:TX,city:Austin}
     search_words = request.args.get("search_words", type=str).split(" ")
     filters = json.loads(request.args.get("filters", default = None))
