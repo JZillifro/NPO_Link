@@ -124,6 +124,7 @@ class Category(db.Model):
     name = db.Column(db.String(80), unique=False, nullable=False)
     image = db.Column(db.String(20000), unique=False, nullable=False)
     nonprofit_list = db.Column(db.PickleType, unique=False, nullable=False)
+    nonprofit_amount = db.Column(db.Integer, nullable=True)
     location_list = db.Column(db.PickleType, unique=False, nullable=False)
     nonprofits = db.relationship("Nonprofit", back_populates="category")
 
@@ -136,6 +137,10 @@ class Category(db.Model):
         self.description = description
         self.location_list = location_list
         self.nonprofit_list = nonprofit_list
+        if len(self.nonprofit_list):
+            self.nonprofit_amount = len(self.nonprofit_list)
+        else:
+            self.nonprofit_amount = None
 
     def __repr__(self):
         return '<Category %r>' % (self.name)

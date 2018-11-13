@@ -71,11 +71,7 @@ def search(page=1):
             if "Parent_code" in filters:
                 filter_queries.append(Category.parent_category.like(filters["Parent_code"]))
             if "Has_nonprofits" in filters:
-                valid_categories = Category.nonprofit_list) >= 1 #pseudo
-                select * 
-                from categories
-                    where count(categories.nonprofit_list) > 0
-                filter_queries.append(Category.nonprofit_list)
+                filter_queries.append(Category.nonprofit_amount.isnot(None))
 
             category_filters = and_(*filter_queries)
     except Exception as e:
@@ -84,7 +80,7 @@ def search(page=1):
     try:
         #Apply queries
         categories = Category.query.filter(and_(category_filters,category_search_queries ))
-        return str(categories)
+        #return str(categories)
         #Sort results
         sort = request.args.get('sort', 'asc')
 
@@ -114,46 +110,6 @@ def search(page=1):
         'pages': categories.pages
     }
     return jsonify(paged_response_object), 200
-
-
-@categories_blueprint.route('/search/<int:page>', methods=['GET'])
-def search(page=1):
-    search_words = request.args.get("search_words", '').split(' ')
-    #nonzero query length
-    if len(search_words):
-        try:
-            #for all query terms search name, descrption and address
-            categories = Category.query.filter(or_(
-                *[Category.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Category.name.ilike(      str(x) + '%') for x in search_words],
-                *[Category.name.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Category.code.ilike('%' + str(x) + '%') for x in search_words],
-                *[Category.code.ilike(      str(x) + '%') for x in search_words],
-                *[Category.code.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
-                *[Category.description.ilike(      str(x) + '%') for x in search_words]
-                *[Category.description.ilike('%' + str(x) + '%') for x in search_words]
-
-            ))
-        except Exception as e:
-            return str(e)
-        #output formatting
-        categories = categories.paginate(page,3,error_out=False)
-
-        paged_response_object = {
-            'status': 'success',
-            'data': {
-                'categories': [category.to_json() for category in categories.items]
-            },
-            'has_next': categories.has_next,
-            'has_prev': categories.has_prev,
-            'next_page': categories.next_num,
-            'pages': categories.pages
-        }
-        return jsonify(paged_response_object), 200
-    return "error, no args"
 
 
 @categories_blueprint.route('/<int:page>',methods=['GET'])
