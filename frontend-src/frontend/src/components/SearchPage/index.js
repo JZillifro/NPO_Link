@@ -1,6 +1,8 @@
 import React from 'react';
 import {Col, Row, Container, Button} from 'reactstrap'
 import CSection from './CSection';
+import LSection from './LSection';
+import NPSection from './NPSection';
 
 export default class SearchPage extends React.Component {
   constructor(props){
@@ -20,16 +22,19 @@ export default class SearchPage extends React.Component {
         <Container className="mb-5 justify-content-center" style={{marginTop: "10%"}}>
            <Row className="mb-5">
               <Col xs={3}>
-                {this.state.query}
                  <form className="form-inline">
                   <input className="form-control mr-md-2" type="search" placeholder="Search..." aria-label="Search"
                           ref={input => this.search = input}/>
                  </form>
-                 <button onClick={this.handleInputChange}>Submit</button>
+              </Col>
+              <Col>
+               <Button onClick={this.handleInputChange}>Submit</Button>
               </Col>
            </Row>
         </Container>
         <CSection query={this.state.query}/>
+        <LSection query={this.state.query}/>
+        <NPSection query={this.state.query}/>
       </div>
     )
   }

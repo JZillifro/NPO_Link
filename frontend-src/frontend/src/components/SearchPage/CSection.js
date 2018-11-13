@@ -1,10 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { BASE_API_URL } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col, CardHeader } from 'reactstrap'
 
-export default class CSection extends React.Component {
+const propTypes = {
+    query: PropTypes.string.isRequired
+}
+
+class CSection extends React.Component {
    constructor(props) {
      super(props)
      this.state = {
@@ -18,12 +23,10 @@ export default class CSection extends React.Component {
 
    componentWillReceiveProps(props){
      const {query} = this.props
-     this.setState({
-       query
-     })
      if (props.query !== query) {
-        console.log(this.state.query);
-        this.refreshPage(1);
+        this.setState({ query: props.query }, () => {
+          this.refreshPage(1);
+       })
      }
    }
 
@@ -50,9 +53,12 @@ export default class CSection extends React.Component {
    }
 
   render() {
-    if(this.state.dataForPage) {
+    if(this.state.dataForPage && this.state.dataForPage.length > 0) {
       return(
-         <div className="container justify-content-center">
+         <div className="container justify-content-center mt-5 mb-5">
+             <Row className="row justify-content-center">
+             <h1>Results for Categories:</h1>
+             </Row>
              <Row className="row justify-content-center">
               {
                 this.state.dataForPage.map(model => (
@@ -87,7 +93,16 @@ export default class CSection extends React.Component {
           </div>
       );
     } else {
-      return(<div></div>)
+      return(
+         <div className="container justify-content-center mt-5 mb-5">
+            <Row className="row justify-content-center">
+            <h1>No Results Found for Categories</h1>
+            </Row>
+         </div>
+      )
     }
   }
 }
+
+CSection.propTypes = propTypes;
+export default CSection;
