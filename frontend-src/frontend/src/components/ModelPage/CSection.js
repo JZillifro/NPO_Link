@@ -46,7 +46,7 @@ export default class CSection extends React.Component {
 
    onParentCodeChange(parentCode) {
      var filters = this.state.filters;
-     filters['Parent Code'] = parentCode;
+     filters['Parent_code'] = parentCode;
       this.setState({filters}, () => {
           this.refreshPage(1);
       })
@@ -54,7 +54,7 @@ export default class CSection extends React.Component {
 
    onHasNonprofitChange(choice) {
      var filters = this.state.filters;
-     filters['Nonprofits'] = choice;
+     filters['Has_nonprofits'] = choice;
       this.setState({filters}, () => {
           this.refreshPage(1);
       })
