@@ -39,6 +39,7 @@ def get_all_locations():
 
 @locations_blueprint.route('/search/<int:page>', methods=['GET'])
 def search(page=1):
+    #Parse args
     search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
     try:
         if search_words is not None:
@@ -47,7 +48,6 @@ def search(page=1):
     except Exception as e:
         return "Error parsing args" + str(e)
 
-    #nonzero query length
     try:
         location_search_queries = True
         if search_words is not None and len(search_words):
@@ -73,6 +73,7 @@ def search(page=1):
         location_filters = True
         if filters is not None and len(filters):
             filter_queries = []
+            #Filter by all provided filters
             if "State" in filters:
                 filter_queries.append(Location.state.like(filters["State"]))
             if "City" in filters:
@@ -83,7 +84,9 @@ def search(page=1):
         return "Error in constructing queries" + str(e)
         
     try:
+        #Apply queries
         locations = Location.query.filter(and_(location_filters,location_search_queries ))
+        #Sort results
         sort = request.args.get('sort', 'asc')
 
         if sort == 'asc':
@@ -112,7 +115,6 @@ def search(page=1):
         'pages': locations.pages
     }
     return jsonify(paged_response_object), 200
-    return "error, no args"
 
 #Deprecated, please don't use
 @locations_blueprint.route('/filter/<int:page>', methods=['GET'])
