@@ -80,8 +80,6 @@ def search(page=1):
     try:
         #Apply queries
         categories = Category.query.filter(and_(category_filters,category_search_queries ))
-        #return str(categories)
-        #Sort results
         sort = request.args.get('sort', 'asc')
 
         if sort == 'asc':

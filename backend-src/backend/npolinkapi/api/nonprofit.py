@@ -1,6 +1,7 @@
 # Import flask dependencies
 from flask import Blueprint, request, jsonify
 
+
 # Import the database object from the main app module
 from npolinkapi import db
 from sqlalchemy import inspect, and_, or_
@@ -10,6 +11,7 @@ from sqlalchemy.orm.exc import NoResultFound
 # Import module models (i.e. nonprofit)
 from npolinkapi.api.models import Nonprofit, Location, Category
 
+import json
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 nonprofits_blueprint = Blueprint('nonprofits', __name__, url_prefix='/v1.0/nonprofits')
 
@@ -35,42 +37,78 @@ def get_all_nonprofits():
 
 @nonprofits_blueprint.route('/search/<int:page>', methods=['GET'])
 def search(page=1):
-    search_words = request.args.get("search_words", '').split(' ')
-    #nonzero query length
-    if len(search_words):
-        try:
+    #Parse args
+    search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
+    try:
+        if search_words is not None:
+            search_words = search_words.split(" ")
+        filters = json.loads(filters)
+    except Exception as e:
+        return "Error parsing args" + str(e)
+
+    try:
+        nonprofit_search_queries = True
+        if search_words is not None and len(search_words):
             #for all query terms search name, descrption and address
-            nonprofits = Nonprofit.query.filter(or_(
-                *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
-                #should'nt be necessary but might be according to some sites
-                *[Nonprofit.name.ilike(      str(x) + '%') for x in search_words],
-                *[Nonprofit.name.ilike('%' + str(x)      ) for x in search_words],
+            nonprofit_search_queries = or_(
+            *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
+            *[Nonprofit.name.ilike(      str(x) + '%') for x in search_words],
+            *[Nonprofit.name.ilike('%' + str(x)      ) for x in search_words],
 
-                *[Nonprofit.description.ilike('%' + str(x) + '%') for x in search_words],
-                *[Nonprofit.description.ilike(      str(x) + '%') for x in search_words],
-                *[Nonprofit.description.ilike('%' + str(x)      ) for x in search_words],
+            *[Nonprofit.address.ilike('%' + str(x) + '%') for x in search_words],
+            *[Nonprofit.address.ilike(      str(x) + '%') for x in search_words],
+            *[Nonprofit.address.ilike('%' + str(x)      ) for x in search_words],
 
-                *[Nonprofit.address.ilike('%' + str(x) + '%') for x in search_words],
-                *[Nonprofit.address.ilike(      str(x) + '%') for x in search_words],
-                *[Nonprofit.address.ilike('%' + str(x)      ) for x in search_words]
-            ))
-        except Exception as e:
-            return str(e)
-        #output formatting
+            *[Nonprofit.description.ilike('%' + str(x) + '%') for x in search_words],
+            *[Nonprofit.description.ilike(      str(x) + '%') for x in search_words],
+            *[Nonprofit.description.ilike('%' + str(x)      ) for x in search_words]
+
+             )
+        nonprofit_filters = True
+        if filters is not None and len(filters):
+            filter_queries = []
+            #Filter by all provided filters
+            #Filters are State, Range
+            if "State" in filters:
+                filter_queries.append(Nonprofit.Location.state.like(filters["State"]))
+            if "Range" in filters:
+                filter_queries.append(Nonprofit.num_projects.isnot(None))
+
+            nonprofit_filters = and_(*filter_queries)
+    except Exception as e:
+        return "Error in constructing queries" + str(e)
+        
+    try:
+        #Apply queries
+        nonprofits = Nonprofit.query.filter(and_(nonprofit_filters,nonprofit_search_queries ))
+        sort = request.args.get('sort', 'asc')
+
+        if sort == 'asc':
+            nonprofits = nonprofits.order_by(Nonprofit.name.asc())
+        else:
+            nonprofits = nonprofits.order_by(Nonprofit.name.desc())
+
+
+    except Exception as e:
+        return "Error in applying queries" + str(e)
+
+    #output formatting
+    try:
         nonprofits = nonprofits.paginate(page,3,error_out=False)
+    except Exception as e:
+        return "Error in paginating" + str(e)
 
-        paged_response_object = {
-            'status': 'success',
-            'data': {
-                'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits.items]
-            },
-            'has_next': nonprofits.has_next,
-            'has_prev': nonprofits.has_prev,
-            'next_page': nonprofits.next_num,
-            'pages': nonprofits.pages
-        }
-        return jsonify(paged_response_object), 200
-    return "error, no args"
+    paged_response_object = {
+        'status': 'success',
+        'data': {
+            'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits.items]
+        },
+        'has_next': nonprofits.has_next,
+        'has_prev': nonprofits.has_prev,
+        'next_page': nonprofits.next_num,
+        'pages': nonprofits.pages
+    }
+    return jsonify(paged_response_object), 200
 
 @nonprofits_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
