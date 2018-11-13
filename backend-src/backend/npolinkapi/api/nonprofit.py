@@ -72,7 +72,10 @@ def search(page=1):
             if "State" in filters:
                 filter_queries.append(Location.state.like(str(filters["State"])))
             if "Range" in filters:
-                filter_queries.append(Nonprofit.num_projects.isnot(None))
+                if filters["Range"]:
+                    filter_queries.append(Nonprofit.num_projects >= filters["Range"])
+                else:
+                    filter_queries.append(Nonprofit.num_projects.isnot(None))
 
             nonprofit_filters = and_(*filter_queries)
     except Exception as e:
