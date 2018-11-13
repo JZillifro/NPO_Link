@@ -3,12 +3,14 @@ from flask import Blueprint, request, jsonify
 
 # Import the database object from the main app module
 from npolinkapi import db
-from sqlalchemy import inspect, or_
+from sqlalchemy import inspect, or_, and_
 from sqlalchemy.orm import load_only
 from sqlalchemy.orm.exc import NoResultFound
 
 # Import module models (i.e. User)
 from npolinkapi.api.models import Location, Category, Nonprofit
+ 
+import json
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 locations_blueprint = Blueprint('locations', __name__, url_prefix='/v1.0/locations')
@@ -38,16 +40,105 @@ def get_all_locations():
 @locations_blueprint.route('/search/<int:page>', methods=['GET'])
 def search(page=1):
     search_words = request.args.get("search_words", '').split(' ')
+    filters = json.loads(request.args.get("filters", default = None))
+
+    #nonzero query length
+    try:
+        location_search_queries = None
+        if len(search_words):
+            #for all query terms search name, descrption and address
+            location_search_queries = or_(
+            *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+            *[Location.name.ilike(      str(x) + '%') for x in search_words],
+            *[Location.name.ilike('%' + str(x)      ) for x in search_words],
+
+            *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+            *[Location.city.ilike(      str(x) + '%') for x in search_words],
+            *[Location.city.ilike('%' + str(x)      ) for x in search_words],
+
+            *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
+            *[Location.description.ilike(      str(x) + '%') for x in search_words],
+            *[Location.description.ilike('%' + str(x)      ) for x in search_words],
+
+            *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
+            *[Location.state.ilike(      str(x) + '%') for x in search_words],
+            *[Location.state.ilike('%' + str(x)      ) for x in search_words]
+
+            )
+        location_filters = None
+        if len(filters):
+            filter_queries = []
+            if "State" in filters:
+                filter_queries.append(Location.state.like(filters["State"]))
+            if "City" in filters:
+                filter_queries.append(Location.city.ilike(filters["City"]))
+
+            location_filters = and_(*filter_queries)
+    except Exception as e:
+        return str(e)
+        
+    try:
+        locations = Location.query.filter(and_(location_filters,location_search_queries ))
+    except Exception as e:
+        return str(e)
+
+    #output formatting
+    try:
+        locations = locations.paginate(page,3,error_out=False)
+    except Exception as e:
+        return str(e)
+
+    paged_response_object = {
+        'status': 'success',
+        'data': {
+            'locations': [location.to_json() for location in locations.items]
+        },
+        'has_next': locations.has_next,
+        'has_prev': locations.has_prev,
+        'next_page': locations.next_num,
+        'pages': locations.pages
+    }
+    return jsonify(paged_response_object), 200
+    return "error, no args"
+
+@locations_blueprint.route('/filter/<int:page>', methods=['GET'])
+def filter(page=1):
+    #expects input of form /filter/<page>?search_words=wordstosearchfor&filter_terms={State:TX,city:Austin}
+    search_words = request.args.get("search_words", type=str).split(" ")
+    filter_terms = json.loads(request.args.get("filter_terms", default = None))
+
+    #return str(filter_terms)
     #nonzero query length
     if len(search_words):
         try:
             #for all query terms search name, descrption and address
-            locations = Location.query.filter(or_(
-                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.city.ilike('%'+str(x)+ '%') for x in search_words],
-                *[Location.description.ilike('%'+str(x)+ '%') for x in search_words],
-                *[Location.state.ilike('%'+str(x)+ '%') for x in search_words]
-            ))
+            locations = Location.query.filter(
+                and_(
+                    or_(
+                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+
+                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+
+                    *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.description.ilike(    str(x) + '%') for x in search_words],
+                    *[Location.description.ilike('%' + str(x)      ) for x in search_words],
+
+                    *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
+                    *[Location.state.ilike(      str(x) + '%') for x in search_words],
+                    *[Location.state.ilike('%' + str(x)      ) for x in search_words]
+
+                ),
+                    and_(
+                        Location.state.like(str(filter_terms["State"])),
+                        Location.city.ilike(str(filter_terms["City"]))
+                    )
+
+            )
+            )
         except Exception as e:
             return str(e)
         #output formatting
@@ -65,6 +156,7 @@ def search(page=1):
         }
         return jsonify(paged_response_object), 200
     return "error, no args"
+
 
 @locations_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):

@@ -30,6 +30,13 @@ test:backend:
    dependencies:
       - build:all
 
+test:frontend:
+   stage: test
+   script:
+      - make test_frontend
+   dependencies:
+      - build:all
+
 cleanup_job:
   stage: cleanup
   script:
