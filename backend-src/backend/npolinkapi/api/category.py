@@ -70,9 +70,9 @@ def search(page=1):
             #Filter by all provided filters
             if "Parent_code" in filters:
                 filter_queries.append(Category.parent_category.like(filters["Parent_code"]))
-            if "Has_nonprofits" in filters:
-                if filters["Has_nonprofits"]:
-                    filter_queries.append(Category.nonprofit_amount >= filters["Has_nonprofits"])
+            if "Num_nonprofits" in filters:
+                if filters["Num_nonprofits"]:
+                    filter_queries.append(Category.nonprofit_amount >= filters["Num_nonprofits"])
                 else:
                     filter_queries.append(Category.nonprofit_amount.isnot(None))
 
