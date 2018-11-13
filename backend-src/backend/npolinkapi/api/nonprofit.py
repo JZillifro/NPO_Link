@@ -70,9 +70,12 @@ def search(page=1):
             #Filter by all provided filters
             #Filters are State, Range
             if "State" in filters:
-                filter_queries.append(Location.state.like(filters["State"]))
+                filter_queries.append(Location.state.like(str(filters["State"])))
             if "Range" in filters:
-                filter_queries.append(Nonprofit.num_projects.isnot(None))
+                if filters["Range"]:
+                    filter_queries.append(Nonprofit.num_projects >= filters["Range"])
+                else:
+                    filter_queries.append(Nonprofit.num_projects.isnot(None))
 
             nonprofit_filters = and_(*filter_queries)
     except Exception as e:
@@ -80,7 +83,8 @@ def search(page=1):
         
     try:
         #Apply queries
-        nonprofits = Nonprofit.query.filter(and_(nonprofit_filters,nonprofit_search_queries ))
+        nonprofits = Nonprofit.query.join(Location).filter(and_(nonprofit_filters,nonprofit_search_queries ))
+        #return str(nonprofits)
         sort = request.args.get('sort', 'asc')
 
         if sort == 'asc':
