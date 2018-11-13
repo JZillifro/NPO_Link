@@ -45,8 +45,7 @@ def search(page=1):
             search_words = search_words.split(" ")
         filters = json.loads(filters)
     except Exception as e:
-        return str(e)
-        return "Error parsing args"
+        return "Error parsing args" + str(e)
 
     #nonzero query length
     try:
@@ -81,11 +80,10 @@ def search(page=1):
 
             location_filters = and_(*filter_queries)
     except Exception as e:
-        return str(e)
+        return "Error in constructing queries" + str(e)
         
     try:
         locations = Location.query.filter(and_(location_filters,location_search_queries ))
-        #locations = Location.query.filter(and_(location_search_queries ))
         sort = request.args.get('sort', 'asc')
 
         if sort == 'asc':
@@ -95,13 +93,13 @@ def search(page=1):
 
 
     except Exception as e:
-        return str(e)
+        return "Error in applying queries" + str(e)
 
     #output formatting
     try:
         locations = locations.paginate(page,3,error_out=False)
     except Exception as e:
-        return str(e)
+        return "Error in paginating" + str(e)
 
     paged_response_object = {
         'status': 'success',
