@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 
 # Import the database object from the main app module
 from npolinkapi import db
-from sqlalchemy import inspect, or_
+from sqlalchemy import inspect, or_, and_ 
 from sqlalchemy.orm import load_only
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -37,6 +37,83 @@ def get_all():
 
 @categories_blueprint.route('/search/<int:page>', methods=['GET'])
 def search(page=1):
+    #Parse args
+    search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
+    try:
+        if search_words is not None:
+            search_words = search_words.split(" ")
+        filters = json.loads(filters)
+    except Exception as e:
+        return "Error parsing args" + str(e)
+
+    try:
+        category_search_queries = True
+        if search_words is not None and len(search_words):
+            #for all query terms search name, descrption and address
+            category_search_queries = or_(
+            *[Category.name.ilike('%' + str(x) + '%') for x in search_words],
+            *[Category.name.ilike(      str(x) + '%') for x in search_words],
+            *[Category.name.ilike('%' + str(x)      ) for x in search_words],
+
+            *[Category.code.ilike('%' + str(x) + '%') for x in search_words],
+            *[Category.code.ilike(      str(x) + '%') for x in search_words],
+            *[Category.code.ilike('%' + str(x)      ) for x in search_words],
+
+            *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
+            *[Category.description.ilike(      str(x) + '%') for x in search_words],
+            *[Category.description.ilike('%' + str(x)      ) for x in search_words]
+
+             )
+        category_filters = True
+        if filters is not None and len(filters):
+            filter_queries = []
+            #Filter by all provided filters
+            if "Parent_code" in filters:
+                filter_queries.append(Category.parent_category.like(filters["Parent_code"]))
+            if "Has_nonprofits" in filters:
+                filter_queries.append(Category.nonprofit_list)
+
+            category_filters = and_(*filter_queries)
+    except Exception as e:
+        return "Error in constructing queries" + str(e)
+        
+    try:
+        #Apply queries
+        categories = Category.query.filter(and_(category_filters,category_search_queries ))
+        return str(categories)
+        #Sort results
+        sort = request.args.get('sort', 'asc')
+
+        if sort == 'asc':
+            categories = categories.order_by(Category.name.asc())
+        else:
+            categories = categories.order_by(Category.name.desc())
+
+
+    except Exception as e:
+        return "Error in applying queries" + str(e)
+
+    #output formatting
+    try:
+        categories = categories.paginate(page,3,error_out=False)
+    except Exception as e:
+        return "Error in paginating" + str(e)
+
+    paged_response_object = {
+        'status': 'success',
+        'data': {
+            'categories': [category.to_json() for category in categories.items]
+        },
+        'has_next': categories.has_next,
+        'has_prev': categories.has_prev,
+        'next_page': categories.next_num,
+        'pages': categories.pages
+    }
+    return jsonify(paged_response_object), 200
+
+
+@categories_blueprint.route('/search/<int:page>', methods=['GET'])
+def search(page=1):
     search_words = request.args.get("search_words", '').split(' ')
     #nonzero query length
     if len(search_words):
@@ -52,7 +129,7 @@ def search(page=1):
                 *[Category.code.ilike('%' + str(x)      ) for x in search_words],
 
                 *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
-                *[Category.description.ilike(      str(x) + '%') for x in search_words],
+                *[Category.description.ilike(      str(x) + '%') for x in search_words]
                 *[Category.description.ilike('%' + str(x) + '%') for x in search_words]
 
             ))
