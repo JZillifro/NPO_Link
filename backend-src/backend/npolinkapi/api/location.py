@@ -39,16 +39,18 @@ def get_all_locations():
 
 @locations_blueprint.route('/search/<int:page>', methods=['GET'])
 def search(page=1):
-    search_words,filters = None, None
+    search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
     try:
-        search_words = request.args.get("search_words").split(' ')
-        #filters = json.loads(request.args.get("filters", default = None))
-    except:
+        if search_words is not None:
+            search_words = search_words.split(" ")
+        filters = json.loads(filters)
+    except Exception as e:
+        return str(e)
         return "Error parsing args"
 
     #nonzero query length
     try:
-        location_search_queries = None
+        location_search_queries = True
         if search_words is not None and len(search_words):
             #for all query terms search name, descrption and address
             location_search_queries = or_(
@@ -69,8 +71,7 @@ def search(page=1):
             *[Location.state.ilike('%' + str(x)      ) for x in search_words]
 
             )
-        '''
-        location_filters = None
+        location_filters = True
         if filters is not None and len(filters):
             filter_queries = []
             if "State" in filters:
@@ -79,13 +80,12 @@ def search(page=1):
                 filter_queries.append(Location.city.ilike(filters["City"]))
 
             location_filters = and_(*filter_queries)
-        '''
     except Exception as e:
         return str(e)
         
     try:
-        #locations = Location.query.filter(and_(location_filters,location_search_queries ))
-        locations = Location.query.filter(and_(location_search_queries ))
+        locations = Location.query.filter(and_(location_filters,location_search_queries ))
+        #locations = Location.query.filter(and_(location_search_queries ))
 
     except Exception as e:
         return str(e)
