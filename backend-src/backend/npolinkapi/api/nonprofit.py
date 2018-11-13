@@ -74,8 +74,6 @@ def search(page=1):
             if "Range" in filters:
                 if filters["Range"]:
                     filter_queries.append(Nonprofit.num_projects >= filters["Range"])
-                else:
-                    filter_queries.append(Nonprofit.num_projects.isnot(None))
 
             nonprofit_filters = and_(*filter_queries)
     except Exception as e:
