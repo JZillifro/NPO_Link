@@ -86,6 +86,13 @@ def search(page=1):
     try:
         locations = Location.query.filter(and_(location_filters,location_search_queries ))
         #locations = Location.query.filter(and_(location_search_queries ))
+        sort = request.args.get('sort', 'asc')
+
+        if sort == 'asc':
+            locations = locations.order_by(Location.name.asc())
+        else:
+            locations = locations.order_by(Location.name.desc())
+
 
     except Exception as e:
         return str(e)
