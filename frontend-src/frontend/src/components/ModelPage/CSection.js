@@ -4,6 +4,7 @@ import { BASE_API_URL } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col, CardHeader } from 'reactstrap'
 import SearchBar from './../SearchBar'
+import DropdownChoices from './../Dropdown'
 
 export default class CSection extends React.Component {
    constructor(props) {
@@ -12,14 +13,16 @@ export default class CSection extends React.Component {
       activePage: 1,
       dataForPage : [],
       query : '',
-      search_key: 'name',
       sort_key: 'name',
-      sort: 'asc'
+      sort: 'asc',
+      filters: {}
      }
 
      this.onChangePage = this.onChangePage.bind(this);
      this.onQueryChange = this.onQueryChange.bind(this);
      this.onSortChange = this.onSortChange.bind(this);
+     this.onParentCodeChange = this.onParentCodeChange.bind(this);
+     this.onHasNonprofitChange = this.onHasNonprofitChange.bind(this);
      this.resetPage = this.resetPage.bind(this);
    }
 
@@ -35,8 +38,24 @@ export default class CSection extends React.Component {
       })
    }
 
-   onQueryChange(search_key, query) {
-      this.setState({query: query, search_key: search_key }, () => {
+   onQueryChange(query) {
+      this.setState({query: query}, () => {
+          this.refreshPage(1);
+      })
+   }
+
+   onParentCodeChange(parentCode) {
+     var filters = this.state.filters;
+     filters['Parent Code'] = parentCode;
+      this.setState({filters}, () => {
+          this.refreshPage(1);
+      })
+   }
+
+   onHasNonprofitChange(choice) {
+     var filters = this.state.filters;
+     filters['Nonprofits'] = choice;
+      this.setState({filters}, () => {
           this.refreshPage(1);
       })
    }
@@ -53,7 +72,6 @@ export default class CSection extends React.Component {
        activePage: 1,
        dataForPage : [],
        query : '',
-       search_key: 'name',
        sort_key: 'id',
        sort: 'asc'
      }, () => {
@@ -62,7 +80,7 @@ export default class CSection extends React.Component {
    }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/categories/${page}?q=${this.state.query}&search_key=${this.state.search_key}&sort=${this.state.sort}&sort_key=${this.state.sort_key}`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/categories/${page}?q=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
         const dataForPage = res.data.data.categories
         const pages = res.data.pages
         this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -77,10 +95,23 @@ export default class CSection extends React.Component {
       return(
          <div className="container justify-content-center">
              <Row className="mb-5">
+               <Col xs={1}>
+                  <DropdownChoices onClick={this.onParentCodeChange}
+                                   items={["H", "G", "F"]}
+                                   value={"Parent Code"}>
+                  </DropdownChoices>
+               </Col>
+               <Col xs={1}>
+               </Col>
+               <Col xs={1}>
+                  <DropdownChoices onClick={this.onHasNonprofitChange}
+                                  items={["Yes","No"]}
+                                  value={"Nonprofits"}>
+                  </DropdownChoices>
+               </Col>
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
                           sort_keys={['name', 'code']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'name'}
-                          search_keys={['name', 'code', 'parent', 'desc']}
                           resetPage={this.resetPage} />
              </Row>
              <Row className="row justify-content-center">

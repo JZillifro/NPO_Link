@@ -4,6 +4,7 @@ import { BASE_API_URL } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
 import SearchBar from './../SearchBar'
+import DropdownChoices from './../Dropdown'
 
 export default class NPSection extends React.Component {
   constructor(props) {
@@ -12,14 +13,16 @@ export default class NPSection extends React.Component {
      activePage: 1,
      dataForPage : [],
      query : '',
-     search_key: 'name',
      sort_key: 'name',
-     sort: 'asc'
+     sort: 'asc',
+     filters: {}
     }
 
     this.onChangePage = this.onChangePage.bind(this);
     this.onQueryChange = this.onQueryChange.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
+    this.onStateChange = this.onStateChange.bind(this);
+    this.onRangeChange = this.onRangeChange.bind(this);
     this.resetPage = this.resetPage.bind(this);
   }
 
@@ -35,8 +38,8 @@ export default class NPSection extends React.Component {
      })
   }
 
-  onQueryChange(search_key, query) {
-     this.setState({query: query, search_key: search_key }, () => {
+  onQueryChange(query) {
+     this.setState({query: query}, () => {
          this.refreshPage(1);
      })
   }
@@ -48,12 +51,27 @@ export default class NPSection extends React.Component {
      })
   }
 
+  onStateChange(state) {
+    var filters = this.state.filters;
+    filters['State'] = state;
+     this.setState({filters}, () => {
+         this.refreshPage(1);
+     })
+  }
+
+  onRangeChange(range) {
+    var filters = this.state.filters;
+    filters['Range'] = range;
+     this.setState({filters}, () => {
+         this.refreshPage(1);
+     })
+  }
+
   resetPage() {
      this.setState({
       activePage: 1,
       dataForPage : [],
       query : '',
-      search_key: 'name',
       sort_key: 'id',
       sort: 'asc'
     }, () => {
@@ -62,7 +80,7 @@ export default class NPSection extends React.Component {
   }
 
   refreshPage(page) {
-     axios.get(`${BASE_API_URL}/v1.0/nonprofits/${page}?q=${this.state.query}&search_key=${this.state.search_key}&sort=${this.state.sort}&sort_key=${this.state.sort_key}`).then(res => {
+     axios.get(`${BASE_API_URL}/v1.0/nonprofits/${page}?q=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
        const dataForPage = res.data.data.nonprofits
        const pages = res.data.pages
        this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -77,10 +95,23 @@ export default class NPSection extends React.Component {
       return(
       <div className="container justify-content-center">
           <Row className="mb-5">
+              <Col xs={1}>
+                 <DropdownChoices onClick={this.onStateChange}
+                                  items={["TX", "OK"]}
+                                  value={"State"}>
+                 </DropdownChoices>
+              </Col>
+              <Col xs={1}>
+              </Col>
+              <Col xs={1}>
+                 <DropdownChoices onClick={this.onRangeChange}
+                                 items={["0-5","6-10"]}
+                                 value={"Range"}>
+                 </DropdownChoices>
+              </Col>
              <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
                         sort_keys={['name', 'ein']}
                         onSearchChange={this.onQueryChange} initialSearchValue={'name'}
-                        search_keys={['name', 'ein', 'desc']}
                         resetPage={this.resetPage} />
           </Row>
 
