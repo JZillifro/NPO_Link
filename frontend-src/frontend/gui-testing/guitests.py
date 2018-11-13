@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 class AcceptanceTests (TestCase):
 
 	def setUp(self):
-		self.homeurl = 'http://localhost'
+		self.homeurl = 'http://localhost/all/search'
 		if platform == "linux" or platform == "linux2":
 			self.browser = webdriver.Chrome('./chrome_drivers/chromedriver_linux')
 		elif platform == "darwin": # macOS
@@ -117,19 +117,19 @@ class AcceptanceTests (TestCase):
 	def test13(self):
 		# self.browser.find_element_by_link_text('Search').click()
 
-		search_field = self.browser.find_element_by_id("search_bar") # update word "keywords" once implemented
+		search_field = self.browser.find_element_by_id("search_bar")
 		search_field.click()
 		search_field.send_keys("water")
 
 		# might need a time/sleep here
-		search_button = self.browser.find_element_by_id("submit_button") # update word "keywords" once implemented
+		search_button = self.browser.find_element_by_id("submit_button")
 		search_button.click()
 
 		time.sleep(1)
 
 		try:
-			self.browser.find_element_by_id('Pollution Abatement & Control').click() # update word "keywords" once implemented
-			self.assertEqual("http://localhost/category/83", self.browser.current_url) # update expected url once implemented
+			self.browser.find_element_by_id('Pollution Abatement & Control').click()
+			self.assertEqual("http://localhost/category/83", self.browser.current_url)
 		except NoSuchElementException:
 			self.fail("The element doesn't exist")
 
@@ -137,15 +137,15 @@ class AcceptanceTests (TestCase):
 	def test14(self):
 		self.browser.find_element_by_link_text('Nonprofits').click()
 
-		search_field = self.browser.find_element_by_id("search_bar") # update word "keywords" once implemented
+		search_field = self.browser.find_element_by_id("search_bar")
 		search_field.click()
-		search_field.send_keys("water") # send in some type of wording
+		search_field.send_keys("water")
 
 		time.sleep(1)
 
 		try:
-			self.browser.find_element_by_id('Community Water Solutions').click() # update word "keywords" once implemented
-			self.assertEqual("http://localhost/nonprofit/132", self.browser.current_url) # update expected url once implemented
+			self.browser.find_element_by_id('Community Water Solutions').click()
+			self.assertEqual("http://localhost/nonprofit/132", self.browser.current_url)
 		except NoSuchElementException:
 			self.fail("The element doesn't exist")
 
@@ -171,17 +171,17 @@ class AcceptanceTests (TestCase):
 	def test16(self):
 		self.browser.find_element_by_link_text('Nonprofits').click()
 
-		sort_button = self.browser.find_element_by_id("sort_key_dropdown") # update word "filter" once implemented
+		sort_button = self.browser.find_element_by_id("sort_key_dropdown")
 		sort_button.click()
 
 		# might need a time/sleep here
-		selection = self.browser.find_element_by_id("selection_name") # update word "selection" once implemented
+		selection = self.browser.find_element_by_id("selection_name")
 		selection.click()
 
 		# might need a time/sleep here
 		try:
-			self.browser.find_element_by_id('3 Generations').click() # update word "specific_select" once implemented
-			self.assertEqual("http://localhost/nonprofit/121", self.browser.current_url) # update expected url once implemented
+			self.browser.find_element_by_id('3 Generations').click()
+			self.assertEqual("http://localhost/nonprofit/121", self.browser.current_url)
 		except NoSuchElementException:
 			self.fail("The element doesn't exist")
 
@@ -189,15 +189,15 @@ class AcceptanceTests (TestCase):
 	def test17(self):
 		self.browser.find_element_by_link_text('Locations').click()
 
-		search_field = self.browser.find_element_by_id("search_bar") # update word "keywords" once implemented
+		search_field = self.browser.find_element_by_id("search_bar")
 		search_field.click()
-		search_field.send_keys("water") # send in some type of wording
+		search_field.send_keys("water")
 
 		time.sleep(1)
 
 		try:
-			self.browser.find_element_by_id('Watertown, MA').click() # update word "keywords" once implemented
-			self.assertEqual("http://localhost/location/51", self.browser.current_url) # update expected url once implemented
+			self.browser.find_element_by_id('Watertown, MA').click()
+			self.assertEqual("http://localhost/location/51", self.browser.current_url)
 		except NoSuchElementException:
 			self.fail("The element doesn't exist")
 
@@ -223,17 +223,17 @@ class AcceptanceTests (TestCase):
 	def test19(self):
 		self.browser.find_element_by_link_text('Locations').click()
 
-		sort_button = self.browser.find_element_by_id("sort_key_dropdown") # update word "filter" once implemented
+		sort_button = self.browser.find_element_by_id("sort_key_dropdown")
 		sort_button.click()
 
 		# might need a time/sleep here
-		selection = self.browser.find_element_by_id("selection_city") # update word "selection" once implemented
+		selection = self.browser.find_element_by_id("selection_city")
 		selection.click()
 
 		# might need a time/sleep here
 		try:
-			self.browser.find_element_by_id('Alexandria, VA').click() # update word "keywords" once implemented
-			self.assertEqual("http://localhost/location/43", self.browser.current_url) # update expected url once implemented
+			self.browser.find_element_by_id('Alexandria, VA').click()
+			self.assertEqual("http://localhost/location/43", self.browser.current_url)
 		except NoSuchElementException:
 			self.fail("The element doesn't exist")
 
@@ -241,15 +241,15 @@ class AcceptanceTests (TestCase):
 	def test20(self):
 		self.browser.find_element_by_link_text('Categories').click()
 
-		search_field = self.browser.find_element_by_id("search_bar") # update word "keywords" once implemented
+		search_field = self.browser.find_element_by_id("search_bar")
 		search_field.click()
 		search_field.send_keys("water")
 
 		time.sleep(1)
 
 		try:
-			self.browser.find_element_by_id('Swimming & Ohter Water Recreation').click() # update word "keywords" once implemented
-			self.assertEqual("http://localhost/category/362", self.browser.current_url) # update expected url once implemented
+			self.browser.find_element_by_id('Swimming & Other Water Recreation').click()
+			self.assertEqual("http://localhost/category/362", self.browser.current_url)
 		except NoSuchElementException:
 			self.fail("The element doesn't exist")
 
@@ -275,17 +275,17 @@ class AcceptanceTests (TestCase):
 	def test22(self):
 		self.browser.find_element_by_link_text('Categories').click()
 
-		sort_button = self.browser.find_element_by_id("sort_key_dropdown") # update word "filter" once implemented
+		sort_button = self.browser.find_element_by_id("sort_key_dropdown")
 		sort_button.click()
 
 		# might need a time/sleep here
-		selection = self.browser.find_element_by_id("selection_name") # update word "selection" once implemented
+		selection = self.browser.find_element_by_id("selection_name")
 		selection.click()
 
 		# might need a time/sleep here
 		try:
-			self.browser.find_element_by_id("AIDS").click() # update word "keywords" once implemented
-			self.assertEqual("http://localhost/category/195", self.browser.current_url) # update expected url once implemented
+			self.browser.find_element_by_id("AIDS").click()
+			self.assertEqual("http://localhost/category/195", self.browser.current_url)
 		except NoSuchElementException:
 			self.fail("The element doesn't exist")
 
