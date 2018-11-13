@@ -102,6 +102,200 @@ class AcceptanceTests (TestCase):
         except NoSuchElementException:
             self.fail("The element doesn't exist")
 
+    # Tests added for Phase 3
+
+    # Make sure can get to universal search page
+    def test14(self):
+        try:
+            self.browser.find_element_by_link_text('Search').click()
+            self.assertEqual("http://npolink.me/search", self.browser.current_url)
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the overall search for the site
+    def test13(self):
+        self.browser.find_element_by_link_text('Search').click()
+
+        search_field = self.browser.find_element_by_id("search_bar") # update word "keywords" once implemented
+        search_field.click()
+        search_field.send_keys("water")
+
+        # might need a time/sleep here
+        search_button = self.browser.find_element_by_id("submit_button") # update word "keywords" once implemented
+		search_buttom.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text('Pollution Abatement & Control').click() # update word "keywords" once implemented
+            self.assertEqual("http://npolink.me/category/83", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the search for the Nonprofits page
+    def test14(self):
+        self.browser.find_element_by_link_text('Nonprofits').click()
+
+        search_field = self.browser.find_element_by_id("search_bar") # update word "keywords" once implemented
+        search_field.click()
+        search_field.send_keys("") # send in some type of wording
+
+        # might need a time/sleep here
+        search_button = self.browser.find_element_by_id("submit_button") # update word "keywords" once implemented
+		search_buttom.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text('Nonprofit Name').click() # update word "keywords" once implemented
+            self.assertEqual("http://npolink.me/nonprofit/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the filtering for the Nonprofits page
+    def test15(self):
+        self.browser.find_element_by_link_text('Nonprofits').click()
+
+		filter_button = self.browser.find_element_by_id("filter_bttn") # update word "filter" once implemented
+		filter_button.click()
+
+        # might need a time/sleep here
+        selection = self.browser.find_element_by_id("selection") # update word "selection" once implemented
+        selection.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text('Nonprofit Name').click() # update word "specific_select" once implemented
+            self.assertEqual("http://npolink.me/nonprofit/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the sorting for the Nonprofits page
+    def test16(self):
+        self.browser.find_element_by_link_text('Nonprofits').click()
+
+        sort_button = self.browser.find_element_by_id("sort_bttn") # update word "filter" once implemented
+		sort_button.click()
+
+        # might need a time/sleep here
+        selection = self.browser.find_element_by_id("selection") # update word "selection" once implemented
+        selection.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text('Nonprofit Name').click() # update word "specific_select" once implemented
+            self.assertEqual("http://npolink.me/nonprofit/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the search for the Locations page
+    def test17(self):
+        self.browser.find_element_by_link_text('Locations').click()
+
+        search_field = self.browser.find_element_by_id("search_bar") # update word "keywords" once implemented
+        search_field.click()
+        search_field.send_keys("") # send in some type of wording
+
+        # might need a time/sleep here
+        search_button = self.browser.find_element_by_id("submit_button") # update word "keywords" once implemented
+		search_buttom.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text('Location Name').click() # update word "keywords" once implemented
+            self.assertEqual("http://npolink.me/location/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the filtering for the Locations page
+    def test18(self):
+        self.browser.find_element_by_link_text('Locations').click()
+
+        filter_button = self.browser.find_element_by_id("filter_bttn") # update word "filter" once implemented
+		filter_button.click()
+
+        # might need a time/sleep here
+        selection = self.browser.find_element_by_id("selection") # update word "selection" once implemented
+        selection.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text('Location Name').click() # update word "keywords" once implemented
+            self.assertEqual("http://npolink.me/location/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the sorting for the Locations page
+    def test19(self):
+        self.browser.find_element_by_link_text('Locations').click()
+
+        sort_button = self.browser.find_element_by_id("sort_bttn") # update word "filter" once implemented
+		sort_button.click()
+
+        # might need a time/sleep here
+        selection = self.browser.find_element_by_id("selection") # update word "selection" once implemented
+        selection.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text('Location Name').click() # update word "keywords" once implemented
+            self.assertEqual("http://npolink.me/location/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the search for the Categories page
+    def test20(self):
+        self.browser.find_element_by_link_text('Categories').click()
+
+        search_field = self.browser.find_element_by_id("search_bar") # update word "keywords" once implemented
+        search_field.click()
+        search_field.send_keys("water")
+
+        # might need a time/sleep here
+        search_button = self.browser.find_element_by_id("submit_button") # update word "keywords" once implemented
+		search_buttom.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text("Category Name").click() # update word "keywords" once implemented
+            self.assertEqual("http://npolink.me/category/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the filtering for the Categories page
+    def test21(self):
+        self.browser.find_element_by_link_text('Categories').click()
+
+        filter_button = self.browser.find_element_by_id("filter_bttn") # update word "filter" once implemented
+		filter_button.click()
+
+        # might need a time/sleep here
+        selection = self.browser.find_element_by_id("selection") # update word "selection" once implemented
+        selection.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text("Category Name").click() # update word "keywords" once implemented
+            self.assertEqual("http://npolink.me/category/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
+    # Tests the sorting for the Categories page
+    def test22(self):
+        self.browser.find_element_by_link_text('Categories').click()
+
+        sort_button = self.browser.find_element_by_id("sort_bttn") # update word "filter" once implemented
+		sort_button.click()
+
+        # might need a time/sleep here
+        selection = self.browser.find_element_by_id("selection") # update word "selection" once implemented
+        selection.click()
+
+        # might need a time/sleep here
+        try:
+            self.browser.find_element_by_link_text("Category Name").click() # update word "keywords" once implemented
+            self.assertEqual("http://npolink.me/category/", self.browser.current_url) # update expected url once implemented
+        except NoSuchElementException:
+            self.fail("The element doesn't exist")
+
     def endBrowser(self):
         self.browser.quit()
 
