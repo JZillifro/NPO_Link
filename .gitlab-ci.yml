@@ -36,7 +36,6 @@ test:frontend:
       - make test_frontend
    dependencies:
       - build:all
-   allow_failure: true
 
 cleanup_job:
   stage: cleanup

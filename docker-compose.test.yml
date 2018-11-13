@@ -1,0 +1,56 @@
+version: '3.6'
+services:
+  frontend:
+    build:
+      context: ./frontend-src/frontend
+      dockerfile: Dockerfile
+      args:
+        - app_env=development
+    volumes:
+      - ./frontend-src/frontend:/usr/frontend
+    ports:
+      - 80:3000
+    environment:
+      - NODE_ENV=test
+    working_dir: /usr/frontend
+    command: bash -c "npm install && npm test"
+    depends_on:  # new
+      - backend
+    networks:
+      - npolink-network
+  backend:
+    build:
+      context: ./backend-src/backend
+      dockerfile: Dockerfile
+      args:
+         - app_env=development
+    volumes:
+      - './backend-src/backend:/usr/src/app'
+    ports:
+      - 5000:5000
+    environment:
+      - FLASK_APP=backend/npolinkapi/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=npolinkapi.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@npolink-db:5432/npolink_dev  # new
+      - DATABASE_TEST_URL=postgres://postgres:postgres@npolink-db:5432/npolink_test  # new
+    depends_on:  # new
+      - npolink-db
+    networks:
+      - npolink-network
+
+  npolink-db:  # new
+    build:
+      context: ./backend-src/backend/db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - npolink-network
+
+networks:
+  npolink-network:
+    driver: bridge

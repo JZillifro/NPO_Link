@@ -4,6 +4,9 @@ build:
 	docker-compose -f docker-compose.local.yml build
 
 up: build
+	docker-compose -f docker-compose.local.yml up
+
+up_background: build
 	docker-compose -f docker-compose.local.yml up -d
 
 recreate_db:
@@ -24,11 +27,11 @@ backend_shell:
 down:
 	docker-compose -f docker-compose.local.yml down
 
-test_backend: up
-	docker-compose -f docker-compose.local.yml run backend python manage.py test
+test_backend: up_background
+	docker-compose -f docker-compose.test.yml run backend python manage.py test
 
-test_frontend: up
-	docker-compose -f docker-compose.local.yml run frontend npm test
+test_frontend: up_background
+	docker-compose -f docker-compose.test.yml run frontend bash -c "npm install && npm test"
 
 zip-and-build-prod-docker:
 	cd frontend-src && git archive -v -o npolink-frontend.zip --format=zip HEAD && \
