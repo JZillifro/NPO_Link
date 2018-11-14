@@ -5,6 +5,7 @@ from flask.cli import FlaskGroup
 
 from npolinkapi import create_app, db   # new
 from npolinkapi.api.models import Category, Location, Nonprofit
+from waitress import serve
 
 app = create_app()  # new
 cli = FlaskGroup(create_app=create_app)  # new
@@ -76,6 +77,9 @@ def test():
         return 0
     return 1
 
+@cli.command()
+def run_prod():
+    serve(app, listen='*:5000')
 
 if __name__ == '__main__':
     cli()

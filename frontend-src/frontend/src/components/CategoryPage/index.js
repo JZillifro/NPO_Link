@@ -1,7 +1,5 @@
 import React from 'react';
 import {Row, Col} from 'reactstrap';
-import {BASE_API_URL} from './../constants.jsx'
-import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
 import {getCategory} from './../../api/CategoryAPI'
 

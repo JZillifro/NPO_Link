@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 
 # Import the database object from the main app module
 from npolinkapi import db
-from sqlalchemy import inspect, and_
+from sqlalchemy import inspect, and_, or_
 from sqlalchemy.orm import load_only
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -33,11 +33,89 @@ def get_all_nonprofits():
     }
     return jsonify(response_object), 200
 
+@nonprofits_blueprint.route('/search/<int:page>', methods=['GET'])
+def search(page=1):
+    search_words = request.args.get("search_words", '').split(' ')
+    #nonzero query length
+    if len(search_words):
+        try:
+            #for all query terms search name, descrption and address
+            nonprofits = Nonprofit.query.filter(or_(
+                *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
+                #should'nt be necessary but might be according to some sites
+                *[Nonprofit.name.ilike(      str(x) + '%') for x in search_words],
+                *[Nonprofit.name.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Nonprofit.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Nonprofit.description.ilike(      str(x) + '%') for x in search_words],
+                *[Nonprofit.description.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Nonprofit.address.ilike('%' + str(x) + '%') for x in search_words],
+                *[Nonprofit.address.ilike(      str(x) + '%') for x in search_words],
+                *[Nonprofit.address.ilike('%' + str(x)      ) for x in search_words]
+            ))
+        except Exception as e:
+            return str(e)
+        #output formatting
+        nonprofits = nonprofits.paginate(page,3,error_out=False)
+
+        paged_response_object = {
+            'status': 'success',
+            'data': {
+                'nonprofits': [nonprofit.to_json() for nonprofit in nonprofits.items]
+            },
+            'has_next': nonprofits.has_next,
+            'has_prev': nonprofits.has_prev,
+            'next_page': nonprofits.next_num,
+            'pages': nonprofits.pages
+        }
+        return jsonify(paged_response_object), 200
+    return "error, no args"
+
 @nonprofits_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
     """Get all nonprofits paged"""
     per_page = 12
-    nonprofits = Nonprofit.query.order_by(Nonprofit.id.asc()).paginate(page,per_page,error_out=False)
+
+    search_key = request.args.get('search_key', 'name')
+    if search_key == 'name':
+        search_column = Nonprofit.name
+    elif search_key == 'ein':
+        search_column = Nonprofit.ein
+    elif search_key == 'desc':
+        search_column = Nonprofit.description
+    else:
+        search_column = Nonprofit.name
+
+    sort_key = request.args.get('sort_key', 'name')
+    if sort_key == 'ein':
+        sort_column = Nonprofit.ein
+    elif sort_key == 'id':
+        sort_column = Nonprofit.id
+    else:
+        sort_column = Nonprofit.name
+
+    searchword = request.args.get('q', '')
+    if len(searchword) > 0:
+        searchwordl = "{}%".format(searchword)
+        searchwordm = "%{}%".format(searchword)
+        searchwordr = "%{}".format(searchword)
+        nonprofits = Nonprofit.query.filter(or_(search_column.ilike(searchwordl),
+                                              search_column.ilike(searchwordm),
+                                              search_column.ilike(searchwordr)))
+    else:
+        searchword = "%"
+        nonprofits = Nonprofit.query.filter(search_column.like(searchword))
+
+    sort = request.args.get('sort', 'asc')
+
+    if sort == 'asc':
+        nonprofits = nonprofits.order_by(sort_column.asc())
+    else:
+        nonprofits = nonprofits.order_by(sort_column.desc())
+
+    nonprofits = nonprofits.paginate(page,per_page,error_out=False)
+
     paged_response_object = {
         'status': 'success',
         'data': {

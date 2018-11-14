@@ -1,7 +1,5 @@
 import React from 'react';
 import {Row, Col} from 'reactstrap';
-import {BASE_API_URL} from './../constants.jsx'
-import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
 import {getNonProfit} from './../../api/NonProfitAPI'
 
@@ -16,7 +14,6 @@ export default class NonprofitPage extends React.Component {
     const response = await getNonProfit(this.props.match.params.id);
     this.setState({nonprofit: response.data.data.nonprofit});
         };
-
 
   render() {
     if(this.state.nonprofit){

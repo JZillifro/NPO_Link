@@ -36,7 +36,7 @@ def create_app(script_info=None):
     def greet():
         #insert any documenation/behaviour for interaction with api at default endpoint here
         return "Welcome to the NPO link api <Placeholder> <Placeholder> <Placeholder>\n"
-
+    
     # shell context for flask cli
     @app.shell_context_processor
     def ctx():

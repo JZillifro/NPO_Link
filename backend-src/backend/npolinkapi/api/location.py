@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 
 # Import the database object from the main app module
 from npolinkapi import db
-from sqlalchemy import inspect
+from sqlalchemy import inspect, or_, and_
 from sqlalchemy.orm import load_only
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -35,11 +35,140 @@ def get_all_locations():
     }
     return jsonify(response_object), 200
 
+@locations_blueprint.route('/search/<int:page>', methods=['GET'])
+def search(page=1):
+    search_words = request.args.get("search_words", '').split(' ')
+    #nonzero query length
+    if len(search_words):
+        try:
+            #for all query terms search name, descrption and address
+            locations = Location.query.filter(or_(
+                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.name.ilike(      str(x) + '%') for x in search_words],
+                *[Location.name.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.city.ilike(      str(x) + '%') for x in search_words],
+                *[Location.city.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.description.ilike(      str(x) + '%') for x in search_words],
+                *[Location.description.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.state.ilike(      str(x) + '%') for x in search_words],
+                *[Location.state.ilike('%' + str(x)      ) for x in search_words]
+
+            ))
+        except Exception as e:
+            return str(e)
+        #output formatting
+        locations = locations.paginate(page,3,error_out=False)
+
+        paged_response_object = {
+            'status': 'success',
+            'data': {
+                'locations': [location.to_json() for location in locations.items]
+            },
+            'has_next': locations.has_next,
+            'has_prev': locations.has_prev,
+            'next_page': locations.next_num,
+            'pages': locations.pages
+        }
+        return jsonify(paged_response_object), 200
+    return "error, no args"
+
+@locations_blueprint.route('/filter/<int:page>', methods=['GET'])
+def filter(page=1):
+    search_words = request.args()#.split(' ')
+    return str(search_words)
+    #nonzero query length
+    if len(search_words):
+        try:
+            #for all query terms search name, descrption and address
+            locations = Location.query.filter(or_(
+                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+
+                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+
+                *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.description.ilike(    str(x) + '%') for x in search_words],
+                *[Location.description.ilike('%' + str(x)      ) for x in search_words],
+
+                *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.state.ilike(      str(x) + '%') for x in search_words],
+                *[Location.state.ilike('%' + str(x)      ) for x in search_words]
+
+            ))
+        except Exception as e:
+            return str(e)
+        #output formatting
+        locations = locations.paginate(page,3,error_out=False)
+
+        paged_response_object = {
+            'status': 'success',
+            'data': {
+                'locations': [location.to_json() for location in locations.items]
+            },
+            'has_next': locations.has_next,
+            'has_prev': locations.has_prev,
+            'next_page': locations.next_num,
+            'pages': locations.pages
+        }
+        return jsonify(paged_response_object), 200
+    return "error, no args"
+
+
 @locations_blueprint.route('/<int:page>',methods=['GET'])
 def view(page=1):
     """Get all locations paged"""
     per_page = 12
-    locations = Location.query.order_by(Location.id.asc()).paginate(page,per_page,error_out=False)
+
+    search_key = request.args.get('search_key', 'name')
+    if search_key == 'city':
+        search_column = Location.city
+    elif search_key == 'state':
+        search_column = Location.state
+    elif search_key == 'desc':
+        search_column = Location.description
+    else:
+        search_column = Location.name
+
+    sort_key = request.args.get('sort_key', 'name')
+    if sort_key == 'city':
+        sort_column = Location.city
+    elif sort_key == 'state':
+        sort_column = Location.state
+    elif sort_key == 'id':
+        sort_column = Location.id
+    else:
+        sort_column = Location.name
+
+    searchword = request.args.get('q', '')
+    if len(searchword) > 0:
+        searchwordl = "{}%".format(searchword)
+        searchwordm = "%{}%".format(searchword)
+        searchwordr = "%{}".format(searchword)
+        locations = Location.query.filter(or_(search_column.ilike(searchwordl),
+                                              search_column.ilike(searchwordm),
+                                              search_column.ilike(searchwordr)))
+    else:
+        searchword = "%"
+        locations = Location.query.filter(search_column.like(searchword))
+
+    sort = request.args.get('sort', 'asc')
+
+    if sort == 'asc':
+        locations = locations.order_by(sort_column.asc())
+    else:
+        locations = locations.order_by(sort_column.desc())
+
+    locations = locations.paginate(page,per_page,error_out=False)
+
     paged_response_object = {
         'status': 'success',
         'data': {

@@ -16,7 +16,7 @@ class About extends Component {
          {name: "Gerardo Mares", gitlab_name: "Gerardo Mares", role: "Developer", image: gerardo, bio: "Gerardo Mares is a senior computer science major with a minor in business at UT Austin", commits: 0, issues: 0, unit_tests: 36},
          {name: "Jacob Zillifro", gitlab_name: "JZillifro", role: "Developer", image: jacob, bio: "Jacob is a junior computer science major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
          {name: "Paul Purifoy", gitlab_name: "Paul Purifoy", role: "Developer", image: paul, bio: "Paul is a junior computer science major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
-         {name: "Edgar Marroquin", gitlab_name: "Edgar Marroquin", role: "Developer", image: edgar, bio: "Edgar Marroquin is a senior computer science and biochemistry double major at UT Austin. His major responsibilites include API management and integration.", commits: 0, issues: 0, unit_tests: 36}
+         {name: "Edgar Marroquin", gitlab_name: "Artsandwitchcraft", role: "Developer", image: edgar, bio: "Edgar Marroquin is a senior computer science and biochemistry double major at UT Austin. His major responsibilites include API management and integration.", commits: 0, issues: 0, unit_tests: 36}
       ],
       issues: [],
       commits: 0
@@ -29,16 +29,12 @@ class About extends Component {
    .then(contributors_data => {
       var contributors = this.state.contributors;
       contributors.forEach(c => {
-         const data = contributors_data.find(d => d.name === c.gitlab_name);
-         if(data){
-            c.commits = data.commits;
-            c.email = data.email
-         }
+         c.commits = contributors_data.filter(d => d.name === c.gitlab_name)
+                                      .map(data => data.commits)
+                                      .reduce((acc, val) => acc + val, 0);
       });
 
-      var commits = contributors.reduce(function(accumulator, contributor) {
-         return accumulator + contributor.commits;
-      }, 0);
+      var commits = contributors.reduce((acc, c) => acc + c.commits, 0);
 
       this.setState({contributors});
       this.setState({commits});

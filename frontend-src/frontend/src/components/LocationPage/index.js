@@ -3,7 +3,6 @@ import {Row, Col} from 'reactstrap';
 import {BASE_API_URL} from './../constants.jsx'
 import axios from 'axios';
 import RelatedModelList from './../RelatedModelList'
-import GoogleMapReact from 'google-map-react';
 import LGMap from './LGMap.js'
 
 export default class locationPage extends React.Component {

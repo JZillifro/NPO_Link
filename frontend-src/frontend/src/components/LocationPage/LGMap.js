@@ -1,8 +1,6 @@
 import React from 'react';
-import {Row, Col} from 'reactstrap';
-import {BASE_API_URL} from './../constants.jsx'
+import { Col } from 'reactstrap';
 import axios from 'axios';
-import RelatedModelList from './../RelatedModelList'
 import GoogleMapReact from 'google-map-react';
 
 export default class LGMap extends React.Component {
@@ -52,7 +50,7 @@ export default class LGMap extends React.Component {
     } else {
       return (
         <Col xs={12} className="pt-3">
-          
+
         </Col>
       )
     }

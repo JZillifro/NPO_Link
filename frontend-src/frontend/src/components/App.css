@@ -25,3 +25,8 @@
     flex: 1 0 auto;
     width: 100vw;
 }
+.card-img-top {
+    width: 100%;
+    height: 20vw;
+    object-fit: cover;
+}
