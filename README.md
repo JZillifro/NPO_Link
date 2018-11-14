@@ -26,7 +26,7 @@ Phase 2
 Git SHA: aaaa1cc6d9bb231f7a8b03bf118ae813132b315e
 
 Phase 3
-Git SHA:
+Git SHA: 225b3859ccb47b4ff6ca0b08b122aa880f5c49b7 
 
 GitLab Pipelines: https://gitlab.com/gerardomares/npolink/pipelines
 
