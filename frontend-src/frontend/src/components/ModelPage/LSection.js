@@ -90,27 +90,12 @@ export default class LSection extends React.Component {
       return(
          <div className="container justify-content-center">
             <Row className="mb-5">
-<<<<<<< HEAD
                 <Col xs={1}>
                    <DropdownChoices onClick={this.onStateChange}
                                     items={["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]}
                                     value={"State"}>
                    </DropdownChoices>
                 </Col>
-=======
-               <Container className="justify-content-center">
-                  <Row>
-                     <Col xs={2}>
-                        <h1>Filters:</h1>
-                     </Col>
-                     <DropdownChoices onClick={this.onStateChange}
-                                      items={STATES}
-                                      value={"State"}
-                                      dropdownType={"state"}>
-                     </DropdownChoices>
-                  </Row>
-               </Container>
->>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'city'}
                           sort_keys={['city', 'state']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'city'}

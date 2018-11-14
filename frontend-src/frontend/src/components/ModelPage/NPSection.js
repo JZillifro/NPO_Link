@@ -60,7 +60,7 @@ export default class NPSection extends React.Component {
 
   onRangeChange(value) {
     var filters = this.state.filters;
-    filters['Projects'] = value;
+    filters['Range'] = value;
      this.setState({filters}, () => {
          this.refreshPage(1);
      })
@@ -71,10 +71,7 @@ export default class NPSection extends React.Component {
       activePage: 1,
       dataForPage : [],
       query : '',
-<<<<<<< HEAD
       sort_key: 'id',
-=======
->>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
       sort: 'asc',
       filters: {}
     }, () => {
@@ -83,11 +80,7 @@ export default class NPSection extends React.Component {
   }
 
   refreshPage(page) {
-<<<<<<< HEAD
      axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?q=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
-=======
-     axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
->>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
        const dataForPage = res.data.data.nonprofits
        const pages = res.data.pages
        this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -107,26 +100,14 @@ export default class NPSection extends React.Component {
               </Col>
               <Col xs={2}>
                  <DropdownChoices onClick={this.onStateChange}
-<<<<<<< HEAD
                                   items={["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]}
                                   value={"State"}>
-=======
-                                  items={STATES}
-                                  value={"State"}
-                                  dropdownType={"state"}>
->>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
                  </DropdownChoices>
               </Col>
               <Col xs={2}>
                  <DropdownChoices onClick={this.onRangeChange}
-<<<<<<< HEAD
                                  items={[0, 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10]}
                                  value={"Range"}>
-=======
-                                 items={["Yes","No"]}
-                                 value={"Has Events"}
-                                 dropdownType={"has_projects"}>
->>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
                  </DropdownChoices>
               </Col>
              <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
