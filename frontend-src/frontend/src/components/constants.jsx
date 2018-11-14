@@ -1,8 +1,4 @@
-const BASE_API_URL = (process.env.NODE_ENV === 'production')
-    ? 'http://api.npolink.me'
-    : (process.env.NODE_ENV === 'test')
-    ? 'http://backend:5000'
-    : 'http://localhost:5000';
+const BASE_API_URL = 'http://api.npolink.me';
 
 // const STATES = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"];
 

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "844819f2-0208-4796-8c11-cb2fd0eb7542",
+		"_postman_id": "925a4369-6086-4047-8167-9f8e2f4462d0",
 		"name": "Unit Tests ",
 		"description": "Unit tests for the API for all endpoint\nCurrently only for local host ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -745,6 +745,77 @@
 								"v1.0",
 								"categories",
 								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "da9bfdab-480d-48d0-a1b5-2d2f27d3fbcd",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successful return\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://api.npolink.me/v1.0/categories/search/1?search_words=aids",
+							"protocol": "http",
+							"host": [
+								"api",
+								"npolink",
+								"me"
+							],
+							"path": [
+								"v1.0",
+								"categories",
+								"search",
+								"1"
+							],
+							"query": [
+								{
+									"key": "search_words",
+									"value": "aids"
+								}
 							]
 						}
 					},
@@ -1753,6 +1824,77 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "da9bfdab-480d-48d0-a1b5-2d2f27d3fbcd",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successful return\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://api.npolink.me/v1.0/nonprofits/search/1?search_words=dogs",
+							"protocol": "http",
+							"host": [
+								"api",
+								"npolink",
+								"me"
+							],
+							"path": [
+								"v1.0",
+								"nonprofits",
+								"search",
+								"1"
+							],
+							"query": [
+								{
+									"key": "search_words",
+									"value": "dogs"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -2680,6 +2822,77 @@
 								"v1.0",
 								"locations",
 								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "da9bfdab-480d-48d0-a1b5-2d2f27d3fbcd",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Valid api call status\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"valid response and functioning body\", function (){",
+									"    //assert response has ok return",
+									"    pm.response.to.be.ok;",
+									"    ",
+									"    //response has a body",
+									"    pm.response.to.be.withBody;",
+									"    ",
+									"    //respsone is in json",
+									"    pm.response.to.be.json;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Status is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"status\");",
+									"});",
+									"",
+									"pm.test(\"Successful return\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"success\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Data is present in response\", function () {",
+									"    pm.response.to.have.jsonBody(\"data\");",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://api.npolink.me/v1.0/locations/search/1?search_words=fbi",
+							"protocol": "http",
+							"host": [
+								"api",
+								"npolink",
+								"me"
+							],
+							"path": [
+								"v1.0",
+								"locations",
+								"search",
+								"1"
+							],
+							"query": [
+								{
+									"key": "search_words",
+									"value": "fbi"
+								}
 							]
 						}
 					},

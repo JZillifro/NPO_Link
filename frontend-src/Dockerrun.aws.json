@@ -1,19 +1,18 @@
 {
    "AWSEBDockerrunVersion": 2,
    "containerDefinitions": [{
+      "environment": [{
+         "name": "NODE_ENV",
+         "value": "production"
+      }],
       "essential": true,
       "memory": 256,
       "image": "gerardomares/npolink:frontend-prod",
-      "environment": [
-        {
-          "name": "NODE_ENV",
-          "value": "production"
-       }
-      ],
       "mountPoints": [{
-         "containerPath": "/usr/frontend",
-         "sourceVolume": "_frontend"
-      }],
+            "containerPath": "/usr/frontend",
+            "sourceVolume": "_frontend"
+         }
+      ],
       "name": "frontend",
       "portMappings": [{
          "containerPort": 3000,
@@ -22,9 +21,10 @@
    }],
    "family": "",
    "volumes": [{
-      "host": {
-         "sourcePath": "frontend"
-      },
-      "name": "_frontend"
-   }]
+         "host": {
+            "sourcePath": "frontend"
+         },
+         "name": "_frontend"
+      }
+   ]
 }

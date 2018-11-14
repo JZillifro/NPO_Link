@@ -15,7 +15,7 @@ class About extends Component {
          {name: "Georgina Garza", gitlab_name: "Georgina Garza", role: "Developer", image: georgina, bio: " Georgina Garza is a junior computer science and dance double major at UT Austin", commits: 0, issues: 0, unit_tests: 18},
          {name: "Gerardo Mares", gitlab_name: "Gerardo Mares", role: "Developer", image: gerardo, bio: "Gerardo Mares is a senior computer science major with a minor in business at UT Austin", commits: 0, issues: 0, unit_tests: 36},
          {name: "Jacob Zillifro", gitlab_name: "JZillifro", role: "Developer", image: jacob, bio: "Jacob is a junior computer science major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
-         {name: "Paul Purifoy", gitlab_name: "Paul Purifoy", role: "Developer", image: paul, bio: "Paul is a junior computer science major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
+         {name: "Paul Purifoy", gitlab_name: "pmpurifoy", role: "Developer", image: paul, bio: "Paul is a junior computer science major at UT Austin", commits: 0, issues: 0, unit_tests: 0},
          {name: "Edgar Marroquin", gitlab_name: "Artsandwitchcraft", role: "Developer", image: edgar, bio: "Edgar Marroquin is a senior computer science and biochemistry double major at UT Austin. His major responsibilites include API management and integration.", commits: 0, issues: 0, unit_tests: 36}
       ],
       issues: [],
