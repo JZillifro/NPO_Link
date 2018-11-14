@@ -44,7 +44,7 @@ class LSection extends React.Component {
    }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}&filters={}`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}`).then(res => {
         console.log(res)
         const dataForPage = res.data.data.locations
         const pages = res.data.pages
