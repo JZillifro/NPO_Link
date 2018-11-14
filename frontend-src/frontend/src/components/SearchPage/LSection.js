@@ -16,6 +16,7 @@ class LSection extends React.Component {
       activePage: 1,
       dataForPage : [],
       query : '',
+      filters : {}
      }
 
      this.onChangePage = this.onChangePage.bind(this);
@@ -43,7 +44,7 @@ class LSection extends React.Component {
    }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}&filters={}`).then(res => {
         console.log(res)
         const dataForPage = res.data.data.locations
         const pages = res.data.pages
@@ -70,7 +71,7 @@ class LSection extends React.Component {
                            src={model.image}
                            className="card-img-top"
                            alt="Card image" />
-                           <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/location/" + model.id} >{model.name}</a></CardHeader>
+                           <CardHeader style={{minHeight: "10vh"}}><a href={"/location/" + model.id} >{model.name}</a></CardHeader>
                            <CardBody className="block-with-text">
                              <CardText className="pt-2">
                                 City: {model.city}

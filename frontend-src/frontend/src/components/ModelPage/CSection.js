@@ -69,19 +69,19 @@ export default class CSection extends React.Component {
 
    resetPage() {
       this.setState({
-      activePage: 1,
-      dataForPage : [],
-      query : '',
-      sort_key: 'name',
-      sort: 'asc',
-      filters: {}
+       activePage: 1,
+       dataForPage : [],
+       query : '',
+       sort_key: 'id',
+       sort: 'asc',
+       filters: {}
      }, () => {
         this.refreshPage(1);
      })
    }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/categories/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/categories/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
         const dataForPage = res.data.data.categories
         const pages = res.data.pages
         this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -101,16 +101,14 @@ export default class CSection extends React.Component {
                </Col>
                <Col xs={2}>
                   <DropdownChoices onClick={this.onParentCodeChange}
-                                   items={CAT_CODES}
-                                   value={"Parent Code"}
-                                   dropdownType={"category"}>
+                                   items={["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]}
+                                   value={"Parent Code"}>
                   </DropdownChoices>
                </Col>
                <Col xs={2}>
                   <DropdownChoices onClick={this.onHasNonprofitChange}
-                                  items={["Yes","No"]}
-                                  value={"Has Nonprofit Data"}
-                                  dropdownType={"has_nonprofits"}>
+                                  items={[0, 1, 2, 3]}
+                                  value={"Min. Nonprofits"}>
                   </DropdownChoices>
                </Col>
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
