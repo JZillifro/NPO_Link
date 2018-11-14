@@ -6,7 +6,7 @@ import ModelPage from './ModelPage'
 import LocationPage from './LocationPage'
 import CategoryPage from './CategoryPage'
 import NonprofitPage from './NonprofitPage'
-
+import SearchPage from './SearchPage'
 // The Main component renders one of the provided
 // Routes (provided that one matches).
 const Main = () => (
@@ -18,6 +18,7 @@ const Main = () => (
       <Route exact path='/location/:id' component={LocationPage}/>
       <Route exact path='/category/:id' component={CategoryPage}/>
       <Route exact path='/nonprofit/:id' component={NonprofitPage}/>
+      <Route exact path='/all/search' component={SearchPage}/>
     </Switch>
   </main>
 )

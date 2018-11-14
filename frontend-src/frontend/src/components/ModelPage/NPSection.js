@@ -1,9 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { BASE_API_URL } from './../constants.jsx';
+import { BASE_API_URL, STATES } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
 import SearchBar from './../SearchBar'
+import DropdownChoices from './../Dropdown'
+import Highlight from "react-highlighter";
 
 export default class NPSection extends React.Component {
   constructor(props) {
@@ -12,14 +14,15 @@ export default class NPSection extends React.Component {
      activePage: 1,
      dataForPage : [],
      query : '',
-     search_key: 'name',
-     sort_key: 'name',
-     sort: 'asc'
+     sort: 'asc',
+     filters: {}
     }
 
     this.onChangePage = this.onChangePage.bind(this);
     this.onQueryChange = this.onQueryChange.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
+    this.onStateChange = this.onStateChange.bind(this);
+    this.onRangeChange = this.onRangeChange.bind(this);
     this.resetPage = this.resetPage.bind(this);
   }
 
@@ -35,8 +38,8 @@ export default class NPSection extends React.Component {
      })
   }
 
-  onQueryChange(search_key, query) {
-     this.setState({query: query, search_key: search_key }, () => {
+  onQueryChange(query) {
+     this.setState({query: query}, () => {
          this.refreshPage(1);
      })
   }
@@ -48,21 +51,37 @@ export default class NPSection extends React.Component {
      })
   }
 
+  onStateChange(state) {
+    var filters = this.state.filters;
+    filters['State'] = state;
+     this.setState({filters}, () => {
+         this.refreshPage(1);
+     })
+  }
+
+  onRangeChange(value) {
+    var filters = this.state.filters;
+    filters['Range'] = value;
+     this.setState({filters}, () => {
+         this.refreshPage(1);
+     })
+  }
+
   resetPage() {
      this.setState({
       activePage: 1,
       dataForPage : [],
       query : '',
-      search_key: 'name',
       sort_key: 'id',
-      sort: 'asc'
+      sort: 'asc',
+      filters: {}
     }, () => {
        this.refreshPage(1);
     })
   }
 
   refreshPage(page) {
-     axios.get(`${BASE_API_URL}/v1.0/nonprofits/${page}?q=${this.state.query}&search_key=${this.state.search_key}&sort=${this.state.sort}&sort_key=${this.state.sort_key}`).then(res => {
+     axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
        const dataForPage = res.data.data.nonprofits
        const pages = res.data.pages
        this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -77,10 +96,28 @@ export default class NPSection extends React.Component {
       return(
       <div className="container justify-content-center">
           <Row className="mb-5">
+              <Col xs={2}>
+              <h1>Filters:</h1>
+              </Col>
+              <Col xs={2}>
+                 <DropdownChoices onClick={this.onStateChange}
+                                  items={STATES}
+                                  value={"State"}
+                                  dropdownType={"state"}>
+
+                 </DropdownChoices>
+              </Col>
+              <Col xs={2}>
+                 <DropdownChoices onClick={this.onRangeChange}
+                                  items={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+                                  value={"Num. Events"}
+                                  dropdownType={"num_projects"}>
+
+                 </DropdownChoices>
+              </Col>
              <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
                         sort_keys={['name', 'ein']}
                         onSearchChange={this.onQueryChange} initialSearchValue={'name'}
-                        search_keys={['name', 'ein', 'desc']}
                         resetPage={this.resetPage} />
           </Row>
 
@@ -94,16 +131,19 @@ export default class NPSection extends React.Component {
                         src={model.logo}
                         className="card-img-top"
                         alt="Card image" />
-                        <CardHeader style={{minHeight: "10vh"}}><a href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
+                        <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
                         <CardBody className="block-with-text">
                           <CardText className="pt-2">
-                             Address: {model.address}
+                             Address:
+                             <Highlight search={this.state.query}>{model.address}</Highlight>
                           </CardText>
                           <CardText className="pt-2">
-                             EIN: {model.ein}
+                             EIN:
+                             <Highlight search={this.state.query}>{model.ein}</Highlight>
                           </CardText>
                           <CardText className="pt-2">
-                             Description: {model.description}
+                             Description:
+                             <Highlight search={this.state.query}>{model.description}</Highlight>
                           </CardText>
                         </CardBody>
                     </Card>

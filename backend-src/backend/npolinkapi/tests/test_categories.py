@@ -62,6 +62,34 @@ class TestCategoryService(BaseTestCase):
         category = data['data']['category']
         self.assertEqual(1, category['id'])
 
+    def test_search_category(self):
+        """Ensure the /categories/search/?search_words=words route behaves."""
+        query = "dog"
+        response = self.client.get('/v1.0/categories/search/1?search_words=' + query)
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('success',data['status'])
+        categories = data['data']['categories']
+        #searches name, code, description
+        for category in categories:
+            self.assertEqual(query in category['name'] 
+            or query in category['code'] 
+            or query in category['description'],
+            True
+            )
+    
+    def test_search_category_filter(self):
+        """Ensure the /categories/search/?filters={} route behaves."""
+        response = self.client.get('/v1.0/categories/search/1?filters={"Parent_code":"A"}')
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('success',data['status'])
+        categories = data['data']['categories']
+        for category in categories:
+            self.assertEqual(category["parent_category"],"A")
+ 
+
+
     def test_get_category_bad_input(self):
         """ Ensure the /categories/category/<category_id> route behaves correctly on
             bad user input.

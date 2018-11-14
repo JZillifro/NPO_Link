@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 
 # Import the database object from the main app module
 from npolinkapi import db
-from sqlalchemy import inspect, or_
+from sqlalchemy import inspect, or_, and_
 from sqlalchemy.orm import load_only
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -37,12 +37,23 @@ def get_all():
 
 @categories_blueprint.route('/search/<int:page>', methods=['GET'])
 def search(page=1):
-    search_words = request.args.get("search_words", '').split(' ')
-    #nonzero query length
-    if len(search_words):
-        try:
-            #for all query terms search name, descrption and address
-            categories = Category.query.filter(or_(
+    #Parse args
+    search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
+    search_key = request.args.get('search_key', default = None)
+    try:
+        if search_words is not None:
+            search_words = search_words.split(" ")
+        filters = json.loads(filters)
+    except Exception as e:
+        return "Error parsing args" + str(e)
+
+    try:
+        category_search_queries = True
+        if search_words is not None and len(search_words):
+            if search_key is None:
+                #for all query terms search name, descrption and address
+                #can do as double nested list comp. *[search_col.ilike(x) for x in search_words for search_col in search_col_list]
+                category_search_queries = or_(
                 *[Category.name.ilike('%' + str(x) + '%') for x in search_words],
                 *[Category.name.ilike(      str(x) + '%') for x in search_words],
                 *[Category.name.ilike('%' + str(x)      ) for x in search_words],
@@ -53,26 +64,83 @@ def search(page=1):
 
                 *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
                 *[Category.description.ilike(      str(x) + '%') for x in search_words],
-                *[Category.description.ilike('%' + str(x) + '%') for x in search_words]
+                *[Category.description.ilike('%' + str(x)      ) for x in search_words]
 
-            ))
-        except Exception as e:
-            return str(e)
-        #output formatting
-        categories = categories.paginate(page,3,error_out=False)
+                )
+            else:
+                if search_key == 'name':
+                    search_column = Category.name
+                elif search_key == 'code':
+                    search_column = Category.code
+                elif search_key == 'parent':
+                    search_column = Category.parent_category
+                elif search_key == 'desc':
+                    search_column = Category.description
+                else:
+                    search_column = Category.name
+                category_search_queries = or_(
+                *[search_column.ilike('%' + str(x) + '%') for x in search_words],
+                *[search_column.ilike(      str(x) + '%') for x in search_words],
+                *[search_column.ilike('%' + str(x)      ) for x in search_words]
+                )
 
-        paged_response_object = {
-            'status': 'success',
-            'data': {
-                'categories': [category.to_json() for category in categories.items]
-            },
-            'has_next': categories.has_next,
-            'has_prev': categories.has_prev,
-            'next_page': categories.next_num,
-            'pages': categories.pages
-        }
-        return jsonify(paged_response_object), 200
-    return "error, no args"
+
+        category_filters = True
+        if filters is not None and len(filters):
+            filter_queries = []
+            #Filter by all provided filters
+            if "Parent_code" in filters:
+                filter_queries.append(Category.parent_category.like(filters["Parent_code"]))
+            if "Has_nonprofits" in filters:
+                if filters["Has_nonprofits"]:
+                    filter_queries.append(Category.nonprofit_amount >= filters["Has_nonprofits"])
+                else:
+                    filter_queries.append(Category.nonprofit_amount <= filters["Has_nonprofits"])
+
+            category_filters = and_(*filter_queries)
+    except Exception as e:
+        return "Error in constructing queries" + str(e)
+
+    try:
+        #Apply queries
+        categories = Category.query.filter(and_(category_filters,category_search_queries))
+        sort = request.args.get('sort', 'asc')
+        sort_key = request.args.get('sort_key', 'name')
+        if sort_key == 'code':
+            sort_column = Category.code
+        elif sort_key == 'id':
+            sort_column = Category.id
+        else:
+            sort_column = Category.name
+
+
+        if sort == 'asc':
+            categories = categories.order_by(sort_column.asc())
+        else:
+            categories = categories.order_by(sort_column.desc())
+
+
+    except Exception as e:
+        return "Error in applying queries" + str(e)
+
+    #output formatting
+    try:
+        page_size = int(request.args.get("page_size", default=3))
+        categories = categories.paginate(page,page_size,error_out=False)
+    except Exception as e:
+        return "Error in paginating" + str(e)
+
+    paged_response_object = {
+        'status': 'success',
+        'data': {
+            'categories': [category.to_json() for category in categories.items]
+        },
+        'has_next': categories.has_next,
+        'has_prev': categories.has_prev,
+        'next_page': categories.next_num,
+        'pages': categories.pages
+    }
+    return jsonify(paged_response_object), 200
 
 
 @categories_blueprint.route('/<int:page>',methods=['GET'])

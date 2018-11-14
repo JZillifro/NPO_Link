@@ -1,9 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { BASE_API_URL } from './../constants.jsx';
+import { BASE_API_URL, STATES } from './../constants.jsx';
 import Pagination from "./../Pagination";
-import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
+import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader, Container} from 'reactstrap'
 import SearchBar from './../SearchBar'
+import DropdownChoices from './../Dropdown'
+import Highlight from "react-highlighter";
 
 export default class LSection extends React.Component {
    constructor(props) {
@@ -13,15 +15,16 @@ export default class LSection extends React.Component {
        dataForPage : [],
        query : '',
        dropdownOpen: false,
-       search_key: 'city',
        sort_key: 'name',
-       sort: 'asc'
+       sort: 'asc',
+       filters: {}
      }
 
      this.onChangePage = this.onChangePage.bind(this);
      this.onQueryChange = this.onQueryChange.bind(this);
      this.onSortChange = this.onSortChange.bind(this);
      this.resetPage = this.resetPage.bind(this);
+     this.onStateChange = this.onStateChange.bind(this);
    }
 
    resetPage() {
@@ -30,15 +33,16 @@ export default class LSection extends React.Component {
        dataForPage : [],
        query : '',
        dropdownOpen: false,
-       search_key: 'city',
        sort_key: 'id',
-       sort: 'asc'
+       sort: 'asc',
+       filters: {}
      }, () => {
         this.refreshPage(1);
      })
    }
 
   componentWillMount() {
+    console.log("");
      this.setState({activePage: 1}, () => {
         this.refreshPage(1);
      })
@@ -50,8 +54,16 @@ export default class LSection extends React.Component {
      })
   }
 
-  onQueryChange(search_key, query) {
-     this.setState({query: query, search_key: search_key }, () => {
+  onQueryChange(query) {
+     this.setState({query: query}, () => {
+         this.refreshPage(1);
+     })
+  }
+
+  onStateChange(state) {
+    var filters = this.state.filters;
+    filters['State'] = state;
+     this.setState({filters}, () => {
          this.refreshPage(1);
      })
   }
@@ -64,7 +76,7 @@ export default class LSection extends React.Component {
   }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/locations/${page}?q=${this.state.query}&search_key=${this.state.search_key}&sort=${this.state.sort}&sort_key=${this.state.sort_key}`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
         const dataForPage = res.data.data.locations
         const pages = res.data.pages
         this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -79,10 +91,22 @@ export default class LSection extends React.Component {
       return(
          <div className="container justify-content-center">
             <Row className="mb-5">
+               <Container className="justify-content-center">
+                  <Row>
+                   <Col xs={2}>
+                      <h1>Filters:</h1>
+                   </Col>
+                   <DropdownChoices onClick={this.onStateChange}
+                                    items={STATES}
+                                    value={"State"}
+                                    dropdownType={"state"}>
+                   </DropdownChoices>
+                  </Row>
+               </Container>
+
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'city'}
                           sort_keys={['city', 'state']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'city'}
-                          search_keys={['city', 'state', 'desc']}
                           resetPage={this.resetPage} />
             </Row>
 
@@ -96,16 +120,19 @@ export default class LSection extends React.Component {
                           src={model.image}
                           className="card-img-top"
                           alt="Card image" />
-                          <CardHeader style={{minHeight: "10vh"}}><a href={"/location/" + model.id} >{model.name}</a></CardHeader>
+                          <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/location/" + model.id} >{model.name}</a></CardHeader>
                           <CardBody className="block-with-text">
                              <CardText className="pt-2">
-                               City: {model.city}
+                               City:
+                               <Highlight search={this.state.query}>{model.city}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
-                               State: {model.state}
+                               State:
+                               <Highlight search={this.state.query}>{model.state}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
-                               Description: {model.description}
+                               Description:
+                               <Highlight search={this.state.query}>{model.description}</Highlight>
                             </CardText>
                           </CardBody>
                       </Card>

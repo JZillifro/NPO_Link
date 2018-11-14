@@ -3,7 +3,7 @@
    "containerDefinitions": [{
       "essential": true,
       "memory": 256,
-      "image": "gerardomares/npolink:frontend",
+      "image": "gerardomares/npolink:frontend-prod",
       "environment": [
         {
           "name": "NODE_ENV",
