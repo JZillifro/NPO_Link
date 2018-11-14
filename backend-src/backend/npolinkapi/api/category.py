@@ -39,6 +39,7 @@ def get_all():
 def search(page=1):
     #Parse args
     search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
+    search_key = request.args.get('search_key', default = None)
     try:
         if search_words is not None:
             search_words = search_words.split(" ")
@@ -49,21 +50,41 @@ def search(page=1):
     try:
         category_search_queries = True
         if search_words is not None and len(search_words):
-            #for all query terms search name, descrption and address
-            category_search_queries = or_(
-            *[Category.name.ilike('%' + str(x) + '%') for x in search_words],
-            *[Category.name.ilike(      str(x) + '%') for x in search_words],
-            *[Category.name.ilike('%' + str(x)      ) for x in search_words],
+            if search_key is None:
+                #for all query terms search name, descrption and address
+                #can do as double nested list comp. *[search_col.ilike(x) for x in search_words for search_col in search_col_list]
+                category_search_queries = or_(
+                *[Category.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Category.name.ilike(      str(x) + '%') for x in search_words],
+                *[Category.name.ilike('%' + str(x)      ) for x in search_words],
 
-            *[Category.code.ilike('%' + str(x) + '%') for x in search_words],
-            *[Category.code.ilike(      str(x) + '%') for x in search_words],
-            *[Category.code.ilike('%' + str(x)      ) for x in search_words],
+                *[Category.code.ilike('%' + str(x) + '%') for x in search_words],
+                *[Category.code.ilike(      str(x) + '%') for x in search_words],
+                *[Category.code.ilike('%' + str(x)      ) for x in search_words],
 
-            *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
-            *[Category.description.ilike(      str(x) + '%') for x in search_words],
-            *[Category.description.ilike('%' + str(x)      ) for x in search_words]
+                *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Category.description.ilike(      str(x) + '%') for x in search_words],
+                *[Category.description.ilike('%' + str(x)      ) for x in search_words]
 
-             )
+                )
+            else:
+                if search_key == 'name':
+                    search_column = Category.name
+                elif search_key == 'code':
+                    search_column = Category.code
+                elif search_key == 'parent':
+                    search_column = Category.parent_category
+                elif search_key == 'desc':
+                    search_column = Category.description
+                else:
+                    search_column = Category.name
+                category_search_queries = or_(
+                *[search_column.ilike('%' + str(x) + '%') for x in search_words],
+                *[search_column.ilike(      str(x) + '%') for x in search_words],
+                *[search_column.ilike('%' + str(x)      ) for x in search_words]
+                )
+
+
         category_filters = True
         if filters is not None and len(filters):
             filter_queries = []
@@ -82,11 +103,19 @@ def search(page=1):
         #Apply queries
         categories = Category.query.filter(and_(category_filters,category_search_queries))
         sort = request.args.get('sort', 'asc')
+        sort_key = request.args.get('sort_key', 'name')
+        if sort_key == 'code':
+            sort_column = Category.code
+        elif sort_key == 'id':
+            sort_column = Category.id
+        else:
+            sort_column = Category.name
+
 
         if sort == 'asc':
-            categories = categories.order_by(Category.name.asc())
+            categories = categories.order_by(sort_column.asc())
         else:
-            categories = categories.order_by(Category.name.desc())
+            categories = categories.order_by(sort_column.desc())
 
 
     except Exception as e:
