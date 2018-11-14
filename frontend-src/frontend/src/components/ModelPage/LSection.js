@@ -33,7 +33,8 @@ export default class LSection extends React.Component {
        query : '',
        dropdownOpen: false,
        sort_key: 'id',
-       sort: 'asc'
+       sort: 'asc',
+       filters: {}
      }, () => {
         this.refreshPage(1);
      })
@@ -91,7 +92,7 @@ export default class LSection extends React.Component {
             <Row className="mb-5">
                 <Col xs={1}>
                    <DropdownChoices onClick={this.onStateChange}
-                                    items={["TX", "OK"]}
+                                    items={["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]}
                                     value={"State"}>
                    </DropdownChoices>
                 </Col>

@@ -73,14 +73,15 @@ export default class NPSection extends React.Component {
       dataForPage : [],
       query : '',
       sort_key: 'id',
-      sort: 'asc'
+      sort: 'asc',
+      filters: {}
     }, () => {
        this.refreshPage(1);
     })
   }
 
   refreshPage(page) {
-     axios.get(`${BASE_API_URL}/v1.0/nonprofits/${page}?q=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
+     axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?q=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
        const dataForPage = res.data.data.nonprofits
        const pages = res.data.pages
        this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -97,7 +98,7 @@ export default class NPSection extends React.Component {
           <Row className="mb-5">
               <Col xs={1}>
                  <DropdownChoices onClick={this.onStateChange}
-                                  items={["TX", "OK"]}
+                                  items={["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]}
                                   value={"State"}>
                  </DropdownChoices>
               </Col>
@@ -105,7 +106,7 @@ export default class NPSection extends React.Component {
               </Col>
               <Col xs={1}>
                  <DropdownChoices onClick={this.onRangeChange}
-                                 items={["0-5","6-10"]}
+                                 items={[0, 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10]}
                                  value={"Range"}>
                  </DropdownChoices>
               </Col>
