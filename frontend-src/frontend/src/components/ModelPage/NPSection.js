@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BASE_API_URL } from './../constants.jsx';
+import { BASE_API_URL, STATES } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
 import SearchBar from './../SearchBar'
@@ -13,7 +13,6 @@ export default class NPSection extends React.Component {
      activePage: 1,
      dataForPage : [],
      query : '',
-     sort_key: 'name',
      sort: 'asc',
      filters: {}
     }
@@ -59,9 +58,9 @@ export default class NPSection extends React.Component {
      })
   }
 
-  onRangeChange(range) {
+  onRangeChange(value) {
     var filters = this.state.filters;
-    filters['Range'] = range;
+    filters['Projects'] = value;
      this.setState({filters}, () => {
          this.refreshPage(1);
      })
@@ -72,7 +71,10 @@ export default class NPSection extends React.Component {
       activePage: 1,
       dataForPage : [],
       query : '',
+<<<<<<< HEAD
       sort_key: 'id',
+=======
+>>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
       sort: 'asc',
       filters: {}
     }, () => {
@@ -81,7 +83,11 @@ export default class NPSection extends React.Component {
   }
 
   refreshPage(page) {
+<<<<<<< HEAD
      axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?q=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
+=======
+     axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
+>>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
        const dataForPage = res.data.data.nonprofits
        const pages = res.data.pages
        this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -96,18 +102,31 @@ export default class NPSection extends React.Component {
       return(
       <div className="container justify-content-center">
           <Row className="mb-5">
-              <Col xs={1}>
+              <Col xs={2}>
+              <h1>Filters:</h1>
+              </Col>
+              <Col xs={2}>
                  <DropdownChoices onClick={this.onStateChange}
+<<<<<<< HEAD
                                   items={["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]}
                                   value={"State"}>
+=======
+                                  items={STATES}
+                                  value={"State"}
+                                  dropdownType={"state"}>
+>>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
                  </DropdownChoices>
               </Col>
-              <Col xs={1}>
-              </Col>
-              <Col xs={1}>
+              <Col xs={2}>
                  <DropdownChoices onClick={this.onRangeChange}
+<<<<<<< HEAD
                                  items={[0, 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10]}
                                  value={"Range"}>
+=======
+                                 items={["Yes","No"]}
+                                 value={"Has Events"}
+                                 dropdownType={"has_projects"}>
+>>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
                  </DropdownChoices>
               </Col>
              <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
@@ -126,7 +145,7 @@ export default class NPSection extends React.Component {
                         src={model.logo}
                         className="card-img-top"
                         alt="Card image" />
-                        <CardHeader style={{minHeight: "10vh"}}><a href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
+                        <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
                         <CardBody className="block-with-text">
                           <CardText className="pt-2">
                              Address: {model.address}

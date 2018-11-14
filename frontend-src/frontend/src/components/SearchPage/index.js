@@ -23,12 +23,12 @@ export default class SearchPage extends React.Component {
            <Row className="mb-5">
               <Col xs={3}>
                  <form className="form-inline">
-                  <input className="form-control mr-md-2" type="search" placeholder="Search..." aria-label="Search"
+                  <input id="search_bar" className="form-control mr-md-2" type="search" placeholder="Search..." aria-label="Search"
                           ref={input => this.search = input}/>
                  </form>
               </Col>
               <Col>
-               <Button onClick={this.handleInputChange}>Submit</Button>
+               <Button id="submit_button" onClick={this.handleInputChange}>Submit</Button>
               </Col>
            </Row>
         </Container>

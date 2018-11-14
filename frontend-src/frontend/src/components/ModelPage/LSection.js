@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { BASE_API_URL } from './../constants.jsx';
+import { BASE_API_URL, STATES } from './../constants.jsx';
 import Pagination from "./../Pagination";
-import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
+import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader, Container} from 'reactstrap'
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
 
@@ -75,7 +75,7 @@ export default class LSection extends React.Component {
   }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
         const dataForPage = res.data.data.locations
         const pages = res.data.pages
         this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -90,12 +90,27 @@ export default class LSection extends React.Component {
       return(
          <div className="container justify-content-center">
             <Row className="mb-5">
+<<<<<<< HEAD
                 <Col xs={1}>
                    <DropdownChoices onClick={this.onStateChange}
                                     items={["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]}
                                     value={"State"}>
                    </DropdownChoices>
                 </Col>
+=======
+               <Container className="justify-content-center">
+                  <Row>
+                     <Col xs={2}>
+                        <h1>Filters:</h1>
+                     </Col>
+                     <DropdownChoices onClick={this.onStateChange}
+                                      items={STATES}
+                                      value={"State"}
+                                      dropdownType={"state"}>
+                     </DropdownChoices>
+                  </Row>
+               </Container>
+>>>>>>> 71be18b8d66a0635fa050d9d494692d525ab14cc
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'city'}
                           sort_keys={['city', 'state']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'city'}
@@ -112,7 +127,7 @@ export default class LSection extends React.Component {
                           src={model.image}
                           className="card-img-top"
                           alt="Card image" />
-                          <CardHeader style={{minHeight: "10vh"}}><a href={"/location/" + model.id} >{model.name}</a></CardHeader>
+                          <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/location/" + model.id} >{model.name}</a></CardHeader>
                           <CardBody className="block-with-text">
                              <CardText className="pt-2">
                                City: {model.city}
