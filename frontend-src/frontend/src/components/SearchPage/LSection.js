@@ -70,7 +70,7 @@ class LSection extends React.Component {
                            src={model.image}
                            className="card-img-top"
                            alt="Card image" />
-                           <CardHeader style={{minHeight: "10vh"}}><a href={"/location/" + model.id} >{model.name}</a></CardHeader>
+                           <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/location/" + model.id} >{model.name}</a></CardHeader>
                            <CardBody className="block-with-text">
                              <CardText className="pt-2">
                                 City: {model.city}

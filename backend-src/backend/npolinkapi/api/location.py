@@ -9,7 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 # Import module models (i.e. User)
 from npolinkapi.api.models import Location, Category, Nonprofit
- 
+
 import json
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
@@ -101,7 +101,7 @@ def search(page=1):
             location_filters = and_(*filter_queries)
     except Exception as e:
         return "Error in constructing queries" + str(e)
-        
+
     try:
         #Apply queries
         locations = Location.query.filter(and_(location_filters,location_search_queries ))
@@ -128,7 +128,8 @@ def search(page=1):
 
     #output formatting
     try:
-        locations = locations.paginate(page,3,error_out=False)
+        page_size = int(request.args.get("page_size", default=3))
+        locations = locations.paginate(page,page_size,error_out=False)
     except Exception as e:
         return "Error in paginating" + str(e)
 

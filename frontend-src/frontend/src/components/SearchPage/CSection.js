@@ -69,7 +69,7 @@ class CSection extends React.Component {
                           src={model.image}
                           className="card-img-top"
                           alt="Card image" />
-                          <CardHeader style={{minHeight: "10vh"}}><a href={"/category/" + model.id} >{model.name}</a></CardHeader>
+                          <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/category/" + model.id} >{model.name}</a></CardHeader>
                           <CardBody className="block-with-text">
                             <CardText className="pt-2">
                                Category Code: {model.code}

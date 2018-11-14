@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 const propTypes = {
     onClick: PropTypes.func.isRequired,
     items: PropTypes.array.isRequired,
-    value: PropTypes.string.isRequired
+    value: PropTypes.string.isRequired,
+    dropdownType: PropTypes.string.isRequired
 }
 
 class DropdownChoices extends React.Component {
@@ -38,14 +39,14 @@ class DropdownChoices extends React.Component {
   render() {
     return (
       <Col>
-         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+         <Dropdown id={this.props.dropdownType + "_dropdown"} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
            <DropdownToggle caret>
-             {this.state.value}
+             {this.props.value}
            </DropdownToggle>
-           <DropdownMenu>
+           <DropdownMenu className="scrollable-menu">
             {
                this.props.items.map((item) => (
-                  <DropdownItem key={item} onClick={this.select }>{item}</DropdownItem>
+                  <DropdownItem id={"selection_" + item} key={item} onClick={this.select }>{item}</DropdownItem>
                ))
             }
            </DropdownMenu>

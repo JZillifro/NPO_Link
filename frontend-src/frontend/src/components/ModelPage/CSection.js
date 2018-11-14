@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { BASE_API_URL } from './../constants.jsx';
+import { BASE_API_URL, CAT_CODES } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col, CardHeader } from 'reactstrap'
 import SearchBar from './../SearchBar'
@@ -69,18 +69,19 @@ export default class CSection extends React.Component {
 
    resetPage() {
       this.setState({
-       activePage: 1,
-       dataForPage : [],
-       query : '',
-       sort_key: 'id',
-       sort: 'asc'
+      activePage: 1,
+      dataForPage : [],
+      query : '',
+      sort_key: 'name',
+      sort: 'asc',
+      filters: {}
      }, () => {
         this.refreshPage(1);
      })
    }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/categories/${page}?q=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/categories/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
         const dataForPage = res.data.data.categories
         const pages = res.data.pages
         this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -95,18 +96,21 @@ export default class CSection extends React.Component {
       return(
          <div className="container justify-content-center">
              <Row className="mb-5">
-               <Col xs={1}>
+               <Col xs={2}>
+               <h1>Filters:</h1>
+               </Col>
+               <Col xs={2}>
                   <DropdownChoices onClick={this.onParentCodeChange}
-                                   items={["H", "G", "F"]}
-                                   value={"Parent Code"}>
+                                   items={CAT_CODES}
+                                   value={"Parent Code"}
+                                   dropdownType={"category"}>
                   </DropdownChoices>
                </Col>
-               <Col xs={1}>
-               </Col>
-               <Col xs={1}>
+               <Col xs={2}>
                   <DropdownChoices onClick={this.onHasNonprofitChange}
                                   items={["Yes","No"]}
-                                  value={"Nonprofits"}>
+                                  value={"Has Nonprofit Data"}
+                                  dropdownType={"has_nonprofits"}>
                   </DropdownChoices>
                </Col>
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
@@ -124,7 +128,7 @@ export default class CSection extends React.Component {
                           src={model.image}
                           className="card-img-top"
                           alt="Card image" />
-                          <CardHeader style={{minHeight: "10vh"}}><a href={"/category/" + model.id} >{model.name}</a></CardHeader>
+                          <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/category/" + model.id} >{model.name}</a></CardHeader>
                           <CardBody className="block-with-text">
                             <CardText className="pt-2">
                                Category Code: {model.code}

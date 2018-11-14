@@ -104,7 +104,7 @@ class About extends Component {
                 <CardText className="pt-2">
                      issues: {this.state.issues.length}<br/>
                      commits: {this.state.commits}<br/>
-                     unit tests: 0
+                     unit tests: 90
                 </CardText>
                 </CardBody>
              </Card>

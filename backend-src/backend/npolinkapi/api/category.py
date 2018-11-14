@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 
 # Import the database object from the main app module
 from npolinkapi import db
-from sqlalchemy import inspect, or_, and_ 
+from sqlalchemy import inspect, or_, and_
 from sqlalchemy.orm import load_only
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -71,16 +71,16 @@ def search(page=1):
             if "Parent_code" in filters:
                 filter_queries.append(Category.parent_category.like(filters["Parent_code"]))
             if "Has_nonprofits" in filters:
-                if filters["Has_nonprofits"]:
+                if filters["range"]:
                     filter_queries.append(Category.nonprofit_amount >= filters["Has_nonprofits"])
 
             category_filters = and_(*filter_queries)
     except Exception as e:
         return "Error in constructing queries" + str(e)
-        
+
     try:
         #Apply queries
-        categories = Category.query.filter(and_(category_filters,category_search_queries ))
+        categories = Category.query.filter(and_(category_filters,category_search_queries))
         sort = request.args.get('sort', 'asc')
 
         if sort == 'asc':
@@ -94,7 +94,8 @@ def search(page=1):
 
     #output formatting
     try:
-        categories = categories.paginate(page,3,error_out=False)
+        page_size = int(request.args.get("page_size", default=3))
+        categories = categories.paginate(page,page_size,error_out=False)
     except Exception as e:
         return "Error in paginating" + str(e)
 

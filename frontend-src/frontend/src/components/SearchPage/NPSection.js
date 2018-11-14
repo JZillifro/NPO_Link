@@ -70,7 +70,7 @@ class NPSection extends React.Component {
                          src={model.logo}
                          className="card-img-top"
                          alt="Card image" />
-                         <CardHeader style={{minHeight: "10vh"}}><a href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
+                         <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
                          <CardBody className="block-with-text">
                            <CardText className="pt-2">
                              Address: {model.address}

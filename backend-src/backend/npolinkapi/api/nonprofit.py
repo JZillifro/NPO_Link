@@ -65,7 +65,8 @@ def search(page=1):
 
              )
         nonprofit_filters = True
-        if filters is not None and len(filters):
+        loc_ids = None
+        if filters is not None and len(filters.keys()):
             filter_queries = []
             #Filter by all provided filters
             #Filters are State, Range
@@ -78,7 +79,7 @@ def search(page=1):
             nonprofit_filters = and_(*filter_queries)
     except Exception as e:
         return "Error in constructing queries" + str(e)
-        
+
     try:
         #Apply queries
         nonprofits = Nonprofit.query.join(Location).filter(and_(nonprofit_filters,nonprofit_search_queries ))
@@ -96,7 +97,8 @@ def search(page=1):
 
     #output formatting
     try:
-        nonprofits = nonprofits.paginate(page,3,error_out=False)
+        page_size = int(request.args.get("page_size", default=3))
+        nonprofits = nonprofits.paginate(page,page_size,error_out=False)
     except Exception as e:
         return "Error in paginating" + str(e)
 
