@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { BASE_API_URL } from './../constants.jsx';
+import { BASE_API_URL, STATES } from './../constants.jsx';
 import Pagination from "./../Pagination";
-import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
+import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader, Container} from 'reactstrap'
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
 
@@ -89,12 +89,18 @@ export default class LSection extends React.Component {
       return(
          <div className="container justify-content-center">
             <Row className="mb-5">
-                <Col xs={1}>
-                   <DropdownChoices onClick={this.onStateChange}
-                                    items={["TX", "OK"]}
-                                    value={"State"}>
-                   </DropdownChoices>
-                </Col>
+               <Container className="justify-content-center">
+                  <Row>
+                     <Col xs={2}>
+                        <h1>Filters:</h1>
+                     </Col>
+                     <DropdownChoices onClick={this.onStateChange}
+                                      items={STATES}
+                                      value={"State"}
+                                      dropdownType={"state"}>
+                     </DropdownChoices>
+                  </Row>
+               </Container>
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'city'}
                           sort_keys={['city', 'state']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'city'}

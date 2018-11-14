@@ -41,9 +41,9 @@ class DropdownChoices extends React.Component {
       <Col>
          <Dropdown id={this.props.dropdownType + "_dropdown"} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
            <DropdownToggle caret>
-             {this.state.value}
+             {this.props.value}
            </DropdownToggle>
-           <DropdownMenu>
+           <DropdownMenu className="scrollable-menu">
             {
                this.props.items.map((item) => (
                   <DropdownItem id={"selection_" + item} key={item} onClick={this.select }>{item}</DropdownItem>

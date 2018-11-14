@@ -65,22 +65,20 @@ def search(page=1):
 
              )
         nonprofit_filters = True
-        if filters is not None and len(filters):
+        loc_ids = None
+        if filters is not None and len(filters.keys()):
             filter_queries = []
             #Filter by all provided filters
             #Filters are State, Range
             if "State" in filters:
                 filter_queries.append(Location.state.like(str(filters["State"])))
-            if "Range" in filters:
-                if filters["Range"]:
-                    filter_queries.append(Nonprofit.num_projects >= filters["Range"])
-                else:
+            if "Projects" in filters and filters["Projects"] == "Yes":
                     filter_queries.append(Nonprofit.num_projects.isnot(None))
 
             nonprofit_filters = and_(*filter_queries)
     except Exception as e:
         return "Error in constructing queries" + str(e)
-        
+
     try:
         #Apply queries
         nonprofits = Nonprofit.query.join(Location).filter(and_(nonprofit_filters,nonprofit_search_queries ))

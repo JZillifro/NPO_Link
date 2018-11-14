@@ -82,6 +82,7 @@ class SearchBar extends Component {
       <Container className="mb-5 justify-content-center">
          <Row className="mb-5">
             <Col xs={2}>
+            <h1>Search:</h1>
             </Col>
             <Col xs={2}>
                <Button onClick={this.resetPage}>Reset</Button>
@@ -92,17 +93,13 @@ class SearchBar extends Component {
                         ref={input => this.search = input} onChange={this.handleInputChange}/>
                </form>
             </Col>
-            <Col xs={1}>
-               <DropdownChoices onClick={this.onSortKeyChange}
-                                items={this.props.sort_keys}
-                                value={this.props.initialSortValue}
-                                dropdownType={"sort_key"}>
-               </DropdownChoices>
+            <Col xs={2}>
+            <h1>Sort:</h1>
             </Col>
-            <Col xs={1}>
+            <Col xs={2}>
                <DropdownChoices onClick={this.onSortValueChange}
                                 items={['asc', 'desc']}
-                                value={'asc'}
+                                value={"Sort"}
                                 dropdownType={"selection"}>
                </DropdownChoices>
             </Col>
