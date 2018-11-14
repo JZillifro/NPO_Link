@@ -4,6 +4,7 @@ import axios from 'axios';
 import { BASE_API_URL } from './../constants.jsx';
 import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col, CardHeader } from 'reactstrap'
+import Highlight from "react-highlighter";
 
 const propTypes = {
     query: PropTypes.string.isRequired
@@ -73,13 +74,16 @@ class NPSection extends React.Component {
                          <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
                          <CardBody className="block-with-text">
                            <CardText className="pt-2">
-                             Address: {model.address}
+                             Address:
+                             <Highlight search={this.state.query}>{model.address}</Highlight>
                            </CardText>
                            <CardText className="pt-2">
-                             EIN: {model.ein}
+                             EIN:
+                             <Highlight search={this.state.query}>{model.ein}</Highlight>
                            </CardText>
                            <CardText className="pt-2">
-                             Description: {model.description}
+                             Description:
+                             <Highlight search={this.state.query}>{model.description}</Highlight>
                            </CardText>
                          </CardBody>
                      </Card>

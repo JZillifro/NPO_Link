@@ -5,6 +5,7 @@ import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader, Container} from 'reactstrap'
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
+import Highlight from "react-highlighter";
 
 export default class LSection extends React.Component {
    constructor(props) {
@@ -115,13 +116,16 @@ export default class LSection extends React.Component {
                           <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/location/" + model.id} >{model.name}</a></CardHeader>
                           <CardBody className="block-with-text">
                              <CardText className="pt-2">
-                               City: {model.city}
+                               City:
+                               <Highlight search={this.state.query}>{model.city}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
-                               State: {model.state}
+                               State:
+                               <Highlight search={this.state.query}>{model.state}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
-                               Description: {model.description}
+                               Description:
+                               <Highlight search={this.state.query}>{model.description}</Highlight>
                             </CardText>
                           </CardBody>
                       </Card>
