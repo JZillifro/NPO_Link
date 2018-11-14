@@ -3,7 +3,7 @@
    "containerDefinitions": [{
       "essential": true,
       "memory": 256,
-      "image": "gerardomares/npolink:backend",
+      "image": "gerardomares/npolink:backend-prod",
       "environment": [
         {
           "name": "FLASK_ENV",
