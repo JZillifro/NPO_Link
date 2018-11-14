@@ -101,14 +101,18 @@ export default class NPSection extends React.Component {
               </Col>
               <Col xs={2}>
                  <DropdownChoices onClick={this.onStateChange}
-                                  items={["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]}
-                                  value={"State"}>
+                                  items={STATES}
+                                  value={"State"}
+                                  dropdownType={"state"}>
+
                  </DropdownChoices>
               </Col>
               <Col xs={2}>
                  <DropdownChoices onClick={this.onRangeChange}
-                                 items={[0, 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10]}
-                                 value={"Range"}>
+                                  items={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+                                  value={"Num. Events"}
+                                  dropdownType={"num_projects"}>
+
                  </DropdownChoices>
               </Col>
              <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}

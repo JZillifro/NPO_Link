@@ -57,6 +57,33 @@ class TestLocationService(BaseTestCase):
         location = data['data']['location']
         self.assertEqual(1, location['id'])
 
+    def test_search_location(self):
+        """Ensure the /locations/search/?search_words=words route behaves."""
+        query = "FBI" #Should occur in Austin, TX description
+        response = self.client.get('/v1.0/locations/search/1?search_words=' + query)
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('success',data['status'])
+        locations = data['data']['locations']
+        #searches name, state,city, description
+        for location in locations:
+            self.assertEqual(query in location['name'] 
+            or query in location['state'] 
+            or query in location['city']
+            or query in location['description'],
+            True
+            )
+    
+    def test_search_location_filter(self):
+        """Ensure the /locations/search/?filters={} route behaves."""
+        response = self.client.get('/v1.0/locations/search/1?filters={"State":"TX"}')
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('success',data['status'])
+        locations = data['data']['locations']
+        for location in locations:
+            self.assertEqual(location["state"],"TX")
+ 
     def test_get_location_bad_input(self):
         """ Ensure the /locations/location/<location_id> route behaves correctly on
             bad user input.

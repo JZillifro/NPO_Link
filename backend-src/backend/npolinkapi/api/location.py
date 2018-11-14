@@ -41,6 +41,7 @@ def get_all_locations():
 def search(page=1):
     #Parse args
     search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
+    search_key = request.args.get("search_key", default=None)
     try:
         if search_words is not None:
             search_words = search_words.split(" ")
@@ -52,24 +53,42 @@ def search(page=1):
         location_search_queries = True
         if search_words is not None and len(search_words):
             #for all query terms search name, descrption and address
-            location_search_queries = or_(
-            *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-            *[Location.name.ilike(      str(x) + '%') for x in search_words],
-            *[Location.name.ilike('%' + str(x)      ) for x in search_words],
+            if search_key is None:
+                location_search_queries = or_(
+                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.name.ilike(      str(x) + '%') for x in search_words],
+                *[Location.name.ilike('%' + str(x)      ) for x in search_words],
 
-            *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
-            *[Location.city.ilike(      str(x) + '%') for x in search_words],
-            *[Location.city.ilike('%' + str(x)      ) for x in search_words],
+                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.city.ilike(      str(x) + '%') for x in search_words],
+                *[Location.city.ilike('%' + str(x)      ) for x in search_words],
 
-            *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
-            *[Location.description.ilike(      str(x) + '%') for x in search_words],
-            *[Location.description.ilike('%' + str(x)      ) for x in search_words],
+                *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.description.ilike(      str(x) + '%') for x in search_words],
+                *[Location.description.ilike('%' + str(x)      ) for x in search_words],
 
-            *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
-            *[Location.state.ilike(      str(x) + '%') for x in search_words],
-            *[Location.state.ilike('%' + str(x)      ) for x in search_words]
+                *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
+                *[Location.state.ilike(      str(x) + '%') for x in search_words],
+                *[Location.state.ilike('%' + str(x)      ) for x in search_words]
 
-            )
+                )
+            elif search_key is not None:
+                if search_key == 'city':
+                    search_column = Location.city
+                elif search_key == 'state':
+                    search_column = Location.state
+                elif search_key == 'desc':
+                    search_column = Location.description
+                else:
+                    search_column = Location.name
+                location_search_queries = or_(
+                    *[search_column.ilike('%' + str(x) + '%') for x in search_words],
+                    *[search_column.ilike(      str(x) + '%') for x in search_words],
+                    *[search_column.ilike('%' + str(x)      ) for x in search_words]
+                )
+
+
+
         location_filters = True
         if filters is not None and len(filters):
             filter_queries = []
@@ -88,11 +107,20 @@ def search(page=1):
         locations = Location.query.filter(and_(location_filters,location_search_queries ))
         #Sort results
         sort = request.args.get('sort', 'asc')
+        sort_key = request.args.get('sort_key', 'name')
+        if sort_key == 'city':
+            sort_column = Location.city
+        elif sort_key == 'state':
+            sort_column = Location.state
+        elif sort_key == 'id':
+            sort_column = Location.id
+        else:
+            sort_column = Location.name
 
         if sort == 'asc':
-            locations = locations.order_by(Location.name.asc())
+            locations = locations.order_by(sort_column.asc())
         else:
-            locations = locations.order_by(Location.name.desc())
+            locations = locations.order_by(sort_column.desc())
 
 
     except Exception as e:

@@ -39,6 +39,8 @@ def get_all_nonprofits():
 def search(page=1):
     #Parse args
     search_words,filters = request.args.get("search_words", default=None), request.args.get("filters", default = "{}")
+    search_key = request.args.get('search_key', default = None)
+
     try:
         if search_words is not None:
             search_words = search_words.split(" ")
@@ -49,31 +51,48 @@ def search(page=1):
     try:
         nonprofit_search_queries = True
         if search_words is not None and len(search_words):
-            #for all query terms search name, descrption and address
-            nonprofit_search_queries = or_(
-            *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
-            *[Nonprofit.name.ilike(      str(x) + '%') for x in search_words],
-            *[Nonprofit.name.ilike('%' + str(x)      ) for x in search_words],
+            if search_key is None:
+                #for all query terms search name, descrption and address
+                nonprofit_search_queries = or_(
+                *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
+                *[Nonprofit.name.ilike(      str(x) + '%') for x in search_words],
+                *[Nonprofit.name.ilike('%' + str(x)      ) for x in search_words],
 
-            *[Nonprofit.address.ilike('%' + str(x) + '%') for x in search_words],
-            *[Nonprofit.address.ilike(      str(x) + '%') for x in search_words],
-            *[Nonprofit.address.ilike('%' + str(x)      ) for x in search_words],
+                *[Nonprofit.address.ilike('%' + str(x) + '%') for x in search_words],
+                *[Nonprofit.address.ilike(      str(x) + '%') for x in search_words],
+                *[Nonprofit.address.ilike('%' + str(x)      ) for x in search_words],
 
-            *[Nonprofit.description.ilike('%' + str(x) + '%') for x in search_words],
-            *[Nonprofit.description.ilike(      str(x) + '%') for x in search_words],
-            *[Nonprofit.description.ilike('%' + str(x)      ) for x in search_words]
+                *[Nonprofit.description.ilike('%' + str(x) + '%') for x in search_words],
+                *[Nonprofit.description.ilike(      str(x) + '%') for x in search_words],
+                *[Nonprofit.description.ilike('%' + str(x)      ) for x in search_words]
 
-             )
+                )
+            else:
+                if search_key == 'name':
+                    search_column = Nonprofit.name
+                elif search_key == 'ein':
+                    search_column = Nonprofit.ein
+                elif search_key == 'desc':
+                    search_column = Nonprofit.description
+                else:
+                    search_column = Nonprofit.name
+                nonprofit_search_queries = or_(
+                *[search_column.ilike('%' + str(x) + '%') for x in search_words],
+                *[search_column.ilike(      str(x) + '%') for x in search_words],
+                *[search_column.ilike('%' + str(x)      ) for x in search_words]
+                )
+
+
         nonprofit_filters = True
-        loc_ids = None
         if filters is not None and len(filters.keys()):
             filter_queries = []
             #Filter by all provided filters
             #Filters are State, Range
             if "State" in filters:
                 filter_queries.append(Location.state.like(str(filters["State"])))
-            if "Projects" in filters and filters["Projects"] == "Yes":
-                    filter_queries.append(Nonprofit.num_projects.isnot(None))
+            if "Range" in filters:
+                if filters["Range"]:
+                    filter_queries.append(Nonprofit.num_projects >= filters["Range"])
 
             nonprofit_filters = and_(*filter_queries)
     except Exception as e:
@@ -84,11 +103,20 @@ def search(page=1):
         nonprofits = Nonprofit.query.join(Location).filter(and_(nonprofit_filters,nonprofit_search_queries ))
         #return str(nonprofits)
         sort = request.args.get('sort', 'asc')
+        sort_key = request.args.get('sort_key', 'name')
+
+        if sort_key == 'ein':
+            sort_column = Nonprofit.ein
+        elif sort_key == 'id':
+            sort_column = Nonprofit.id
+        else:
+            sort_column = Nonprofit.name
+
 
         if sort == 'asc':
-            nonprofits = nonprofits.order_by(Nonprofit.name.asc())
+            nonprofits = nonprofits.order_by(sort_column.asc())
         else:
-            nonprofits = nonprofits.order_by(Nonprofit.name.desc())
+            nonprofits = nonprofits.order_by(sort_column.desc())
 
 
     except Exception as e:

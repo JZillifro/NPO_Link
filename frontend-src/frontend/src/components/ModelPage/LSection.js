@@ -76,7 +76,7 @@ export default class LSection extends React.Component {
   }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/locations/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
         const dataForPage = res.data.data.locations
         const pages = res.data.pages
         this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -91,12 +91,19 @@ export default class LSection extends React.Component {
       return(
          <div className="container justify-content-center">
             <Row className="mb-5">
-                <Col xs={1}>
+               <Container className="justify-content-center">
+                  <Row>
+                   <Col xs={2}>
+                      <h1>Filters:</h1>
+                   </Col>
                    <DropdownChoices onClick={this.onStateChange}
-                                    items={["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]}
-                                    value={"State"}>
+                                    items={STATES}
+                                    value={"State"}
+                                    dropdownType={"state"}>
                    </DropdownChoices>
-                </Col>
+                  </Row>
+               </Container>
+
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'city'}
                           sort_keys={['city', 'state']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'city'}
