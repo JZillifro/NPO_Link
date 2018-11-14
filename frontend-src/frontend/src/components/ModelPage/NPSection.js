@@ -60,7 +60,7 @@ export default class NPSection extends React.Component {
 
   onRangeChange(value) {
     var filters = this.state.filters;
-    filters['Projects'] = value;
+    filters['Range'] = value;
      this.setState({filters}, () => {
          this.refreshPage(1);
      })
@@ -108,9 +108,9 @@ export default class NPSection extends React.Component {
               </Col>
               <Col xs={2}>
                  <DropdownChoices onClick={this.onRangeChange}
-                                  items={["Yes","No"]}
-                                  value={"Has Events"}
-                                  dropdownType={"has_projects"}>
+                                  items={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+                                  value={"Num. Events"}
+                                  dropdownType={"num_projects"}>
 
                  </DropdownChoices>
               </Col>
