@@ -56,6 +56,34 @@ class TestNonprofitService(BaseTestCase):
         nonprofit = data['data']['nonprofit']
         self.assertEqual(1, nonprofit['id'])
 
+    def test_search_nonprofit(self):
+        """Ensure the /nonprofits/search/?search_words=words route behaves."""
+        query = "help" 
+        response = self.client.get('/v1.0/nonprofits/search/1?search_words=' + query)
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('success',data['status'])
+        nonprofits = data['data']['nonprofits']
+        #searches name, address, description
+        for nonprofit in nonprofits:
+            self.assertEqual(query in nonprofit['name'] 
+            or query in nonprofit['address']
+            or query in nonprofit['description'],
+            True
+            )
+    
+    def test_search_nonprofit_filter(self):
+        """Ensure the /nonprofits/search/?filters={} route behaves."""
+        #Fiters by state(foreign key) and number of projects("Range")
+        response = self.client.get('/v1.0/nonprofits/search/1?filters={"Range":6}')
+        data = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('success',data['status'])
+        nonprofits = data['data']['nonprofits']
+        for nonprofit in nonprofits:
+            self.assertGreaterEqual(len(nonprofit["projects"]),6)
+ 
+
     def test_get_nonprofit_bad_input(self):
         """ Ensure the /nonprofits/nonprofit/<nonprofit_id> route behaves correctly on
             bad user input.
