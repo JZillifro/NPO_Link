@@ -71,8 +71,10 @@ def search(page=1):
             if "Parent_code" in filters:
                 filter_queries.append(Category.parent_category.like(filters["Parent_code"]))
             if "Has_nonprofits" in filters:
-                if filters["range"]:
+                if filters["Has_nonprofits"]:
                     filter_queries.append(Category.nonprofit_amount >= filters["Has_nonprofits"])
+                else:
+                    filter_queries.append(Category.nonprofit_amount <= filters["Has_nonprofits"])
 
             category_filters = and_(*filter_queries)
     except Exception as e:
