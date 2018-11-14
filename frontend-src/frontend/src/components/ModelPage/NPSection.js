@@ -5,6 +5,7 @@ import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactstrap'
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
+import Highlight from "react-highlighter";
 
 export default class NPSection extends React.Component {
   constructor(props) {
@@ -80,7 +81,7 @@ export default class NPSection extends React.Component {
   }
 
   refreshPage(page) {
-       axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
+     axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
        const dataForPage = res.data.data.nonprofits
        const pages = res.data.pages
        this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -133,13 +134,16 @@ export default class NPSection extends React.Component {
                         <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/nonprofit/" + model.id} >{model.name}</a></CardHeader>
                         <CardBody className="block-with-text">
                           <CardText className="pt-2">
-                             Address: {model.address}
+                             Address:
+                             <Highlight search={this.state.query}>{model.address}</Highlight>
                           </CardText>
                           <CardText className="pt-2">
-                             EIN: {model.ein}
+                             EIN:
+                             <Highlight search={this.state.query}>{model.ein}</Highlight>
                           </CardText>
                           <CardText className="pt-2">
-                             Description: {model.description}
+                             Description:
+                             <Highlight search={this.state.query}>{model.description}</Highlight>
                           </CardText>
                         </CardBody>
                     </Card>

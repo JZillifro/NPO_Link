@@ -5,6 +5,7 @@ import Pagination from "./../Pagination";
 import { Card, CardBody, CardImg, CardText, Row, Col, CardHeader } from 'reactstrap'
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
+import Highlight from "react-highlighter";
 
 export default class CSection extends React.Component {
    constructor(props) {
@@ -131,13 +132,16 @@ export default class CSection extends React.Component {
                           <CardHeader style={{minHeight: "10vh"}}><a id={model.name} href={"/category/" + model.id} >{model.name}</a></CardHeader>
                           <CardBody className="block-with-text">
                             <CardText className="pt-2">
-                               Category Code: {model.code}
+                               Category Code:
+                               <Highlight search={this.state.query}>{model.code}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
-                               Parent Code: {model.parent_category}
+                               Parent Code:
+                               <Highlight search={this.state.query}>{model.parent_category}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
-                               Description: {model.description}
+                               Description:
+                               <Highlight search={this.state.query}>{model.description}</Highlight>
                             </CardText>
                           </CardBody>
                       </Card>
