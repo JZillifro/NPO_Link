@@ -93,7 +93,8 @@ def search(page=1):
 
     #output formatting
     try:
-        categories = categories.paginate(page,3,error_out=False)
+        page_size = int(request.args.get("page_size", default=3))
+        categories = categories.paginate(page,page_size,error_out=False)
     except Exception as e:
         return "Error in paginating" + str(e)
 
