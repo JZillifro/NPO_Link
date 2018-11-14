@@ -73,8 +73,6 @@ def search(page=1):
             if "Has_nonprofits" in filters:
                 if filters["Has_nonprofits"]:
                     filter_queries.append(Category.nonprofit_amount >= filters["Has_nonprofits"])
-                else:
-                    filter_queries.append(Category.nonprofit_amount.isnot(None))
 
             category_filters = and_(*filter_queries)
     except Exception as e:
