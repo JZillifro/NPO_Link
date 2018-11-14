@@ -107,11 +107,20 @@ def search(page=1):
         locations = Location.query.filter(and_(location_filters,location_search_queries ))
         #Sort results
         sort = request.args.get('sort', 'asc')
+        sort_key = request.args.get('sort_key', 'name')
+        if sort_key == 'city':
+            sort_column = Location.city
+        elif sort_key == 'state':
+            sort_column = Location.state
+        elif sort_key == 'id':
+            sort_column = Location.id
+        else:
+            sort_column = Location.name
 
         if sort == 'asc':
-            locations = locations.order_by(Location.name.asc())
+            locations = locations.order_by(sort_column.asc())
         else:
-            locations = locations.order_by(Location.name.desc())
+            locations = locations.order_by(sort_column.desc())
 
 
     except Exception as e:
