@@ -94,7 +94,7 @@ export default class LSection extends React.Component {
 
            <div class="wrapper style2">
              <article id="main" class="container special" style={{backgroundColor: "white"}}>
-               <a href="#" class="image featured"><img src={Image} alt=""/></a>
+               <a href="#" class="image featured"><img src={Image} alt="" className="card-img-top"/></a>
              </article>
            </div>
 
