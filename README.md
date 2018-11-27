@@ -26,7 +26,10 @@ Phase 2
 Git SHA: aaaa1cc6d9bb231f7a8b03bf118ae813132b315e
 
 Phase 3
-Git SHA: 225b3859ccb47b4ff6ca0b08b122aa880f5c49b7 
+Git SHA: 225b3859ccb47b4ff6ca0b08b122aa880f5c49b7
+
+Phase 4
+Git SHA:
 
 GitLab Pipelines: https://gitlab.com/gerardomares/npolink/pipelines
 
@@ -39,4 +42,7 @@ Actual Completion Time Phase 2: 27 hours (team worked together for the hours)
 Estimated Completion Time Phase 3: 20 hours
 Actual Completion Time Phase 3: 18 hours (team worked together for the hours)
 
-Comments: N/A
+Estimated Completion Time Phase 4: 7 hours
+Actual Completion Time Phase 4: 7 hours (team worked together for the hours)
+
+Comments: Our api is linked at http://api.npolink.me (not https)
