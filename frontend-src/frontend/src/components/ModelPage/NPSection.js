@@ -6,6 +6,7 @@ import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactst
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
 import Highlight from "react-highlighter";
+import Image from "../../hands2.jpg"
 
 export default class NPSection extends React.Component {
   constructor(props) {
@@ -99,7 +100,7 @@ export default class NPSection extends React.Component {
           <div class="wrapper style2">
 
             <article id="main" class="container special" style={{backgroundColor: "white"}}>
-              <a href="#" class="image featured"><img src="images/pic06.jpg" alt=""/></a>
+              <a href="#" class="image featured"><img src={Image} alt=""/></a>
             </article>
 
           </div>
