@@ -6,6 +6,7 @@ import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader, Container} fr
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
 import Highlight from "react-highlighter";
+import Image from "../../map.jpg"
 
 export default class LSection extends React.Component {
    constructor(props) {
@@ -90,6 +91,13 @@ export default class LSection extends React.Component {
     if(this.state.dataForPage) {
       return(
          <div className="container justify-content-center">
+
+           <div class="wrapper style2">
+             <article id="main" class="container special" style={{backgroundColor: "white"}}>
+               <a href="#" class="image featured"><img src={Image} alt=""/></a>
+             </article>
+           </div>
+
             <Row className="mb-5">
                <Container className="justify-content-center">
                   <Row>

@@ -98,11 +98,9 @@ export default class NPSection extends React.Component {
       <div className="container justify-content-center">
 
           <div class="wrapper style2">
-
             <article id="main" class="container special" style={{backgroundColor: "white"}}>
               <a href="#" class="image featured"><img src={Image} alt=""/></a>
             </article>
-
           </div>
 
           <Row className="mb-5">
