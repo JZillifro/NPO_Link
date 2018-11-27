@@ -6,6 +6,7 @@ import { Card, CardBody, CardImg, CardText, Row, Col, CardHeader } from 'reactst
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
 import Highlight from "react-highlighter";
+import Image from "../../paint.jpg";
 
 export default class CSection extends React.Component {
    constructor(props) {
@@ -94,6 +95,13 @@ export default class CSection extends React.Component {
     if(this.state.dataForPage) {
       return(
          <div className="container justify-content-center">
+
+             <div class="wrapper style2">
+               <article id="main" class="container special" style={{backgroundColor: "white"}}>
+                 <a href="#" class="image featured"><img src={Image} alt="" style={{width: "50%"}}/></a>
+               </article>
+             </div>
+
              <Row className="mb-5">
                <Col xs={2}>
                <h1>Filters:</h1>

@@ -6,7 +6,7 @@ import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactst
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
 import Highlight from "react-highlighter";
-import Image from "../../hands2.jpg"
+import Image from "../../hands2.jpg";
 
 export default class NPSection extends React.Component {
   constructor(props) {

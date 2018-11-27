@@ -6,7 +6,7 @@ import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader, Container} fr
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
 import Highlight from "react-highlighter";
-import Image from "../../map.jpg"
+import Image from "../../map.jpg";
 
 export default class LSection extends React.Component {
    constructor(props) {
