@@ -48,26 +48,25 @@ def search(page=1):
         return "Error parsing args" + str(e)
 
     try:
+        #default values to search for
         category_search_queries = True
+        attributes_to_search = [Category.name, Category.code, Category.description]
+        #Any search terms given
         if search_words is not None and len(search_words):
+            #Search all available attributes
             if search_key is None:
+                #construct queries
                 #for all query terms search name, descrption and address
-                #can do as double nested list comp. *[search_col.ilike(x) for x in search_words for search_col in search_col_list]
                 category_search_queries = or_(
-                *[Category.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Category.name.ilike(      str(x) + '%') for x in search_words],
-                *[Category.name.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Category.code.ilike('%' + str(x) + '%') for x in search_words],
-                *[Category.code.ilike(      str(x) + '%') for x in search_words],
-                *[Category.code.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Category.description.ilike('%' + str(x) + '%') for x in search_words],
-                *[Category.description.ilike(      str(x) + '%') for x in search_words],
-                *[Category.description.ilike('%' + str(x)      ) for x in search_words]
+                    *[attr.ilike('%' + str(x) + '%') for x in search_words for attr in attributes_to_search],
+                    *[attr.ilike(      str(x) + '%') for x in search_words for attr in attributes_to_search],
+                    *[attr.ilike('%' + str(x)      ) for x in search_words for attr in attributes_to_search]
 
                 )
+            #Search only one attribute
             else:
+                #Determine the attribute to search
+                #Default to name
                 if search_key == 'name':
                     search_column = Category.name
                 elif search_key == 'code':
@@ -78,6 +77,7 @@ def search(page=1):
                     search_column = Category.description
                 else:
                     search_column = Category.name
+                #Constrcut queries for attribute to search
                 category_search_queries = or_(
                 *[search_column.ilike('%' + str(x) + '%') for x in search_words],
                 *[search_column.ilike(      str(x) + '%') for x in search_words],
@@ -86,6 +86,7 @@ def search(page=1):
 
 
         category_filters = True
+        #If a filter is specified
         if filters is not None and len(filters):
             filter_queries = []
             #Filter by all provided filters
@@ -104,8 +105,10 @@ def search(page=1):
     try:
         #Apply queries
         categories = Category.query.filter(and_(category_filters,category_search_queries))
+        #Determine arguments for sorting
         sort = request.args.get('sort', 'asc')
         sort_key = request.args.get('sort_key', 'name')
+        #Determine attribute to sort by
         if sort_key == 'code':
             sort_column = Category.code
         elif sort_key == 'id':
@@ -113,7 +116,7 @@ def search(page=1):
         else:
             sort_column = Category.name
 
-
+        #Determine and apply sorting method
         if sort == 'asc':
             categories = categories.order_by(sort_column.asc())
         else:

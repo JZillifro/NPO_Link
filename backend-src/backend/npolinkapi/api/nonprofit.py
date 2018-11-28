@@ -49,24 +49,21 @@ def search(page=1):
         return "Error parsing args" + str(e)
 
     try:
+        #default, dont search
         nonprofit_search_queries = True
+        #determine if search parameters are provided
         if search_words is not None and len(search_words):
+            attributes_to_search = [Nonprofit.name, Nonprofit.address, Nonprofit.description]
+            # No specific attribute to search provided, Search all attributes
             if search_key is None:
                 #for all query terms search name, descrption and address
                 nonprofit_search_queries = or_(
-                *[Nonprofit.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Nonprofit.name.ilike(      str(x) + '%') for x in search_words],
-                *[Nonprofit.name.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Nonprofit.address.ilike('%' + str(x) + '%') for x in search_words],
-                *[Nonprofit.address.ilike(      str(x) + '%') for x in search_words],
-                *[Nonprofit.address.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Nonprofit.description.ilike('%' + str(x) + '%') for x in search_words],
-                *[Nonprofit.description.ilike(      str(x) + '%') for x in search_words],
-                *[Nonprofit.description.ilike('%' + str(x)      ) for x in search_words]
+                    *[attr.ilike('%' + str(x) + '%') for x in search_words for attr in attributes_to_search],
+                    *[attr.ilike(      str(x) + '%') for x in search_words for attr in attributes_to_search],
+                    *[attr.ilike('%' + str(x)      ) for x in search_words for attr in attributes_to_search]
 
                 )
+            #specific attribute to search provided
             else:
                 if search_key == 'name':
                     search_column = Nonprofit.name
@@ -76,6 +73,7 @@ def search(page=1):
                     search_column = Nonprofit.description
                 else:
                     search_column = Nonprofit.name
+                #construct query
                 nonprofit_search_queries = or_(
                 *[search_column.ilike('%' + str(x) + '%') for x in search_words],
                 *[search_column.ilike(      str(x) + '%') for x in search_words],

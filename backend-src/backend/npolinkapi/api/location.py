@@ -50,28 +50,22 @@ def search(page=1):
         return "Error parsing args" + str(e)
 
     try:
+        #defaults to not searching
         location_search_queries = True
+        #IF weards to search provided
         if search_words is not None and len(search_words):
             #for all query terms search name, descrption and address
+            #Search all attributes
             if search_key is None:
+                #attributes to search
+                attributes_to_search = [Location.name, Location.city, Location.description, Location.state]
+                #construct queries
                 location_search_queries = or_(
-                *[Location.name.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.name.ilike(      str(x) + '%') for x in search_words],
-                *[Location.name.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Location.city.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.city.ilike(      str(x) + '%') for x in search_words],
-                *[Location.city.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Location.description.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.description.ilike(      str(x) + '%') for x in search_words],
-                *[Location.description.ilike('%' + str(x)      ) for x in search_words],
-
-                *[Location.state.ilike('%' + str(x) + '%') for x in search_words],
-                *[Location.state.ilike(      str(x) + '%') for x in search_words],
-                *[Location.state.ilike('%' + str(x)      ) for x in search_words]
-
+                    *[attr.ilike('%' + str(x) + '%') for x in search_words for attr in attributes_to_search],
+                    *[attr.ilike(      str(x) + '%') for x in search_words for attr in attributes_to_search],
+                    *[attr.ilike('%' + str(x)      ) for x in search_words for attr in attributes_to_search]
                 )
+            #Search only indicated attribute
             elif search_key is not None:
                 if search_key == 'city':
                     search_column = Location.city
@@ -81,6 +75,7 @@ def search(page=1):
                     search_column = Location.description
                 else:
                     search_column = Location.name
+                #construct query
                 location_search_queries = or_(
                     *[search_column.ilike('%' + str(x) + '%') for x in search_words],
                     *[search_column.ilike(      str(x) + '%') for x in search_words],
@@ -145,6 +140,7 @@ def search(page=1):
     }
     return jsonify(paged_response_object), 200
 
+'''
 #Deprecated, please don't use
 @locations_blueprint.route('/filter/<int:page>', methods=['GET'])
 def filter(page=1):
@@ -185,6 +181,7 @@ def filter(page=1):
         }
         return jsonify(paged_response_object), 200
     return "error, no args"
+'''
 
 
 @locations_blueprint.route('/<int:page>',methods=['GET'])
