@@ -117,6 +117,9 @@ class About extends Component {
                 <CardText className="pt-2">
                      <a href="https://gitlab.com/gerardomares/npolink">GitLab Repository</a>
                 </CardText>
+                <CardText className="pt-2">
+                     <a href="/visuals/all">Visualizations</a>
+                </CardText>
                 </CardBody>
              </Card>
              <Card>
