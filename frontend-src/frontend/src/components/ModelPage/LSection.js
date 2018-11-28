@@ -92,11 +92,12 @@ export default class LSection extends React.Component {
       return(
          <div className="container justify-content-center">
 
-           <div class="wrapper style2">
-             <article id="main" class="container special" style={{backgroundColor: "white"}}>
-               <a href="#" class="image featured"><img src={Image} alt="" className="card-img-top"/></a>
-             </article>
-           </div>
+         <div class="wrapper style2">
+           <article id="main" class="container special" style={{backgroundColor: "white"}}>
+             <div className="image featured titleimage" style={{position:"relative", textAlign:"center"}}><img src={Image} alt="" className="card-img-top"/><h1 style={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%, -50%)", color:"white", fontSize:"1000%"}}>Locations</h1></div>
+             <header><h2>These are various cities which have nonprofit organizations.</h2></header>
+           </article>
+         </div>
 
             <Row className="mb-5">
                <Container className="justify-content-center">

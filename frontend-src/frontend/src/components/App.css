@@ -40,3 +40,10 @@
     max-height: 200px;
     overflow-x: hidden;
 }
+
+.titleimage {
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    )
+}
