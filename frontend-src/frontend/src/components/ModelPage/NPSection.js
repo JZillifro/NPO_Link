@@ -6,6 +6,7 @@ import { Card, CardBody, CardImg, CardText, Row, Col , CardHeader} from 'reactst
 import SearchBar from './../SearchBar'
 import DropdownChoices from './../Dropdown'
 import Highlight from "react-highlighter";
+import Image from "../../hands2.jpg";
 
 export default class NPSection extends React.Component {
   constructor(props) {
@@ -81,7 +82,7 @@ export default class NPSection extends React.Component {
   }
 
   refreshPage(page) {
-     axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}`).then(res => {
+     axios.get(`${BASE_API_URL}/v1.0/nonprofits/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
        const dataForPage = res.data.data.nonprofits
        const pages = res.data.pages
        this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -95,6 +96,13 @@ export default class NPSection extends React.Component {
     if(this.state.dataForPage) {
       return(
       <div className="container justify-content-center">
+
+          <div class="wrapper style2">
+            <article id="main" class="container special" style={{backgroundColor: "white"}}>
+              <a href="#" class="image featured"><img src={Image} alt="" className="card-img-top"/></a>
+            </article>
+          </div>
+
           <Row className="mb-5">
               <Col xs={2}>
               <h1>Filters:</h1>
