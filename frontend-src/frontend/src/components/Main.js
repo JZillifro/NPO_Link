@@ -7,6 +7,10 @@ import LocationPage from './LocationPage'
 import CategoryPage from './CategoryPage'
 import NonprofitPage from './NonprofitPage'
 import SearchPage from './SearchPage'
+import BarChart from './Visuals/BarChart'
+import HeatMap from './Visuals/HeatMap'
+import PieChart from './Visuals/PieChart'
+import Visuals from './Visuals'
 // The Main component renders one of the provided
 // Routes (provided that one matches).
 const Main = () => (
@@ -19,6 +23,10 @@ const Main = () => (
       <Route exact path='/category/:id' component={CategoryPage}/>
       <Route exact path='/nonprofit/:id' component={NonprofitPage}/>
       <Route exact path='/all/search' component={SearchPage}/>
+      <Route exact path='/visuals/visual1' component={BarChart}/>
+      <Route exact path='/visuals/visual2' component={HeatMap}/>
+      <Route exact path='/visuals/visual3' component={PieChart}/>
+      <Route exact path='/visuals/all' component={Visuals}/>
     </Switch>
   </main>
 )

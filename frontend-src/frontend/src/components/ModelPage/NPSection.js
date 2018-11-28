@@ -45,9 +45,8 @@ export default class NPSection extends React.Component {
      })
   }
 
-  onSortChange(sort_key, sort) {
-     console.log(sort)
-     this.setState({sort_key: sort_key, sort: sort }, () => {
+  onSortChange(sort) {
+     this.setState({sort: sort }, () => {
          this.refreshPage(1);
      })
   }
@@ -73,7 +72,6 @@ export default class NPSection extends React.Component {
       activePage: 1,
       dataForPage : [],
       query : '',
-      sort_key: 'id',
       sort: 'asc',
       filters: {}
     }, () => {
@@ -124,7 +122,6 @@ export default class NPSection extends React.Component {
                  </DropdownChoices>
               </Col>
              <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
-                        sort_keys={['name', 'ein']}
                         onSearchChange={this.onQueryChange} initialSearchValue={'name'}
                         resetPage={this.resetPage} />
           </Row>

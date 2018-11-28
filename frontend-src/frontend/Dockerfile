@@ -13,10 +13,7 @@ COPY . /usr/frontend
 
 CMD if [ ${APP_ENV} = production ]; \
 	then \
-	npm install -g http-server && \
-	npm run build && \
-	cd build && \
-	hs -p 3000; \
+	npm start; \
 	else \
 	npm start; \
 	fi

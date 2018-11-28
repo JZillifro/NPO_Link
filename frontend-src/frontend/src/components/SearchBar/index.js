@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import DropdownChoices from './../Dropdown'
 
 const propTypes = {
-    sort_keys: PropTypes.array.isRequired,
     initialSortValue: PropTypes.string.isRequired,
     initialSearchValue: PropTypes.string.isRequired,
     onSearchChange: PropTypes.func.isRequired,
@@ -22,17 +21,15 @@ class SearchBar extends Component {
 
     this.onSortChange = this.onSortChange.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
-    this.onSortKeyChange = this.onSortKeyChange.bind(this);
     this.onSortValueChange = this.onSortValueChange.bind(this);
     this.resetPage = this.resetPage.bind(this);
   }
 
-  onSortChange = (sort_key, sort) => {
+  onSortChange = (sort) => {
      this.setState({
-       sort_key: sort_key,
        sort: sort
      }, () => {
-         this.props.onSortChange(this.state.sort_key, this.state.sort);
+         this.props.onSortChange(this.state.sort);
      })
   }
 
@@ -44,19 +41,11 @@ class SearchBar extends Component {
      })
   }
 
-  onSortKeyChange = (sort_key) => {
-     this.setState({
-       sort_key: sort_key
-     }, () => {
-         this.props.onSortChange(this.state.sort_key, this.state.sort);
-     })
-  }
-
   onSortValueChange = (sort) => {
      this.setState({
        sort: sort
      }, () => {
-         this.props.onSortChange(this.state.sort_key, this.state.sort);
+         this.props.onSortChange(this.state.sort);
      })
   }
 

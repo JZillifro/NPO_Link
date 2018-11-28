@@ -16,7 +16,6 @@ export default class LSection extends React.Component {
        dataForPage : [],
        query : '',
        dropdownOpen: false,
-       sort_key: 'name',
        sort: 'asc',
        filters: {}
      }
@@ -34,7 +33,6 @@ export default class LSection extends React.Component {
        dataForPage : [],
        query : '',
        dropdownOpen: false,
-       sort_key: 'id',
        sort: 'asc',
        filters: {}
      }, () => {
@@ -69,9 +67,9 @@ export default class LSection extends React.Component {
      })
   }
 
-  onSortChange(sort_key, sort) {
+  onSortChange(sort) {
      console.log(sort)
-     this.setState({sort_key: sort_key, sort: sort }, () => {
+     this.setState({sort: sort }, () => {
          this.refreshPage(1);
      })
   }
@@ -113,7 +111,6 @@ export default class LSection extends React.Component {
                </Container>
 
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'city'}
-                          sort_keys={['city', 'state']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'city'}
                           resetPage={this.resetPage} />
             </Row>

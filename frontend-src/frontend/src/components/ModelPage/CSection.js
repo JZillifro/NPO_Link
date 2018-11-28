@@ -61,9 +61,8 @@ export default class CSection extends React.Component {
       })
    }
 
-   onSortChange(sort_key, sort) {
-      console.log(sort)
-      this.setState({sort_key: sort_key, sort: sort }, () => {
+   onSortChange(sort) {
+      this.setState({sort: sort }, () => {
           this.refreshPage(1);
       })
    }
@@ -81,7 +80,7 @@ export default class CSection extends React.Component {
    }
 
    refreshPage(page) {
-      axios.get(`${BASE_API_URL}/v1.0/categories/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&sort_key=${this.state.sort_key}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
+      axios.get(`${BASE_API_URL}/v1.0/categories/search/${page}?search_words=${this.state.query}&sort=${this.state.sort}&filters=${JSON.stringify(this.state.filters)}&page_size=12`).then(res => {
         const dataForPage = res.data.data.categories
         const pages = res.data.pages
         this.setState({dataForPage: dataForPage, activePage: page, totalPages: pages })
@@ -123,7 +122,6 @@ export default class CSection extends React.Component {
                   </DropdownChoices>
                </Col>
                <SearchBar onSortChange={this.onSortChange} initialSortValue={'name'}
-                          sort_keys={['name', 'code']}
                           onSearchChange={this.onQueryChange} initialSearchValue={'name'}
                           resetPage={this.resetPage} />
              </Row>
