@@ -62,12 +62,17 @@ class About extends Component {
       <div className="wrapper style1" style={{color: "rgb(43, 37, 44)"}}>
         <section id="features" className="container special">
           <header>
+            <br/>
             <h2>About</h2>
+            <br/>
+            <br/>
             <p>NPO Link aims to help you learn more about nonprofits in your area
                            and how you can contribute. We provide a way for you to search nonprofits based
                            on location and category as well as see what non-profits exist for various categories
                            and what non-profits exist in a location.</p>
           </header>
+          <br/>
+          <br/>
            <Row className="row justify-content-center text-center">
             {
               this.state.contributors.map((contributor) => (
@@ -116,6 +121,9 @@ class About extends Component {
                 </CardText>
                 <CardText className="pt-2">
                      <a href="https://gitlab.com/gerardomares/npolink">GitLab Repository</a>
+                </CardText>
+                <CardText className="pt-2">
+                     <a href="/visuals/all">Visualizations</a>
                 </CardText>
                 </CardBody>
              </Card>
