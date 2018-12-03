@@ -77,7 +77,7 @@ class PieChart extends PureComponent {
 
   render() {
     return (
-        <div className="container pt-5 mt-5">
+        <div className="container">
         <ReactD3PieChart data={this.state.data} tooltip renderLabel={this.renderLabel} />
         </div>
     );
