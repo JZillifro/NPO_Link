@@ -46,7 +46,7 @@ class HeatMap extends Component {
    }
 
   render(){
-    return (<div className="container justify-content-center mt-5 pt-5 mb-5"><svg width="1260" height="900" id="statesvg"></svg></div>);
+    return (<div className="container justify-content-center"><svg width="1260" height="900" id="statesvg"></svg></div>);
   }
 }
 

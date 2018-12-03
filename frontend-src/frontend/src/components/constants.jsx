@@ -67,11 +67,83 @@ var STATE_PATHS=[
 ];
 
 
+var OTHER_STATE_DATA = {
+ 'Arizona': 78/1615041,
+ 'California': 311/7279206,
+ 'Colorado': 84/693060,
+ 'District of Columbia': 84/681170,
+ 'Florida': 33/880623,
+ 'Illinois': 80/2704965,
+ 'Indiana': 59/852506,
+ 'Kentucky': 23/616261,
+ 'Maryland': 70/614664,
+ 'Massachusetts': 73/672840,
+ 'Michigan': 46/672829,
+ 'Nevada': 52/632916,
+ 'New York': 82/8537673,
+ 'North Carolina': 74/842029,
+ 'Ohio': 71/862643,
+ 'Oklahoma': 29/638311,
+ 'Oregon': 41/639635,
+ 'Pennsylvania': 71/1567872,
+ 'Tennessee': 76/1313145,
+ 'Texas': 338/7601706,
+ 'Washington': 70/704358
+}
+
+var FULL_NAME = [
+ 'Arizona',
+ 'California',
+ 'Colorado',
+ 'District of Columbia',
+ 'Florida',
+ 'Illinois',
+ 'Indiana',
+ 'Kentucky',
+ 'Maryland',
+ 'Massachusetts',
+ 'Michigan',
+ 'Nevada',
+ 'New York',
+ 'North Carolina',
+ 'Ohio',
+ 'Oklahoma',
+ 'Oregon',
+ 'Pennsylvania',
+ 'Tennessee',
+ 'Texas',
+ 'Washington'];
+
+ var ABBREVIATIONS = {
+  'Arizona' : 'AZ',
+  'California' : 'CA',
+  'Colorado': 'CO',
+  'District of Columbia': 'DC',
+  'Florida' :'FL',
+  'Illinois' : 'IL',
+  'Indiana': 'IN',
+  'Kentucky': 'KY',
+  'Maryland': 'MD',
+  'Massachusetts': 'MA',
+  'Michigan': 'MI',
+  'Nevada': 'NV',
+  'New York': 'NY',
+  'North Carolina': 'NC',
+  'Ohio': 'OH',
+  'Oklahoma': 'OK',
+  'Oregon': 'OR',
+  'Pennsylvania': 'PA',
+  'Tennessee': 'TN',
+  'Texas': 'TX',
+  'Washington': 'WA'};
 
 export {
  BASE_API_URL,
  STATES,
  CAT_CODES,
  STATE_PATHS,
- ALL_STATES
+ ALL_STATES,
+ OTHER_STATE_DATA,
+ ABBREVIATIONS,
+ FULL_NAME
 }

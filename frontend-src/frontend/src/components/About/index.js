@@ -125,6 +125,9 @@ class About extends Component {
                 <CardText className="pt-2">
                      <a href="/visuals/all">Visualizations</a>
                 </CardText>
+                <CardText className="pt-2">
+                    <a href="/visuals/providers">Provider Visualizations</a>
+              </CardText>
                 </CardBody>
              </Card>
              <Card>
