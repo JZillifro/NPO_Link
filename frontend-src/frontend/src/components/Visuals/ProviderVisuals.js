@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import OtherPieChart from './OtherPieChart'
 import Image from '../../diffChart.png';
+import OtherHeatMap from './OtherHeatMap'
 
 class ProviderVisuals extends Component {
 
@@ -21,12 +22,18 @@ class ProviderVisuals extends Component {
             </div>
          </div>
          <div className="row">
-            <div classname="containers">
+            <div className="containers">
                <img style={{maxWidth:"100%"}} src={Image} alt="Diff Chart"/>
             </div>
          </div>
-         <div className="row">
+         <div className="row pt-5">
+            <div className="container text-center">
+            <h1>Heat Map for Number of Events by Population for Each State</h1>
+            </div>
          </div>
+          <div className="row">
+          <OtherHeatMap/>
+          </div>
         </div>
     );
   }

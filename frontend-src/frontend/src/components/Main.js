@@ -13,6 +13,7 @@ import PieChart from './Visuals/PieChart'
 import OtherPieChart from './Visuals/OtherPieChart'
 import Visuals from './Visuals'
 import ProviderVisuals from './Visuals/ProviderVisuals'
+import OtherHeatMap from './Visuals/OtherHeatMap'
 // The Main component renders one of the provided
 // Routes (provided that one matches).
 const Main = () => (
@@ -29,6 +30,7 @@ const Main = () => (
       <Route exact path='/visuals/visual2' component={HeatMap}/>
       <Route exact path='/visuals/visual3' component={PieChart}/>
       <Route exact path='/visuals/visual4' component={OtherPieChart}/>
+      <Route exact path='/visuals/visual5' component={OtherHeatMap}/>
       <Route exact path='/visuals/all' component={Visuals}/>
       <Route exact path='/visuals/providers' component={ProviderVisuals}/>
     </Switch>
