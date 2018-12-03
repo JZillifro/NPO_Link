@@ -97,10 +97,11 @@ export default class CSection extends React.Component {
 
              <div class="wrapper style2">
                <article id="main" class="container special" style={{backgroundColor: "white"}}>
-                 <a href="#" class="image featured"><div style={{width:"100%"}}><img src={Image} alt="" top width="100%" className="card-img-top"/></div></a>
+                 <div className="image featured" style={{position:"relative", textAlign:"center"}}><img src={Image} alt="" className="card-img-top"/><h1 style={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%, -50%)", color:"white", fontSize:"1000%"}}>Categories</h1></div>
+                 <header><h2>These are various types of nonprofit organizations.</h2></header>
                </article>
              </div>
-             
+
              <Row className="mb-5">
                <Col xs={2}>
                <h1>Filters:</h1>

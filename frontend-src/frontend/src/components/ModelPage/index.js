@@ -14,23 +14,6 @@ export default class ModelPage extends React.Component {
       <div className="wrapper style1" style={{color: "rgb(43, 37, 44)"}}>
 
         <section id="features" className="container special">
-          <header>
-            <br/>
-            <br/>
-            <h2>{this.props.match.params.title}</h2>
-            <br/>
-            <br/>
-            {
-              this.props.match.params.title === "Nonprofits" && <p>Nonprofit organizations are accountable to the donors, funders, volunteers, program recipients, and the public community.</p>
-            }
-            {
-              this.props.match.params.title === "Categories" && <p>These are various types of nonprofit organizations.</p>
-            }
-            {
-              this.props.match.params.title === "Locations" && <p>These are various cities which have nonprofit organizations.</p>
-            }
-          </header>
-          <br/>
           <br/>
           <div className="row">
             {

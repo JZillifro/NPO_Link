@@ -97,7 +97,8 @@ export default class NPSection extends React.Component {
 
           <div class="wrapper style2">
             <article id="main" class="container special" style={{backgroundColor: "white"}}>
-              <a href="#" class="image featured"><img src={Image} alt="" className="card-img-top"/></a>
+              <div className="image featured" style={{position:"relative", textAlign:"center"}}><img src={Image} alt="" className="card-img-top"/><h1 style={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%, -50%)", color:"white", fontSize:"1000%"}}>Nonprofits</h1></div>
+              <header><h2>Nonprofit organizations are accountable to the donors, funders, volunteers, program recipients, and the public community.</h2></header>
             </article>
           </div>
 
