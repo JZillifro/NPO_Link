@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import * as d3 from 'd3';
-import { ALL_STATES, STATE_PATHS, BASE_API_URL, STATES, OTHER_STATE_DATA, ABBREVIATIONS, FULL_NAME } from './../constants.jsx';
-import axios from 'axios';
+import { ALL_STATES, STATE_PATHS, OTHER_STATE_DATA, ABBREVIATIONS, FULL_NAME } from './../constants.jsx';
 
 class OtherHeatMap extends Component {
    constructor(props) {
