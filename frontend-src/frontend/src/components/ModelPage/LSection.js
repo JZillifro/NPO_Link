@@ -133,15 +133,15 @@ export default class LSection extends React.Component {
                           <CardBody className="block-with-text">
                              <CardText className="pt-2">
                                City:
-                               <Highlight search={this.state.query}>{model.city}</Highlight>
+                               <Highlight search={this.state.query}> {model.city}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
                                State:
-                               <Highlight search={this.state.query}>{model.state}</Highlight>
+                               <Highlight search={this.state.query}> {model.state}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
                                Description:
-                               <Highlight search={this.state.query}>{model.description}</Highlight>
+                               <Highlight search={this.state.query}> {model.description}</Highlight>
                             </CardText>
                           </CardBody>
                       </Card>

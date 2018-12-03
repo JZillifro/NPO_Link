@@ -24,7 +24,7 @@ export default class NonprofitPage extends React.Component {
               <Row className="row">
                  <div className="col">
                    <div className="containter special" style={{textAlign: "center", marginRight:"5%", marginLeft:"5%"}}>
-                     <a className="image featured"><img src={this.state.nonprofit.logo} alt=""/></a>
+                     <a className="image featured" style={{maxWidth:"50%", marginLeft:"auto", marginRight:"auto"}}><img src={this.state.nonprofit.logo} alt=""/></a>
                      <header>
                        <h2>{this.state.nonprofit.name}</h2>
                        <br/>

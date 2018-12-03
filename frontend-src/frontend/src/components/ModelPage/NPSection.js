@@ -144,15 +144,15 @@ export default class NPSection extends React.Component {
                         <CardBody className="block-with-text">
                           <CardText className="pt-2">
                              Address:
-                             <Highlight search={this.state.query}>{model.address}</Highlight>
+                             <Highlight search={this.state.query}> {model.address}</Highlight>
                           </CardText>
                           <CardText className="pt-2">
                              EIN:
-                             <Highlight search={this.state.query}>{model.ein}</Highlight>
+                             <Highlight search={this.state.query}> {model.ein}</Highlight>
                           </CardText>
                           <CardText className="pt-2">
                              Description:
-                             <Highlight search={this.state.query}>{model.description}</Highlight>
+                             <Highlight search={this.state.query}> {model.description}</Highlight>
                           </CardText>
                         </CardBody>
                     </Card>

@@ -142,15 +142,15 @@ export default class CSection extends React.Component {
                           <CardBody className="block-with-text">
                             <CardText className="pt-2">
                                Category Code:
-                               <Highlight search={this.state.query}>{model.code}</Highlight>
+                               <Highlight search={this.state.query}> {model.code}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
                                Parent Code:
-                               <Highlight search={this.state.query}>{model.parent_category}</Highlight>
+                               <Highlight search={this.state.query}> {model.parent_category}</Highlight>
                             </CardText>
                             <CardText className="pt-2">
                                Description:
-                               <Highlight search={this.state.query}>{model.description}</Highlight>
+                               <Highlight search={this.state.query}> {model.description}</Highlight>
                             </CardText>
                           </CardBody>
                       </Card>
